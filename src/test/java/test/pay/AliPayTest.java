@@ -1,10 +1,5 @@
 package test.pay;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import cn.kidtop.business.pay.PayApplication;
 import cn.kidtop.business.pay.dto.CallBackDTO;
 import cn.kidtop.business.pay.dto.PayParamDTO;
@@ -17,17 +12,18 @@ import cn.kidtop.business.pay.facade.PayFacade;
 import cn.kidtop.business.pay.facade.PayResponseValidatorFacade;
 import cn.kidtop.business.pay.facade.RefundFacade;
 import cn.kidtop.framework.util.JsonUtil;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 @RunWith(SpringRunner.class)
@@ -73,7 +69,7 @@ public class AliPayTest{
 		payParamDTO.setPayFrom(EPayFrom.PAY_FROM_WEB_DOWN_VIDEO);
 		payParamDTO.setNotifyUrl("");
 		payParamDTO.setReturnUrl("");
-//		payParamDTO.setSubject("");
+		payParamDTO.setSubject("");
 		payParamDTO.setTradeNo("20151016000000055");
 		payParamDTO.setTotalFee(BigDecimal.valueOf(100));
 		payFacade.createAlipayDirectPayResult(payParamDTO);
