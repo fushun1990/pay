@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="aliPayConfigure" class="com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig">
+        <property name="RSA_PRIVATE">
+            <value>${alipay.RSA_PRIVATE}</value>
+        </property>
+        <property name="gateway">
+            <value>${alipay.gateway}</value>
+        </property>
+        <property name="aliPayPublicKey">
+            <value>${alipay.aliPayPublicKey}</value>
+        </property>
+        <property name="partner">
+            <value>${alipay.partner}</value>
+        </property>
+        <property name="appId">
+            <value>${alipay.appId}</value>
+        </property>
+        <property name="seller_email">
+            <value>${alipay.seller_email}</value>
+        </property>
+        <property name="key">
+            <value>${alipay.key}</value>
+        </property>
+        <property name="sign_type">
+            <value>${alipay.sign_type}</value>
+        </property>
+        <property name="log_path">
+            <value>${alipay.log_path}</value>
+        </property>
+        <property name="input_charset">
+            <value>${alipay.input_charset}</value>
+        </property>
+    </bean>
+
+    <bean id="sdkConfig" class="com.fushun.pay.thirdparty.sdk.unionpaysdk.SDKConfig" lazy-init="false"
+          init-method="loadPropertiesFromSrc"/>
+</beans>

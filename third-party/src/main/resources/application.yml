@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: test
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: INFO
+
+app:
+    datasource:
+        jdbcUrl: jdbc:mysql://localhost:3306/createpay?serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        pool-size: 30
+        driverClassName: com.mysql.cj.jdbc.Driver
+
+pay:
+  alipay:
+    appId: 2019022563415001
+    gateway: https://openapi.alipay.com/gateway.do
+    partner: 2088002708536731
+    inputCharset: utf-8
+    signType: RSA2
+    aliPayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAizDGmC3HCi1iZNX/B0O3mul8oeB+mxUbx0d/bkSYRPLrsx+8b9dUWVanC+zlVS/fICqG7I230XN820fPMsl/G9BAMmh4tUZO8EFKdAR/dN1c60MyAd3dVrg+zU6FMiTpLh0Ax4uMJhSvRPK0C1vM40bpiiK3tHSTZY+pv1vTkrQfANMP+ZUvHklvj/4W9HE1gZQBJbSQgQm4SbBgWnFrBARk5t2hTL3zBmd1nDKRGjHxV5iF2xV5M46GMLtMObYoqt7N2S14iIFDg3S5eFUf89UDuuJSPAUNhPTmVBo7Er8wb8JJ28fO+sUHUgJNavrSix02ZXQMDrWcCYCN33jWnwIDAQAB
+    rsaPrivateKeyPkcs8: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDKO6/10B8MYmyQMTEsJTQAcTTBb+rUvp3qROMQzlhXHTC63tCaiphs9xXYE3vXU0MPdXbMO93Hr3qY0TYPgG8tldVsjJD3bNqyTMVoT3ji8fGZlngMjDtXVepIH3oAByTnfB0B1Zwob9pahGGPJUq1DmqhgxpXzV35t8R8CVIGUodfX61ErmxDe+5jn+AanzrEnarr4qaM+wUvh9n7Jkg8sAXQ8zBNkRSMc971ZaJL/IQbPRLAA0pjbC8ICOCvMBH2wbvbOcQgGnKUbeJdLf8bTLJeOF3eV4nJoWKxinOIWN9cHplrxQ3/WqYlDr/Cxr/OJkoeYaSHTTi0syu+azE7AgMBAAECggEBAJDnycI5mTW3hJChHtnB4ov6kdGVDs/XsbE+IPFW2Ue6W8NaimBhtKxHM3i7JT55o5B9G11l/Bjr7M15AuKCpaclOGLqKamQbvfZOI3we+8pa3MgtO5QwOhoYFHDdBh3BgN0FBjPZXA4DV5Ugs8d6nTnWpJWLVcCiTa4bWpvBz4NNo4e1QBp2zmCOnsl4XqasBZdMs2IjgLBx/1lsPb7loroE+6iztKsZJqI/E6sEqvwAQnYDj/9zCj46KsVhf7BvdrnN//ijNA7IyySlLcsD/RCXs/JNw8k5bk5QPtPAV/e9me1itQVTgUefZJcAx7J9W/OSLlgBMK+UNftEVme5fECgYEA/UXURenM0fY1ff5Oa5Hk4e31wXKutcQ2bqy7kFSNdFJpFv+NwWN+eqWpqC1Q5/+ChhqLIHFgGNjvC4QzGoR5flDfOIrcmZA+L56owII3AIEXe4y5FsoXoHlbcQlY8kMzHkKbsSRrkDoKcO2LXNL1IjsxuJgf50LViyxs1Uk0cCMCgYEAzGkpm4I/bnxTO+JeoNNN7ZFapAALnioCM/CypD2+eTLLvUPJrfhPm63bIvH3/Zvwt2wRj5yfMPV7GKqZnwBUJp/Ei9WK6tyTOCPocMHVli/TA8TgbOUHSABJuerKLYCGKehjObHE0jUtN0oNAjMqwLi4SDxHzPxQzK/LK0WzwAkCgYEAx2t+EnZesUtdHxFnicdcIpCNGn5EFhaijU4weRo6LsbcvCEH6qd+ZO+fwC2+MI28pf6sYSUj9yyIO9chrdV1HAJtYEXmIHu0myYf1UQyLpF2fe91pP4G0HH9j+k+QbKrwz3K/RWiI/OvWO+Q9cuc/BEDu0b8h8jV/zlBkEaNpWUCgYB1/gY8c9S1rCJHoQXKg+6pwYu2uyf5pnobDUexMsruHvooSCb0uy8IyDSEWXQy+n7bAhCo+1mQ40KpHGEMvR3WJcdIiH1l0OlSMLgNznXB+d0ugciiUxn+39uu6+7EkTngmvob5ZedV4DAN4iGyo5VLMuDNvijRMpHPPpkAhoeMQKBgQC+6ChoflRKQ4pJdHSHcST6ZRfevmKR8LEaY3ifgG9LeE0/PeVEBd2tXioeUOJ1eQgqLW3t2gBQ2ZuIvh9zDpuRQOILhPRgtL7VjZ4yXUORqwYQeF3UlccR3sp3RadIXwS6es0stpqCbch5xIt+iDrjhf0JAV4celXomBMPmqbkVw==
+    appPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuABwWMlCZ815THPopLCf pypoAfbZWil/TLYfoQwwNd+++S359jIXQQMn5SLvETkK6XSah54W1t/wubi0016c 9gSxASM6igYWNSxNxLl4qluBLUq3U/mr1l4cAlrV5jLftLPNDX0aHZvFoDTCaU50 03rd54axUG0Kclhq/LX88XTFdiIDcrKupBnJwdhOuwczB9dYWZ19G53cq6TRRw7I xaZi6uTOP91lkRWAdBspm4paOSNg/WSPYz+I4/+4GVITTRUbmlxVom+8aIrJiLZ6 Z64DdXZRaTBr/noYok/t3Og0rssQ3F4K5l8/k02wQIPCiutNJOgj56ERbJKzM0SS cwIDAQAB
+    sellerEmail: test

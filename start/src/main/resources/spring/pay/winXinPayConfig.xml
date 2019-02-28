@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 微信支付api -->
+    <bean id="ApiConfigure" class="com.tencent.common.ApiConfigure">
+        <property name="PAY_API">
+            <value>${weiXinPay.api.PAY_API}</value>
+        </property>
+        <property name="UNIFIEDORDER_API">
+            <value>${weiXinPay.api.UNIFIEDORDER_API}</value>
+        </property>
+        <property name="CLOSEORDER_API">
+            <value>${weiXinPay.api.CLOSEORDER_API}</value>
+        </property>
+        <property name="PAY_QUERY_API">
+            <value>${weiXinPay.api.PAY_QUERY_API}</value>
+        </property>
+        <property name="REFUND_API">
+            <value>${weiXinPay.api.REFUND_API}</value>
+        </property>
+        <property name="REFUND_QUERY_API">
+            <value>${weiXinPay.api.REFUND_QUERY_API}</value>
+        </property>
+        <property name="REVERSE_API">
+            <value>${weiXinPay.api.REVERSE_API}</value>
+        </property>
+        <property name="DOWNLOAD_BILL_API">
+            <value>${weiXinPay.api.DOWNLOAD_BILL_API}</value>
+        </property>
+        <property name="REPORT_API">
+            <value>${weiXinPay.api.REPORT_API}</value>
+        </property>
+    </bean>
+
+    <!-- appC微信支付 -->
+    <bean id="appCWeixinPayConfigure" class="com.tencent.common.AppCConfigure" init-method="initMethod">
+        <property name="key">
+            <value>${weiXinPay.AppC.key}</value>
+        </property>
+        <property name="appID">
+            <value>${winXinPay.AppC.appId}</value>
+        </property>
+        <property name="appSecret">
+            <value>${winXinPay.AppC.appSecret}</value>
+        </property>
+        <property name="mchID">
+            <value>${weiXinPay.AppC.mchID}</value>
+        </property>
+        <property name="subMchID">
+            <value>${weiXinPay.AppC.subMchID}</value>
+        </property>
+        <property name="certLocalPath">
+            <value>${weiXinPay.AppC.certLocalPath}</value>
+        </property>
+        <property name="certPassword">
+            <value>${weiXinPay.AppC.certPassword}</value>
+        </property>
+        <property name="useThreadToDoReport">
+            <value>${weiXinPay.AppC.useThreadToDoReport}</value>
+        </property>
+    </bean>
+    <bean id="AppCweiXinCertLocalPathResourceBean"
+          class="com.fushun.pay.thirdparty.sdk.weixinpay.CertLocalPathResourceBean">
+        <constructor-arg name="configure" type="com.tencent.common.Configure" ref="appCWeixinPayConfigure"/>
+        <constructor-arg name="resource" type="org.springframework.core.io.Resource"
+                         value="classpath:/spring/pay/weiXinAppCApiclient_cert.p12"/>
+    </bean>
+
+    <!-- 公众号微信支付 -->
+    <bean id="GZHWeixinPayConfigure" class="com.tencent.common.GZHConfigure" init-method="initMethod">
+        <property name="key">
+            <value>${weiXinPay.key}</value>
+        </property>
+        <property name="appID">
+            <value>${winXinPay.appId}</value>
+        </property>
+        <property name="appSecret">
+            <value>${winXinPay.appSecret}</value>
+        </property>
+        <property name="mchID">
+            <value>${weiXinPay.mchID}</value>
+        </property>
+        <property name="subMchID">
+            <value>${weiXinPay.subMchID}</value>
+        </property>
+        <property name="certLocalPath">
+            <value>${weiXinPay.certLocalPath}</value>
+        </property>
+        <property name="certPassword">
+            <value>${weiXinPay.certPassword}</value>
+        </property>
+        <property name="useThreadToDoReport">
+            <value>${weiXinPay.useThreadToDoReport}</value>
+        </property>
+    </bean>
+    <bean id="GZHweiXinCertLocalPathResourceBean"
+          class="com.fushun.pay.thirdparty.sdk.weixinpay.CertLocalPathResourceBean">
+        <constructor-arg name="configure" type="com.tencent.common.Configure" ref="GZHWeixinPayConfigure"/>
+        <constructor-arg name="resource" type="org.springframework.core.io.Resource"
+                         value="classpath:/spring/pay/weiXinGJHApiClient_cert.p12"/>
+    </bean>
+</beans>

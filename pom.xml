@@ -23,6 +23,7 @@
         <module>infrastructure</module>
         <module>start</module>
         <module>third-party</module>
+        <module>wxpay-java-sdk</module>
     </modules>
 
     <properties>
@@ -67,9 +68,8 @@
                 <version>${project.version}</version>
             </dependency>
 
-
             <dependency>
-                <groupId>com.tencent</groupId>
+                <groupId>com.fushun.pay</groupId>
                 <artifactId>wxpay-java-sdk</artifactId>
                 <version>1.0.6-SNAPSHOT</version>
             </dependency>
