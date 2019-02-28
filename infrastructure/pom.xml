@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>pay</artifactId>
+        <groupId>com.fushun.pay</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.fushun.pay</groupId>
+    <artifactId>infrastructure</artifactId>
+    <name>infrastructure</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fushun.framework</groupId>
+            <artifactId>framework-spring-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -3,6 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <groupId>com.fushun.pay</groupId>
+    <artifactId>pay</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>pay</name>
 
     <parent>
         <artifactId>framework-parent</artifactId>
@@ -10,88 +16,129 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.fushun.pay</groupId>
-    <artifactId>pay</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>domain</module>
+        <module>app</module>
+        <module>client</module>
+        <module>infrastructure</module>
+        <module>start</module>
+        <module>third-party</module>
+    </modules>
 
-    <dependencies>
+    <properties>
+        <cola.framework.version>1.0.0-SNAPSHOT</cola.framework.version>
+        <alipay-sdk-java.version>3.3.2</alipay-sdk-java.version>
+        <bcprov-jdk14.version>1.54</bcprov-jdk14.version>
+        <commons-httpclient.version>3.1</commons-httpclient.version>
+        <lombok.version>1.12.6</lombok.version>
+    </properties>
 
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpasyncclient</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore-nio -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore-nio</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>fluent-hc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-        </dependency>
 
-        <!--MySQL Driver驱动包-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>start</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>third-party</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <!-- 支付依赖 -->
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
-        <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>3.4.49.ALL</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk14</artifactId>
-            <version>1.54</version>
-        </dependency>
-        <dependency>
-            <groupId>com.tencent</groupId>
-            <artifactId>wxpay-java-sdk</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
-        </dependency>
+            <dependency>
+                <groupId>com.tencent</groupId>
+                <artifactId>wxpay-java-sdk</artifactId>
+                <version>1.0.6-SNAPSHOT</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.fushun.framework</groupId>
-            <artifactId>framework-spring-boot</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fushun.framework</groupId>
-            <artifactId>framework-sping-data-jpa</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
-    </dependencies>
+            <!--Framework-->
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-common</artifactId>
+                <version>${cola.framework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-core</artifactId>
+                <version>${cola.framework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.9.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>${alipay-sdk-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk14</artifactId>
+                <version>${bcprov-jdk14.version}</version>
+            </dependency>
+
+            <!-- 支付依赖 -->
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons-httpclient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
