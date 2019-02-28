@@ -1,6 +1,6 @@
 package com.tencent.business.impl;
 
-import cn.kidtop.framework.util.JsonUtil;
+import com.fushun.framework.util.util.JsonUtil;
 import com.tencent.business.BaseBusiness;
 import com.tencent.business.ResultListener;
 import com.tencent.common.Log;
@@ -40,7 +40,7 @@ public class OAuth20Business extends BaseBusiness<OAuth20ReqData, OAuth20ResData
     /**
      * 公众号授权
      *
-     * @param unifiedorderReqData 这个数据对象里面包含了API要求提交的各种数据字段
+     * @param oAuth20ReqData 这个数据对象里面包含了API要求提交的各种数据字段
      * @param resultListener      商户需要自己监听被扫支付业务逻辑可能触发的各种分支事件，并做好合理的响应处理
      * @return API返回的XML数据
      * @throws Exception
