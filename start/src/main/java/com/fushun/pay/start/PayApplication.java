@@ -1,4 +1,4 @@
-package com.funshun.pay;
+package com.fushun.pay.start;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.fushun.pay", "com.alibaba.cola"})
+@ComponentScan(basePackages = {"com.fushun.pay", "com.fushun.framework", "com.alibaba.cola"})
 public class PayApplication {
 
     public static void main(String[] args) {

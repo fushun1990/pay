@@ -1,5 +1,7 @@
 package com.fushun.pay.thirdparty.alipay.pay;
 
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.fushun.framework.util.exception.exception.BusinessException;
@@ -9,8 +11,8 @@ import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
+import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
-import com.fushun.pay.thirdparty.sdk.alipay.util.AlipaySubmitApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +31,9 @@ import java.util.Map;
 public class AlipayAppTradeQueryFacade {
 
     private static Map<String, String> errorMap = new HashMap<String, String>();
+
+    @Autowired
+    private AlipayConfig alipayConfig;
 
     /**
      * 初始化接口错误
@@ -84,7 +89,8 @@ public class AlipayAppTradeQueryFacade {
             //SDK已经封装掉了公共参数，这里只需要传入业务参数
             //此次只是参数展示，未进行字符串转义，实际情况下请转义
             request.setBizContent(JsonUtil.classToJson(map));
-            response = AlipaySubmitApp.execute(request);
+            AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGateway(), alipayConfig.getAppId(), alipayConfig.getRsaPrivateKeyPkcs8(), "json", alipayConfig.getInputCharset(), alipayConfig.getAliPayPublicKey(), alipayConfig.getSignType());
+            response = alipayClient.execute(request);
         } catch (Exception e) {
             throw new PayException(e, PayException.Enum.QUERY_REQUEST_FAILED_EXCEPTION);
         }

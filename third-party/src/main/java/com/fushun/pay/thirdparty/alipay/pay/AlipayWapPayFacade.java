@@ -24,7 +24,6 @@ import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
-import com.fushun.pay.thirdparty.sdk.alipay.util.AlipayNotify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -120,7 +119,7 @@ public class AlipayWapPayFacade {
         alipayRequest.setNotifyUrl(map.get("notify_url"));//在公共参数中设置回跳和通知地址
         alipayRequest.setBizContent(map.get("biz_content"));//填充业务参数
         try {
-            String form = client.pageExecute(alipayRequest).getBody();
+            String form = client.pageExecute(alipayRequest, "GET").getBody();
             return form;
         } catch (AlipayApiException e) {
             throw new PayException(e, PayException.Enum.PAY_CREATE_FAILED_EXCEPTION);
@@ -192,7 +191,15 @@ public class AlipayWapPayFacade {
 
         // 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
 
-        if (!AlipayNotify.verify(params, alipayConfig.getInputCharset())) {
+//        ;AlipayNotify.verify(params, alipayConfig.getInputCharset())
+
+        boolean signVerified = false;
+        try {
+            signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAliPayPublicKey(), alipayConfig.getInputCharset());
+        } catch (AlipayApiException e) {
+            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+        }
+        if (signVerified == false) {
             throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
         }
         // 验证成功

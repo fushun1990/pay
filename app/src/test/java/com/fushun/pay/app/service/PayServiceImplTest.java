@@ -46,7 +46,7 @@ public class PayServiceImplTest {
 
     @Test
     public void createPay() throws Exception {
-        testCreatePayAlipayApp();
+//        testCreatePayAlipayApp();
         testCreatePayAlipayWapPay();
 //        org.springframework.validation.Validator
 //        org.springframework.core.convert.converter.Converter
@@ -76,9 +76,10 @@ public class PayServiceImplTest {
         createPayAlipayWapCO.setPayFrom(EPayFrom.PAY_FROM_APP_DOWN_VIDEO);
         createPayAlipayWapCO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
 //        createPayAlipayWapCO.setReturnUrl("");
-        createPayAlipayWapCO.setTradeNo("2015101600000005555557");
+        createPayAlipayWapCO.setTradeNo("2015101600000005555558");
         createPayAlipayWapCO.setTotalFee(BigDecimal.valueOf(0.1));
         createPayAlipayWapCO.setSubject("支付测试");
+
         createPayAlipayAppCmd.setCreatePayAlipayAppCO(createPayAlipayWapCO);
         SingleResponse<CreatedPayRequestBodyCO> singleResponse = payServiceI.createPay(createPayAlipayAppCmd);
         Assert.assertTrue(singleResponse.isSuccess());
@@ -111,7 +112,7 @@ public class PayServiceImplTest {
         createPayAlipayWapCO.setTotalFee(BigDecimal.valueOf(0.1));
         createPayAlipayWapCO.setSubject("支付测试");
         createPayAlipayWapCmd.setCreatePayAlipayWapCO(createPayAlipayWapCO);
-
+        System.out.println(JsonUtil.classToJson(createPayAlipayWapCO));
         SingleResponse<CreatedPayRequestBodyCO> singleResponse = payServiceI.createPay(createPayAlipayWapCmd);
         Assert.assertTrue(singleResponse.isSuccess());
         logger.info(singleResponse.getData().getPayStr());

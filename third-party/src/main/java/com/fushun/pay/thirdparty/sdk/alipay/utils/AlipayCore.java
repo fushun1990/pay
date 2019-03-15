@@ -1,12 +1,8 @@
-package com.fushun.pay.thirdparty.sdk.alipay.util;
+package com.fushun.pay.thirdparty.sdk.alipay.utils;
 
-import com.fushun.framework.util.exception.base.SpringContextUtil;
-import com.fushun.pay.domain.exception.PayException;
-import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /* *
  *类名：AlipayFunction
@@ -21,9 +17,6 @@ import java.util.*;
 
 public class AlipayCore {
 
-    private static final String yu = "&";
-    private static final String deng = "=";
-    private static AlipayConfig alipayConfig = SpringContextUtil.getBean(AlipayConfig.class);
     private static Map<String, Object> alipayErrorMap = new HashMap<String, Object>();
 
     /**
@@ -84,117 +77,6 @@ public class AlipayCore {
         map2.put("isv.insufficient-isv-permissions", "ISV权限不足	请检查配置的账户是否有当前接口权限");
         map2.put("isv.insufficient-user-permissions", "用户权限不足	代理的商户没有当前接口权限");
         alipayErrorMap.put("40006", "参数无效	检查参数，格式不对、非法值、越界等");
-    }
-
-    /**
-     * 除去数组中的空值和签名参数
-     *
-     * @param sArray 签名参数组
-     * @return 去掉空值与签名参数后的新签名参数组
-     */
-    public static Map<String, String> paraFilter(Map<String, String> sArray) {
-
-        Map<String, String> result = new HashMap<String, String>();
-
-        if (sArray == null || sArray.size() <= 0) {
-            return result;
-        }
-
-        for (String key : sArray.keySet()) {
-            if (sArray.get(key) != null) {
-                String value = sArray.get(key).toString();
-                if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
-                        || key.equalsIgnoreCase("sign_type")) {
-                    continue;
-                }
-                result.put(key, value);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
-     *
-     * @param params 需要排序并参与字符拼接的参数组
-     * @return 拼接后字符串
-     */
-    public static String createLinkString(Map<String, String> params) {
-        List<String> keys = new ArrayList<String>(params.keySet());
-        return createLinkString(params, keys, false);
-    }
-
-    /**
-     * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串<br>
-     * map.value 使用URLEncode编码
-     *
-     * @param params 需要排序并参与字符拼接的参数组
-     * @return 拼接后字符串
-     */
-    public static String createLinkStringByEncode(Map<String, String> params) {
-        List<String> keys = new ArrayList<String>(params.keySet());
-        return createLinkString(params, keys, true);
-    }
-
-    /**
-     * 把数组所有元素排序，并按照“参数=参数值”的模式用“&”字符拼接成字符串
-     *
-     * @param params 需要排序并参与字符拼接的参数组
-     * @return 拼接后字符串
-     */
-    public static String createLinkStringBySort(Map<String, String> params) {
-        List<String> keys = new ArrayList<String>(params.keySet());
-        // key排序
-        Collections.sort(keys);
-        return createLinkString(params, keys, false);
-    }
-
-    /**
-     * 拼接字符串
-     *
-     * @param params   参数对象
-     * @param keys     参数Map中的key顺序  ASCII排序
-     * @param isEncode 参数的value是否需要编码
-     * @return
-     * @author fushun
-     * @version V3.0商城
-     * @creation 2017年1月13日
-     * @records <p>  fushun 2017年1月13日</p>
-     */
-    private static String createLinkString(Map<String, String> params, List<String> keys, boolean isEncode) {
-        StringBuffer sb = new StringBuffer();
-        boolean one = false;
-        for (int i = 0; i < keys.size(); i++) {
-            String key = keys.get(i);
-            String value = params.get(key);
-            if (isEncode) {
-                value = buildValue(value);
-            }
-            if (one) {
-                sb.append(yu);
-            }
-            one = true;
-            sb.append(key).append(deng).append(value);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Url 编码值
-     *
-     * @param value
-     * @author fushun
-     * @version V3.0商城
-     * @creation 2016年9月14日
-     * @records <p>  fushun 2016年9月14日</p>
-     */
-    private static String buildValue(String value) {
-        try {
-            return URLEncoder.encode(value, alipayConfig.getInputCharset());
-        } catch (UnsupportedEncodingException e) {
-            throw new PayException(e, PayException.Enum.PAY_CREATE_FAILED_EXCEPTION);
-        }
     }
 
     /**

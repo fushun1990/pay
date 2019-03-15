@@ -21,3 +21,7 @@ https://blog.csdn.net/zwx19921215/article/details/83828783
 
 >命令参数
 http://maven.apache.org/plugins/maven-deploy-plugin/deploy-file-mojo.html
+
+IDEA下lombok安装，
+
+https://blog.csdn.net/xzp_12345/article/details/80268834
