@@ -44,7 +44,6 @@
         <dependency>
             <groupId>com.fushun.framework</groupId>
             <artifactId>framework-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

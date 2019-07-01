@@ -40,8 +40,8 @@ public class PayServiceImpl implements PayServiceI {
     }
 
     @Override
-    public MultiResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry) {
-        return (MultiResponse<PayCO>) commandBus.send(payFindByCriteriaQry);
+    public SingleResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry) {
+        return (SingleResponse<PayCO>) commandBus.send(payFindByCriteriaQry);
     }
 
     /**

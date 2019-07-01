@@ -1,6 +1,6 @@
 package com.fushun.pay.app.dto.clientobject.createpay;
 
-import com.fushun.framework.util.exception.base.BaseEnum;
+import com.fushun.framework.base.BaseEnum;
 
 /**
  * @author wangfushun

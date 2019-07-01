@@ -7,6 +7,7 @@ import com.fushun.pay.infrastructure.pay.tunnel.database.PayDBTunnel;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * @description
  * @creation 2019年01月20日18时39分
  */
-@Repository
+@Component
 public class PayRepository implements RepositoryI {
 
     @Autowired

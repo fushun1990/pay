@@ -7,17 +7,9 @@ package com.fushun.pay.app.dto.enumeration;
  */
 public enum EPayFrom implements ECallBackFrom<String> {
     /**
-     * Web端下载视频
+     * 购买会员
      */
-    PAY_FROM_WEB_DOWN_VIDEO("pay_from_web_down_video", "Web端", "WDW_"),
-    /**
-     * APP端
-     */
-    PAY_FROM_APP_DOWN_VIDEO("pay_from_App_down_video", "APP端", "ADW_"),
-    /**
-     * APP端
-     */
-    PAY_FROM_APP_BUY_GOODS("pay_from_App_buy_goods", "APP端", "ABG_");
+    PAY_FROM_BUY_MEMBERS("pay_from_buy_members", "公众号", "WDW_");
 
     private String code;
 

@@ -1,19 +1,21 @@
+server:
+  port: 8097
 spring:
   profiles:
-    active: test,alipay-sandbox
+    active: local,alipay-sandbox,weixin-gzh
   jpa:
-    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLDialect
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 
 logging:
   level:
     root: INFO
-
-app:
-    datasource:
-        jdbcUrl: jdbc:mysql://localhost:3306/pay?serverTimezone=Asia/Shanghai
-        username: root
-        password: 123456
-        pool-size: 30
-        driverClassName: com.mysql.cj.jdbc.Driver
+  path: log
+  file:
+    max-size: 10MB
+    max-history: 1000

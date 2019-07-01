@@ -22,7 +22,7 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class TestHttpClient {
 
-    @Test
+//    @Test
     public void testHttpsRequest() throws InterruptedException {
 
         Class class1 = HttpsRequest.class;

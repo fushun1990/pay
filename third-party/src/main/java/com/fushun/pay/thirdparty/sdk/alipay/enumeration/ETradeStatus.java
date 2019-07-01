@@ -1,6 +1,6 @@
 package com.fushun.pay.thirdparty.sdk.alipay.enumeration;
 
-import com.fushun.framework.util.exception.base.BaseEnum;
+import com.fushun.framework.base.BaseEnum;
 
 /**
  * 支付宝支 交易状态

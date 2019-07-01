@@ -1,6 +1,7 @@
 package com.fushun.pay.app.dto.enumeration;
 
-import com.fushun.framework.util.exception.base.BaseEnum;
+
+import com.fushun.framework.base.BaseEnum;
 
 /**
  * 支付信息状态

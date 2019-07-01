@@ -87,7 +87,7 @@ public class WeiXinUnifiedOrderFacade {
             UnifiedorderResData resData = unifiedOrderResultListener.getResData();
             return resData;
         } catch (BusinessException e) {
-            throw new PayException(new Throwable(e.getMessage()), PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.Enum.PAY_FAILED_EXCEPTION);
         } catch (Exception e) {
             throw new PayException(e, PayException.Enum.PAY_FAILED_EXCEPTION);
         }

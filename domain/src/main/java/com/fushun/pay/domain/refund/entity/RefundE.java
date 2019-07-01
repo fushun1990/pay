@@ -5,17 +5,15 @@ import com.alibaba.cola.domain.EntityObject;
 import com.alibaba.cola.exception.BizException;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
+import com.fushun.framework.base.SpringContextUtil;
 import com.fushun.framework.util.util.BeanUtils;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
-import com.fushun.pay.app.dto.enumeration.ERefundFrom;
-import com.fushun.pay.app.dto.enumeration.ERefundStatus;
+import com.fushun.pay.app.dto.enumeration.*;
 import com.fushun.pay.domain.pay.repository.PayRepository;
 import com.fushun.pay.domain.refund.exception.ErrorCode;
 import com.fushun.pay.domain.refund.repository.RefundRepository;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -31,8 +29,14 @@ import java.math.BigDecimal;
 public class RefundE extends EntityObject {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     /**
-     * 支付单号
+     * 支付系统的支付单号
+     */
+    private String outTradeNo;
+
+    /**
+     * 业务系统 支付单号
      */
     private String tradeNo;
 
@@ -52,6 +56,16 @@ public class RefundE extends EntityObject {
     private BigDecimal refundMoney;
 
     /**
+     *  支付金额 需要带回的数据
+     */
+    private BigDecimal payMoney;
+
+    /**
+     * 支付源
+     */
+    private EPayWay ePayWay;
+
+    /**
      * 退款源
      */
     private ERefundFrom eRefundFrom;
@@ -62,15 +76,18 @@ public class RefundE extends EntityObject {
     private String refundReason;
 
     /**
+     * 失败原因
+     */
+    private String result;
+
+    /**
      * 退款状态
      */
     private ERefundStatus eRefundStatus;
 
-    @Autowired
-    private PayRepository payRepository;
+    private PayRepository payRepository= SpringContextUtil.getBean(PayRepository.class);
 
-    @Autowired
-    private RefundRepository refundRepository;
+    private RefundRepository refundRepository=SpringContextUtil.getBean(RefundRepository.class);
 
     /**
      * @param
@@ -82,13 +99,12 @@ public class RefundE extends EntityObject {
      */
     @Transactional
     public void refund() {
-        String outTradeNo = this.eRefundFrom.getPreStr() + this.tradeNo;
-        RecordPayDO recordPayDO = payRepository.findByOutTradeNO(outTradeNo);
+        RecordPayDO recordPayDO = payRepository.findByOutTradeNO(this.outTradeNo);
         if (BeanUtils.isEmpty(recordPayDO)) {
             //订单不存在
             throw new BizException(ErrorCode.PAY_IS_NOT_EXIST, ErrorCode.PAY_IS_NOT_EXIST.getErrDesc());
         }
-        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.eRefundFrom);
+        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
         if (BeanUtils.isNotEmpty(refundDO)) {
             if (ERefundStatus.success.getCode().equals(refundDO.getStatus())) {
                 //已退款
@@ -128,6 +144,7 @@ public class RefundE extends EntityObject {
             return;
         }
 
+        this.payMoney=recordPayDO.getPayMoney();
         //退款不存在，
         //保存退款信息
         refundRepository.create(this);
@@ -144,14 +161,12 @@ public class RefundE extends EntityObject {
      */
     @Transactional
     public void fail() {
-
-        String outTradeNo = this.eRefundFrom.getPreStr() + this.tradeNo;
-        RecordPayDO recordPayDO = payRepository.findByOutTradeNO(outTradeNo);
+        RecordPayDO recordPayDO = payRepository.findByOutTradeNO(this.outTradeNo);
         if (BeanUtils.isEmpty(recordPayDO)) {
             //订单不存在
             throw new BizException(ErrorCode.PAY_IS_NOT_EXIST, ErrorCode.PAY_IS_NOT_EXIST.getErrDesc());
         }
-        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.eRefundFrom);
+        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
         if (BeanUtils.isEmpty(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
@@ -162,6 +177,7 @@ public class RefundE extends EntityObject {
 
         //更新退款状态为失败
         refundDO.setStatus(this.eRefundStatus.getCode());
+        refundDO.setResult(this.result);
         refundRepository.update(refundDO);
 
         //还原已退款金额
@@ -179,7 +195,7 @@ public class RefundE extends EntityObject {
      */
     public void success() {
 
-        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.eRefundFrom);
+        RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
         if (BeanUtils.isEmpty(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }

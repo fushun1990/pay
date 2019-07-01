@@ -28,6 +28,7 @@ public class RefundServiceImpl implements RefundServiceI {
      * @author wangfushun
      * @version 1.0
      */
+    @Override
     public Response refund(RefundCmd refundCmd) {
         Response response = commandBus.send(refundCmd);
         return response;

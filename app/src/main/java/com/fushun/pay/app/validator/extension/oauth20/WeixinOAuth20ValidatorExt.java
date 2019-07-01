@@ -20,7 +20,7 @@ public class WeixinOAuth20ValidatorExt implements OAuth20ValidatorExtPt<Oauth20W
 
     @Override
     public void validate(Oauth20WeixinCmd candidate) {
-        WeixinOauth20CO weixinOauth20CO = candidate.getWeixinOauth20CO();
+        WeixinOauth20CO weixinOauth20CO = candidate.getOAuth20CO();
 
         if (StringUtils.isEmpty(weixinOauth20CO.getCode())) {
             throw new BizException(ErrorCode.OAUTH20_FAIL, ErrorCode.OAUTH20_FAIL.getErrDesc());

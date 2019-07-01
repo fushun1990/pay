@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @creation 2019年02月14日23时18分
  */
 @Configuration
-@EntityScan(basePackages = {"com.fushun.pay.infrastructure.*.tunnel.database.dataobject"})
+@EntityScan(basePackages = {"com.fushun.pay.infrastructure.*.tunnel.database.dataobject","com.fushun.framework.base"})
 public class EntityConfig {
 }

@@ -23,12 +23,12 @@ public class RefundDomainConverter implements ConvertorI<RefundCO, RefundE, Refu
     @Override
     public RefundDO entityToData(RefundE refundE) {
         RefundDO refundDO = new RefundDO();
-        refundDO.setOutTradeNo(refundE.getERefundFrom() + refundE.getERefundFrom().getCode());
-        refundDO.setPayWay(refundE.getERefundFrom().getCode());
+        refundDO.setOutTradeNo(refundE.getOutTradeNo());
+        refundDO.setOutRefundNo(refundE.getERefundFrom().getEPayFrom().getPreStr() + refundE.getRefundNo());
+        refundDO.setPayWay(refundE.getEPayWay().getCode());
         refundDO.setRefundFrom(refundE.getERefundFrom().getCode());
         refundDO.setRefundMoney(refundE.getRefundMoney());
         refundDO.setRefundNo(refundE.getRefundNo());
-        refundDO.setOutTradeNo(refundE.getERefundFrom().getPreStr() + refundDO.getRefundNo());
         refundDO.setRefundReason(refundE.getRefundReason());
         refundDO.setStatus(ERefundStatus.wait.getCode());
         refundDO.setNoticeStatus(ERefundNotityStatus.No.getCode());

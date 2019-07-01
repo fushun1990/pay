@@ -5,6 +5,7 @@ import com.alibaba.cola.domain.Entity;
 import com.alibaba.cola.domain.EntityObject;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
+import com.fushun.framework.base.SpringContextUtil;
 import com.fushun.framework.util.util.BeanUtils;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.pay.app.dto.domainevent.CreatedPayEvent;
@@ -90,12 +91,9 @@ public class PayE extends EntityObject {
      */
     private EPayWay receiveWay;
 
+    private PayRepository payRepository= SpringContextUtil.getBean(PayRepository.class);
 
-    @Autowired
-    private PayRepository payRepository;
-
-    @Autowired
-    private DomainEventPublisher domainEventPublisher;
+    private DomainEventPublisher domainEventPublisher=SpringContextUtil.getBean(DomainEventPublisher.class);;
 
     /**
      * @param
@@ -155,11 +153,13 @@ public class PayE extends EntityObject {
      */
     public void payNotify() {
         RecordPayId recordPayId = new RecordPayId(this.getOutTradeNo());
-        RecordPayDO recordPayDO = payRepository.findById(recordPayId).get();
 
-        if (recordPayDO == null) {
+        Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
+
+        if (!optional.isPresent()) {
             throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
         }
+        RecordPayDO recordPayDO = optional.get();
 
         ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
         ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());
@@ -202,12 +202,12 @@ public class PayE extends EntityObject {
      */
     public void syncResponse() {
         RecordPayId recordPayId = new RecordPayId(this.getOutTradeNo());
-        RecordPayDO recordPayDO = payRepository.findById(recordPayId).get();
+        Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
 
-        if (recordPayDO == null) {
+        if (!optional.isPresent()) {
             throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
         }
-
+        RecordPayDO recordPayDO = optional.get();
         ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
         ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());
 
@@ -248,11 +248,14 @@ public class PayE extends EntityObject {
      */
     public void payFail() {
         RecordPayId recordPayId = new RecordPayId(this.getOutTradeNo());
-        RecordPayDO recordPayDO = payRepository.findById(recordPayId).get();
 
-        if (recordPayDO == null) {
+        Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
+
+        if (!optional.isPresent()) {
             throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
         }
+        RecordPayDO recordPayDO = optional.get();
+
 
         ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
         ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());

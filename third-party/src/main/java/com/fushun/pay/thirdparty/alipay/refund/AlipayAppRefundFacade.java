@@ -84,12 +84,17 @@ public class AlipayAppRefundFacade {
     private Map<String, String> getRequestData(RefundAlipayCO refundAlipayCO) {
 
         Map<String, String> map = new HashMap<>();
-        map.put("out_trade_no", refundAlipayCO.getERefundFrom().getPreStr() + refundAlipayCO.getTradeNo());
+        String outTradeNo="";
+        if(!refundAlipayCO.getIsSpecial()){
+         outTradeNo=refundAlipayCO.getERefundFrom().getEPayFrom().getPreStr();
+        }
+        outTradeNo+=refundAlipayCO.getTradeNo();
+        map.put("out_trade_no",outTradeNo);
         map.put("refund_amount", String.valueOf(refundAlipayCO.getRefundMoney()));
         if (refundAlipayCO.getRefundReason() != null) {
             map.put("refund_reason", refundAlipayCO.getRefundReason());
         }
-        map.put("out_request_no", refundAlipayCO.getERefundFrom().getPreStr() + refundAlipayCO.getRefundNo());
+        map.put("out_request_no", refundAlipayCO.getERefundFrom().getEPayFrom().getPreStr() + refundAlipayCO.getRefundNo());
 
         return map;
     }

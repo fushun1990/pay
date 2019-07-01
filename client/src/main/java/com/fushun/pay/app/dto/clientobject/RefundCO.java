@@ -1,5 +1,7 @@
 package com.fushun.pay.app.dto.clientobject;
 
+import com.fushun.pay.app.dto.enumeration.EPayFrom;
+import com.fushun.pay.app.dto.enumeration.EPayWay;
 import com.fushun.pay.app.dto.enumeration.ERefundFrom;
 import lombok.Data;
 
@@ -15,12 +17,12 @@ import java.math.BigDecimal;
 public class RefundCO {
 
     /**
-     * 支付号（内部系统）
+     * 支付号（业务系统）
      */
     private String tradeNo;
 
     /**
-     * 退款单号（内部系统）
+     * 退款单号（业务系统）
      */
     private String refundNo;
 
@@ -31,9 +33,14 @@ public class RefundCO {
 
     /**
      * 退款单号（第三方系统）
+     * 不需要填写 退款成功之后返回的
      */
     private String thirdRefundNo;
 
+    /**
+     * 支付订单的总金额
+     */
+    private BigDecimal payMoney;
     /**
      * 退款金额
      */
@@ -47,13 +54,18 @@ public class RefundCO {
     /**
      * 支付方式（）
      */
-    private String ePayWay;
+    private EPayWay ePayWay;
 
 
     /**
      * 退款原因
      */
     private String refundReason;
+
+    /**
+     * 特殊支付，老系统移过来的，支付单号没有前缀
+     */
+    private Boolean isSpecial=false;
 
 
 }

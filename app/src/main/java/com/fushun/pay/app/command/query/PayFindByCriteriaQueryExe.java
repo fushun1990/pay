@@ -1,7 +1,10 @@
 package com.fushun.pay.app.command.query;
 
+import com.alibaba.cola.command.Command;
 import com.alibaba.cola.command.QueryExecutorI;
 import com.alibaba.cola.dto.MultiResponse;
+import com.alibaba.cola.dto.SingleResponse;
+import com.fushun.pay.app.common.exception.ErrorCode;
 import com.fushun.pay.app.convertor.CreatePayConvertor;
 import com.fushun.pay.app.dto.PayFindByCriteriaQry;
 import com.fushun.pay.app.dto.clientobject.PayCO;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author wangfushun
@@ -19,7 +23,8 @@ import java.util.List;
  * @description
  * @creation 2019年01月19日23时21分
  */
-public class PayFindByCriteriaQueryExe implements QueryExecutorI<MultiResponse<PayCO>, PayFindByCriteriaQry> {
+@Command
+public class PayFindByCriteriaQueryExe implements QueryExecutorI<SingleResponse<PayCO>, PayFindByCriteriaQry> {
     @Autowired
     private PayDBTunnel payDBTunnel;
 
@@ -27,12 +32,14 @@ public class PayFindByCriteriaQueryExe implements QueryExecutorI<MultiResponse<P
     private CreatePayConvertor payConvertor;
 
     @Override
-    public MultiResponse<PayCO> execute(PayFindByCriteriaQry cmd) {
+    public SingleResponse<PayCO> execute(PayFindByCriteriaQry cmd) {
         RecordPayId recordPayId = new RecordPayId();
-        recordPayId.setOutTradeNo("123");
-        RecordPayDO recordPayDO = payDBTunnel.findById(recordPayId).get();
-        List<PayCO> customerCos = new ArrayList<>();
-        customerCos.add(payConvertor.dataToClient(recordPayDO));
-        return MultiResponse.of(customerCos, customerCos.size());
+        recordPayId.setOutTradeNo(cmd.getOutTradeNo());
+        Optional<RecordPayDO> optional = payDBTunnel.findById(recordPayId);
+        if(!optional.isPresent()){
+            return SingleResponse.buildFailure(ErrorCode.PAY_FAIL.getErrCode(),"支付信息不存在");
+        }
+        PayCO payCO=payConvertor.dataToClient(optional.get());
+        return SingleResponse.of(payCO);
     }
 }

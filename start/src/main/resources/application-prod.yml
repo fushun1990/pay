@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+app:
+  datasource:
+    jdbc-url: jdbc:mysql://120.76.202.185:53306/bldsupermarket?serverTimezone=Asia/Shanghai
+    username: bldsupermarket
+    password: bldsu123
+    pool-size: 30
+    driverClassName: com.mysql.cj.jdbc.Driver

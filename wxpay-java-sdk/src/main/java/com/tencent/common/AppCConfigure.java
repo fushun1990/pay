@@ -1,5 +1,8 @@
 package com.tencent.common;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
 /**
  * 微信App支付对象
  *

@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
+//@ContextConfiguration(classes = {TestConfig.class})
 public class CustomerValidatorTest {
 
     @Test

@@ -7,6 +7,7 @@ import com.alibaba.cola.dto.SingleResponse;
 import com.alibaba.cola.extension.ExtensionExecutor;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
+import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.common.exception.ErrorCode;
 import com.fushun.pay.app.convertor.extensionpoint.PaySyncResponseConvertorExtPt;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
@@ -45,10 +46,10 @@ public class PaySyncResponseCmdExe implements CommandExecutorI<Response, PaySync
             paySyncResponseCO = extensionExecutor.execute(PaySyncResponseThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.responseValidator(cmd.getPaySyncResponseCO()));
         } catch (Exception e) {
             analysisSyncResponse = false;
-            logger.error("pay syncResponse  fail, paramMap:[{}]", cmd.getPaySyncResponseCO().getResponseStr(), e);
+            logger.error("pay syncResponse fail,PaySyncResponseCO:[{}]", JsonUtil.classToJson(cmd.getPaySyncResponseCO()), e);
 
             PaySyncResponseExceptionEvent paySyncResponseExceptionEvent = new PaySyncResponseExceptionEvent();
-            paySyncResponseExceptionEvent.setOutTradeNo(paySyncResponseCO.getOutTradeNo());
+            paySyncResponseExceptionEvent.setOutTradeNo(cmd.getPaySyncResponseCO().getOutTradeNo());
             domainEventPublisher.publish(paySyncResponseExceptionEvent);
         }
 
@@ -60,7 +61,7 @@ public class PaySyncResponseCmdExe implements CommandExecutorI<Response, PaySync
         payE.syncResponse();
 
         if (analysisSyncResponse == false) {
-            SingleResponse.buildFailure(ErrorCode.PAY_FAIL.getErrCode(), ErrorCode.PAY_FAIL.getErrCode());
+            return SingleResponse.buildFailure(ErrorCode.PAY_FAIL.getErrCode(), ErrorCode.PAY_FAIL.getErrCode());
         }
         return SingleResponse.of(ErrorCode.PAY_SUCCESS.getErrDesc());
     }

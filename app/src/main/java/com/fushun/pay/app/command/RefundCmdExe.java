@@ -7,6 +7,7 @@ import com.alibaba.cola.extension.ExtensionExecutor;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.app.common.exception.ErrorCode;
 import com.fushun.pay.app.convertor.extensionpoint.RefundConvertorExtPt;
 import com.fushun.pay.app.dto.RefundCmd;
 import com.fushun.pay.app.dto.clientobject.RefundCO;
@@ -40,6 +41,7 @@ public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
         //2, invoke domain service or directly operate domain to do business logic process
         RefundE refundE = extensionExecutor.execute(RefundConvertorExtPt.class, cmd.getContext(), convertor -> convertor.clientToEntity(cmd.getRefundCO(), cmd.getContext()));
         refundE.refund();
+        cmd.getRefundCO().setPayMoney(refundE.getPayMoney());
 
         //获取支付信息
         try {
@@ -47,8 +49,9 @@ public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
         } catch (Exception e) {
             logger.info("refund exception,param:[{}]", JsonUtil.toJson(cmd.getRefundCO()), e);
             refundE.setERefundStatus(ERefundStatus.fail);
+            refundE.setResult(e.getMessage());
             refundE.fail();
-            throw e;
+            return Response.buildFailure(ErrorCode.REFUND_FAIL.getErrCode(),ErrorCode.REFUND_FAIL.getErrDesc());
         }
 
         refundE.setThirdRefundNo(cmd.getRefundCO().getThirdRefundNo());

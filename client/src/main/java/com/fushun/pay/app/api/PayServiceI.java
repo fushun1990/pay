@@ -26,7 +26,7 @@ public interface PayServiceI {
      */
     SingleResponse<CreatedPayRequestBodyCO> createPay(CreatePayCmd payCmd);
 
-    MultiResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry);
+    SingleResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry);
 
     /**
      * @param payNotifyCmd

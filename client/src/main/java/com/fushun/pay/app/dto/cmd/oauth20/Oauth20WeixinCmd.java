@@ -17,7 +17,7 @@ public class Oauth20WeixinCmd extends OAuth20Cmd {
     private WeixinOauth20CO weixinOauth20CO;
 
     @Override
-    public OAuth20CO getOAuth20CO() {
+    public WeixinOauth20CO getOAuth20CO() {
         return this.weixinOauth20CO;
     }
 }

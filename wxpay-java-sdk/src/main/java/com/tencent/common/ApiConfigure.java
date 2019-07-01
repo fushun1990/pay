@@ -13,6 +13,11 @@ public class ApiConfigure {
      */
     public static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
 
+    /**
+     * 获取用户信息
+     */
+    public static String USER_INFO_URL="https://api.weixin.qq.com/sns/userinfo";
+
     //以下是几个API的路径：
     //1）被扫支付API
     public static String PAY_API = "https://api.mch.weixin.qq.com/pay/micropay";

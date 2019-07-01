@@ -17,6 +17,8 @@ import com.tencent.protocol.refund_query_protocol.RefundQueryResData;
 import com.tencent.protocol.reverse_protocol.ReverseReqData;
 import com.tencent.protocol.unifiedorder_protocol.AppUnifiedOrderReqData;
 import com.tencent.protocol.unifiedorder_protocol.UnifiedorderResData;
+import com.tencent.protocol.userinfo_protocol.UserInfoReqData;
+import com.tencent.protocol.userinfo_protocol.UserInfoResData;
 import com.tencent.service.impl.*;
 
 /**
@@ -154,7 +156,7 @@ public class WXPay {
     /**
      * 获取授权信息
      *
-     * @param auth20ReqData
+     * @param oauth20ReqData
      * @param resultListener
      * @throws IllegalAccessException
      * @throws ClassNotFoundException
@@ -168,6 +170,20 @@ public class WXPay {
     public static void oAuth20Business(OAuth20ReqData oauth20ReqData, ResultListener<OAuth20ResData> resultListener) throws IllegalAccessException, ClassNotFoundException, InstantiationException, Exception {
         new OAuth20Business().run(oauth20ReqData, resultListener);
     }
+
+    /**
+     * 获取用户信息
+     * @param userInfoReqData
+     * @param resultListener
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws Exception
+     */
+    public static void userInfoBusiness(UserInfoReqData userInfoReqData, ResultListener<UserInfoResData> resultListener) throws IllegalAccessException, ClassNotFoundException, InstantiationException, Exception {
+        new UserInfoBusiness().run(userInfoReqData, resultListener);
+    }
+
 
     /**
      * 查询订单支付状态

@@ -2,8 +2,8 @@ package com.fushun.pay.thirdparty.weixin.pay;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.framework.util.util.StringUtils;
 import com.fushun.pay.app.dto.clientobject.refund.RefundWeixinCO;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
 import com.fushun.pay.app.dto.enumeration.ERefundAccount;
@@ -16,7 +16,6 @@ import com.tencent.common.GZHConfigure;
 import com.tencent.protocol.refund_protocol.RefundReqData;
 import com.tencent.protocol.refund_protocol.RefundResData;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * 微信退款 实现
@@ -51,8 +50,11 @@ public class WeiXinRefundFacade {
         } catch (WeiXinRefundException e) {
             logger.info("refund exception,change refundAccount,param:[{}]", JsonUtil.toJson(refundWeixinCO));
             //切换一种退款源方式，再次退款
-            if (StringUtils.isEmpty(refundWeixinCO.getERefundAccount())) {
-                refundWeixinCO.setERefundAccount(ERefundAccount.REFUND_SOURCE_RECHARGE_FUNDS);
+            if (refundWeixinCO.getIsAutoChangeRefundAccount()) {
+                ERefundAccount eRefundAccount=this.getOtherERefundAccount(refundWeixinCO.getERefundAccount());
+                logger.warn("切换一种退款账户，oldRefundAccount:[{}],refundAccount:[{}]",refundWeixinCO.getERefundAccount().getCode(),eRefundAccount.getCode());
+                refundWeixinCO.setERefundAccount(eRefundAccount);
+                refundWeixinCO.setIsAutoChangeRefundAccount(false);;
                 return refundRequest(refundWeixinCO);
             }
             throw e;
@@ -62,10 +64,20 @@ public class WeiXinRefundFacade {
         return null;
     }
 
+    private ERefundAccount getOtherERefundAccount(ERefundAccount eRefundAccount){
+        switch (eRefundAccount){
+            case REFUND_SOURCE_RECHARGE_FUNDS:
+                return ERefundAccount.REFUND_SOURCE_UNSETTLED_FUNDS;
+            case REFUND_SOURCE_UNSETTLED_FUNDS:
+                return ERefundAccount.REFUND_SOURCE_RECHARGE_FUNDS;
+        }
+        return null;
+    }
+
 
     private RefundReqData getReq(RefundWeixinCO refundWeixinCO) {
         RefundReqData refundReqData;
-        EPayWay ePayWay = EnumUtil.getEnum(EPayWay.class, refundWeixinCO.getEPayWay());
+        EPayWay ePayWay = refundWeixinCO.getEPayWay();
         switch (ePayWay) {
             case PAY_WAY_WEIXINPAY:
                 refundReqData = new RefundReqData(null, GZHConfigure.initMethod());
@@ -76,14 +88,18 @@ public class WeiXinRefundFacade {
             default:
                 throw new PayException(PayException.Enum.REFUND_ERROR_EXCEPTION);
         }
-        ;
-        refundReqData.setOut_trade_no(refundWeixinCO.getERefundFrom().getPreStr() + refundWeixinCO.getTradeNo());
-        refundReqData.setOut_refund_no(refundWeixinCO.getERefundFrom().getPreStr() + refundWeixinCO.getRefundNo());
-        refundReqData.setTotal_fee(refundWeixinCO.getRefundMoney().multiply(WeiXinUnifiedOrderFacade.bai).intValue());
+        if(!refundWeixinCO.getIsSpecial()){
+            refundReqData.setOut_trade_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr());
+        }
+        refundReqData.setOut_trade_no(refundWeixinCO.getTradeNo());
+        refundReqData.setOut_refund_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr() + refundWeixinCO.getRefundNo());
+        refundReqData.setTotal_fee(refundWeixinCO.getPayMoney().multiply(WeiXinUnifiedOrderFacade.bai).intValue());
         refundReqData.setRefund_fee(refundWeixinCO.getRefundMoney().multiply(WeiXinUnifiedOrderFacade.bai).intValue());
 
         if (!StringUtils.isEmpty(refundWeixinCO.getERefundAccount())) {
             refundReqData.setRefund_account(refundWeixinCO.getERefundAccount().getCode());
+        }else{
+            refundReqData.setRefund_account(ERefundAccount.REFUND_SOURCE_UNSETTLED_FUNDS.getCode());
         }
 
         return refundReqData;
@@ -95,9 +111,9 @@ public class WeiXinRefundFacade {
         @Override
         public void onFail(RefundResData refundResData) {
             if ("NOTENOUGH".equals(refundResData.getErr_code())) {
-                throw new PayException(new Throwable(refundResData.getErr_code_des()), PayException.Enum.REFUND_ERROR_EXCEPTION);
+                throw new WeiXinRefundException(new Throwable(refundResData.getErr_code_des()), PayException.Enum.REFUND_ERROR_EXCEPTION);
             }
-            this.onFail(refundResData);
+            throw new RuntimeException("退款失败:"+refundResData.getErr_code_des());
         }
 
         @Override

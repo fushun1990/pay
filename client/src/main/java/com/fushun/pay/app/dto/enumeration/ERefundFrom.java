@@ -1,23 +1,15 @@
 package com.fushun.pay.app.dto.enumeration;
 
 /**
- * 支付信息状态
+ * 退款源
  *
  * @author zhoup
  */
 public enum ERefundFrom implements ECallBackFrom<String> {
     /**
-     * Web端下载视频
+     * 退款购买会员金额
      */
-    REFUND_FROM_WEB_DOWN_VIDEO("refund_from_web_down_video", "Web端", "WDW_"),
-    /**
-     * APP端
-     */
-    REFUND_FROM_APP_DOWN_VIDEO("refund_from_App_down_video", "APP端", "ADW_"),
-    /**
-     * APP端
-     */
-    REFUND_FROM_APP_BUY_GOODS("refund_from_App_buy_goods", "APP端", "ABG_");
+    REFUND_FROM_GZH_BUY_MEMBERS("refund_from_gzh_buy_members", "退款购买会员金额", EPayFrom.PAY_FROM_BUY_MEMBERS);
 
 
     private String code;
@@ -27,41 +19,26 @@ public enum ERefundFrom implements ECallBackFrom<String> {
     /**
      * 订单号前缀
      */
-    private String preStr;
+    private EPayFrom ePayFrom;
 
-    ERefundFrom(String code, String text, String preStr) {
+    ERefundFrom(String code, String text, EPayFrom ePayFrom) {
         this.code = code;
         this.text = text;
-        this.preStr = preStr;
+        this.ePayFrom = ePayFrom;
     }
 
+
+    @Override
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+    @Override
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public EPayFrom getEPayFrom() {
+        return ePayFrom;
     }
-
-    @Override
-    public String toString() {
-        return text;
-    }
-
-    public String getPreStr() {
-        return preStr;
-    }
-
-    public void setPreStr(String preStr) {
-        this.preStr = preStr;
-    }
-
 }

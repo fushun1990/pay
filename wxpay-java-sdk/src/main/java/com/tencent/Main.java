@@ -4,7 +4,7 @@ import com.tencent.common.Util;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public  void test(String[] args) {
 
         try {
 

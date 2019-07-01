@@ -36,11 +36,22 @@ public class PayCO extends ClientObject {
 //(groups={CreateAlipayAppPayResultValidatorGroup.class,CreateWeiXinJZHPayValidatorGroup.class,CreateAlipayWapResultValidatorGroup.class,CreateWeiXinAppPayValidatorGroup.class,CreateAlipayDirectPayResultValidatorGroup.class})
     private String notifyUrl;
     /**
-     * 支付单号
+     * 支付单号 支付系统
      */
     @NotEmpty
 //(groups={CreateAlipayAppPayResultValidatorGroup.class,CreateWeiXinJZHPayValidatorGroup.class,CreateAlipayWapResultValidatorGroup.class,CreateWeiXinAppPayValidatorGroup.class,CreateAlipayDirectPayResultValidatorGroup.class})
     private String tradeNo;
+
+    /**
+     * 业务系统的 支付单号
+     */
+    private String orderPayNo;
+
+
+    /**
+     * 第三方支付系统 支付单号
+     */
+    private String payNo;
 
     /**
      * 支付金额

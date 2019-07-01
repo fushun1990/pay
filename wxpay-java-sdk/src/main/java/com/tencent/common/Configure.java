@@ -1,5 +1,7 @@
 package com.tencent.common;
 
+import lombok.Data;
+
 import java.net.URL;
 
 /**
@@ -8,6 +10,7 @@ import java.net.URL;
  * Time: 14:40
  * 这里放置各种配置数据
  */
+@Data
 public abstract class Configure {
 //这个就是自己要保管好的私有Key了（切记只能放在自己的后台代码里，不能放在任何可能被看到源代码的客户端程序中）
     // 每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
@@ -53,85 +56,5 @@ public abstract class Configure {
      * @records <p>  fushun 2017年5月31日</p>
      */
     public abstract Configure getConfigure();
-
-    public String getKey() {
-        return getConfigure().key;
-    }
-
-    public void setKey(String key) {
-        getConfigure().key = key;
-    }
-
-    public String getAppID() {
-        return getConfigure().appID;
-    }
-
-    public void setAppID(String appID) {
-        getConfigure().appID = appID;
-    }
-
-    public String getAppSecret() {
-        return getConfigure().appSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        getConfigure().appSecret = appSecret;
-    }
-
-    public String getMchID() {
-        return getConfigure().mchID;
-    }
-
-    public void setMchID(String mchID) {
-        getConfigure().mchID = mchID;
-    }
-
-    public String getSubMchID() {
-        return getConfigure().subMchID;
-    }
-
-    public void setSubMchID(String subMchID) {
-        getConfigure().subMchID = subMchID;
-    }
-
-    public URL getCertLocalPath() {
-        return getConfigure().certLocalPath;
-    }
-
-    public void setCertLocalPath(URL certLocalPath) {
-        getConfigure().certLocalPath = certLocalPath;
-    }
-
-    public String getCertPassword() {
-        return getConfigure().certPassword;
-    }
-
-    public void setCertPassword(String certPassword) {
-        getConfigure().certPassword = certPassword;
-    }
-
-    public boolean isUseThreadToDoReport() {
-        return getConfigure().useThreadToDoReport;
-    }
-
-    public void setUseThreadToDoReport(boolean useThreadToDoReport) {
-        getConfigure().useThreadToDoReport = useThreadToDoReport;
-    }
-
-    public String getIp() {
-        return getConfigure().ip;
-    }
-
-    public void setIp(String ip) {
-        getConfigure().ip = ip;
-    }
-
-    public String getHttpsRequestClassName() {
-        return HttpsRequestClassName;
-    }
-
-    public void setHttpsRequestClassName(String httpsRequestClassName) {
-        getConfigure().HttpsRequestClassName = httpsRequestClassName;
-    }
 
 }

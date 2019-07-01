@@ -1,7 +1,6 @@
 package com.fushun.pay.start;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @version 1.0
  * @creation 2018年12月21日00时13分
  */
-@EnableAutoConfiguration
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.fushun.pay", "com.fushun.framework", "com.alibaba.cola"})
 public class PayApplication {

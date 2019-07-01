@@ -12,6 +12,9 @@ import lombok.Data;
 @Data
 public class WeixinOauth20CO extends OAuth20CO {
 
+    /**
+     * 微信授权返回的code
+     */
     private String code;
 
     private String openId;

@@ -2,6 +2,8 @@ package com.tencent.protocol.oauth20_protocol;
 
 import com.tencent.protocol.base_protocol.BaseResData;
 
+import java.math.BigDecimal;
+
 public class OAuth20ResData extends BaseResData {
     /**
      * access_token	网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
@@ -10,7 +12,7 @@ public class OAuth20ResData extends BaseResData {
     /**
      * expires_in	access_token接口调用凭证超时时间，单位（秒）
      */
-    private Integer expires_in;
+    private BigDecimal expires_in;
     /**
      * refresh_token	用户刷新access_token
      */
@@ -43,11 +45,11 @@ public class OAuth20ResData extends BaseResData {
         this.access_token = access_token;
     }
 
-    public Integer getExpires_in() {
+    public BigDecimal getExpires_in() {
         return expires_in;
     }
 
-    public void setExpires_in(Integer expires_in) {
+    public void setExpires_in(BigDecimal expires_in) {
         this.expires_in = expires_in;
     }
 

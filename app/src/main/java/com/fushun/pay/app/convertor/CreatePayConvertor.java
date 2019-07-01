@@ -36,7 +36,9 @@ public class CreatePayConvertor implements ConvertorI {
         payCO.setPayFrom(EnumUtil.getEnum(EPayFrom.class, dataObject.getPayFrom()));
         payCO.setPayWay(EnumUtil.getEnum(EPayWay.class, dataObject.getPayWay()));
         payCO.setTotalFee(dataObject.getPayMoney());
-        payCO.setTradeNo(dataObject.getPayNo());
+        payCO.setTradeNo(dataObject.getOutTradeNo());
+        payCO.setOrderPayNo(dataObject.getOrderPayNo());
+        payCO.setPayNo(dataObject.getPayNo());
         return payCO;
     }
 }

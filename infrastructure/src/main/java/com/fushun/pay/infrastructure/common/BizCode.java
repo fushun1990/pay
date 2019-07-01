@@ -14,4 +14,6 @@ public class BizCode {
     public final static String REFUND_WEIXIN = "com.fushun.refund.weixin";
 
     public final static String OAUTH20_WEIXIN = "oauth20.weixin";
+
+    public final static String USER_INFO_WEIXIN="userInfo.weixin";
 }

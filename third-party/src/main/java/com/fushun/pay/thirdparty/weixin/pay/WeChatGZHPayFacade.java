@@ -10,6 +10,7 @@ import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
 import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
 import com.fushun.pay.app.dto.clientobject.notify.PayNotifyWeixinGZHCO;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
+import com.fushun.pay.app.dto.enumeration.EPayWay;
 import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.tencent.common.GZHConfigure;
@@ -19,6 +20,7 @@ import com.tencent.protocol.jspay_protocol.NotifyResData;
 import com.tencent.protocol.oauth20_protocol.OAuth20ResData;
 import com.tencent.protocol.order_query_protocol.OrderQueryResData;
 import com.tencent.protocol.unifiedorder_protocol.UnifiedorderResData;
+import com.tencent.protocol.userinfo_protocol.UserInfoResData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -161,20 +163,34 @@ public class WeChatGZHPayFacade {
         recordPayDTO.setOutTradeNo(orderQueryResData.getOut_trade_no());
         recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
         recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(orderQueryResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+        recordPayDTO.setReceiveWay(EPayWay.PAY_WAY_WEIXINPAY);
     }
 
     /**
-     * 根据微信code获取openId
+     * 根据微信code获取 获取ACCESS_TOKEN 和 openId
      *
      * @param weiXinAuthCode
      * @return
      */
-    public String getWeChatOpenIdByCode(String weiXinAuthCode) {
+    public OAuth20ResData getAuthorizeByCode(String weiXinAuthCode) {
         if (StringUtils.isEmpty(weiXinAuthCode)) {
             throw new PayException(null, PayException.Enum.WECHAT_CODE_NOT_NULL_EXCEPTION);
         }
         OAuth20ResData oAuth20ResData = weiXinOAuth20Facade.getOAuth20Data(weiXinAuthCode);
-        String openId = oAuth20ResData.getOpenid();
-        return openId;
+        return oAuth20ResData;
+    }
+
+    /**
+     * 获取用户信息
+     * @param accessToken
+     * @param openId
+     * @return
+     */
+    public UserInfoResData getUserInfoByOpenId(String accessToken, String openId){
+        if (StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId)) {
+            throw new PayException(null, PayException.Enum.WECHAT_CODE_NOT_NULL_EXCEPTION);
+        }
+        UserInfoResData userInfoResData = weiXinOAuth20Facade.getUserInfoByOpenId(accessToken,openId);
+        return userInfoResData;
     }
 }
