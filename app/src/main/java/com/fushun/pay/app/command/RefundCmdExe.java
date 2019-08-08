@@ -47,7 +47,7 @@ public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
         try {
             RefundCO refundCO = extensionExecutor.execute(RefundThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.refund(cmd.getRefundCO()));
         } catch (Exception e) {
-            logger.info("refund exception,param:[{}]", JsonUtil.toJson(cmd.getRefundCO()), e);
+            logger.error("refund exception,param:[{}]", JsonUtil.toJson(cmd.getRefundCO()), e);
             refundE.setERefundStatus(ERefundStatus.fail);
             refundE.setResult(e.getMessage());
             refundE.fail();

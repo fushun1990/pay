@@ -20,10 +20,11 @@ public class RefundConvertor implements ConvertorI {
     public RefundE clientToEntity(RefundCO refundCO, Context context) {
         RefundE refundE = new RefundE();
         if(!refundCO.getIsSpecial()){
-            refundE.setOutTradeNo(refundCO.getERefundFrom().getEPayFrom().getPreStr());
+            refundE.setOutTradeNo(refundCO.getERefundFrom().getEPayFrom().getPreStr()+refundCO.getTradeNo());
+        }else{
+            refundE.setOutTradeNo(refundCO.getTradeNo());
         }
         refundE.setEPayWay(refundCO.getEPayWay());
-        refundE.setOutTradeNo(refundCO.getTradeNo());
         refundE.setTradeNo(refundCO.getTradeNo());
         refundE.setRefundMoney(refundCO.getRefundMoney());
         refundE.setRefundNo(refundCO.getRefundNo());

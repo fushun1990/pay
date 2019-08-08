@@ -46,7 +46,6 @@ public class WeiXinRefundFacade {
             RefundResData refundResData = resultListener.getResData();
             logger.info("refund result:[{}]", JsonUtil.classToJson(refundResData));
             refundWeixinCO.setThirdRefundNo(refundResData.getRefund_id());
-
         } catch (WeiXinRefundException e) {
             logger.info("refund exception,change refundAccount,param:[{}]", JsonUtil.toJson(refundWeixinCO));
             //切换一种退款源方式，再次退款
@@ -89,9 +88,11 @@ public class WeiXinRefundFacade {
                 throw new PayException(PayException.Enum.REFUND_ERROR_EXCEPTION);
         }
         if(!refundWeixinCO.getIsSpecial()){
-            refundReqData.setOut_trade_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr());
+            refundReqData.setOut_trade_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr()+refundWeixinCO.getTradeNo());
+        }else{
+            refundReqData.setOut_trade_no(refundWeixinCO.getTradeNo());
         }
-        refundReqData.setOut_trade_no(refundWeixinCO.getTradeNo());
+
         refundReqData.setOut_refund_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr() + refundWeixinCO.getRefundNo());
         refundReqData.setTotal_fee(refundWeixinCO.getPayMoney().multiply(WeiXinUnifiedOrderFacade.bai).intValue());
         refundReqData.setRefund_fee(refundWeixinCO.getRefundMoney().multiply(WeiXinUnifiedOrderFacade.bai).intValue());
@@ -113,6 +114,7 @@ public class WeiXinRefundFacade {
             if ("NOTENOUGH".equals(refundResData.getErr_code())) {
                 throw new WeiXinRefundException(new Throwable(refundResData.getErr_code_des()), PayException.Enum.REFUND_ERROR_EXCEPTION);
             }
+            logger.error("支付错误，错误信息：[{}]",JsonUtil.classToJson(refundResData));
             throw new RuntimeException("退款失败:"+refundResData.getErr_code_des());
         }
 

@@ -135,6 +135,8 @@ public class RefundE extends EntityObject {
             throw new BizException(ErrorCode.PAY_MONEY_IS_ZERO, ErrorCode.PAY_MONEY_IS_ZERO.getErrDesc() + "，可退金额" + recordPayDO.getPayMoney());
         }
 
+        this.payMoney=recordPayDO.getPayMoney();
+
         if (BeanUtils.isNotEmpty(refundDO)) {
             //退款存在，更状态
             logger.info("refund is exist,refundNo:[{}]", refundDO.getRefundNo());
@@ -144,7 +146,6 @@ public class RefundE extends EntityObject {
             return;
         }
 
-        this.payMoney=recordPayDO.getPayMoney();
         //退款不存在，
         //保存退款信息
         refundRepository.create(this);
