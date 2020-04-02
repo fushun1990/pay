@@ -1,6 +1,10 @@
 package com.fushun.pay.infrastructure.pay.tunnel.database.dataobject;
 
 import com.fushun.framework.base.BaseCMP;
+import com.fushun.pay.app.dto.enumeration.EPayFrom;
+import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -64,7 +68,8 @@ public class RecordPayDO extends BaseCMP implements Serializable {
      * 支付方式，1、支付宝，2银联
      */
     @Column(columnDefinition = "varchar(50) DEFAULT NULL comment '支付方式，1、支付宝，2银联'")
-    private String payWay;
+    @Enumerated(EnumType.STRING)
+    private EPayWay payWay;
 
     /**
      * 接收账户
@@ -80,16 +85,16 @@ public class RecordPayDO extends BaseCMP implements Serializable {
 
     /**
      * 支付状态[1 成功 2失败，3：创建]
-     * {@linkplain com.fushun.pay.app.dto.enumeration.ERecordPayStatus#code}
      */
-    @Column(columnDefinition = "int(2) DEFAULT 3 comment '支付状态[1 成功 2失败，3：创建]'")
-    private Integer status;
+    @Column(columnDefinition = "varchar(10) DEFAULT 'CREATED' comment '支付状态[1 成功 2失败，3：创建]'")
+    @Enumerated(EnumType.STRING)
+    private ERecordPayStatus status;
 
     /**
      * 支付端，1、web,2、app
      */
     @Column(columnDefinition = "varchar(50) DEFAULT NULL comment '支付端，1、web,2、app'")
-    private String payFrom;
+    private EPayFrom payFrom;
 
     /**
      * 已退金额
@@ -99,9 +104,9 @@ public class RecordPayDO extends BaseCMP implements Serializable {
 
     /**
      * 系统通知 状态，1：已通知,2：未通知
-     * {@link com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus#code}
      */
-    @Column(columnDefinition = "int(2) DEFAULT 2 comment '已退金额'")
-    private Integer notityStatus;
+    @Column(columnDefinition = "varchar(10) DEFAULT 'NO' comment '已退金额'")
+    @Enumerated(EnumType.STRING)
+    private ERecordPayNotityStatus notityStatus;
 
 }

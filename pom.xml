@@ -7,13 +7,13 @@
 
     <groupId>com.fushun.pay</groupId>
     <artifactId>pay</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <name>pay</name>
 
     <parent>
         <artifactId>framework-parent</artifactId>
         <groupId>com.fushun.framework</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <cola.framework.version>1.0.0-SNAPSHOT</cola.framework.version>
+        <cola.framework.version>2.0.0</cola.framework.version>
         <alipay-sdk-java.version>3.3.2</alipay-sdk-java.version>
         <bcprov-jdk14.version>1.54</bcprov-jdk14.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>

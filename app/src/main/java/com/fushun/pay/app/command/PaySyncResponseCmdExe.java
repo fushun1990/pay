@@ -43,7 +43,7 @@ public class PaySyncResponseCmdExe implements CommandExecutorI<Response, PaySync
         PaySyncResponseCO paySyncResponseCO = null;
         boolean analysisSyncResponse = true;
         try {
-            paySyncResponseCO = extensionExecutor.execute(PaySyncResponseThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.responseValidator(cmd.getPaySyncResponseCO()));
+            paySyncResponseCO = extensionExecutor.execute(PaySyncResponseThirdPartyExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.responseValidator(cmd.getPaySyncResponseCO()));
         } catch (Exception e) {
             analysisSyncResponse = false;
             logger.error("pay syncResponse fail,PaySyncResponseCO:[{}]", JsonUtil.classToJson(cmd.getPaySyncResponseCO()), e);
@@ -54,10 +54,10 @@ public class PaySyncResponseCmdExe implements CommandExecutorI<Response, PaySync
         }
 
         //1, validation
-        extensionExecutor.executeVoid(PaySyncResponseValidatorExtPt.class, cmd.getContext(), validator -> validator.validate(cmd));
+        extensionExecutor.executeVoid(PaySyncResponseValidatorExtPt.class, cmd.getBizScenario(), validator -> validator.validate(cmd));
 
         //2, invoke domain service or directly operate domain to do business logic process
-        PayE payE = extensionExecutor.execute(PaySyncResponseConvertorExtPt.class, cmd.getContext(), convertor -> convertor.clientToEntity(cmd.getPaySyncResponseCO(), cmd.getContext()));
+        PayE payE = extensionExecutor.execute(PaySyncResponseConvertorExtPt.class, cmd.getBizScenario(), convertor -> convertor.clientToEntity(cmd.getPaySyncResponseCO(),cmd.getBizScenario()));
         payE.syncResponse();
 
         if (analysisSyncResponse == false) {

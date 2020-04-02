@@ -130,7 +130,7 @@ public class AlipayAppRefundFacade {
             response = client.execute(request);
             //调用成功，则处理业务逻辑
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.REFUND_REQUEST_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.REFUND_REQUEST_FAILED);
         }
 
         return response;

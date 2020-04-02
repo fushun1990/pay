@@ -1,7 +1,7 @@
 package com.fushun.pay.app.convertor;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.convertor.ConvertorI;
+import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.dto.clientobject.PayCO;
 import com.fushun.pay.app.dto.clientobject.PaySyncResponseCO;
 import com.fushun.pay.domain.pay.entity.PayE;
@@ -16,10 +16,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PaySyncResponseConvertor implements ConvertorI {
-    public PayE clientToEntity(PaySyncResponseCO paySyncResponseCO, Context context) {
+    public PayE clientToEntity(PaySyncResponseCO paySyncResponseCO, BizScenario bizScenario) {
         PayE payE = new PayE();
         payE.setTradeNo(paySyncResponseCO.getOutTradeNo());
         payE.setStatus(paySyncResponseCO.getStatus());
+        payE.setBizScenario(bizScenario);
         return payE;
     }
 

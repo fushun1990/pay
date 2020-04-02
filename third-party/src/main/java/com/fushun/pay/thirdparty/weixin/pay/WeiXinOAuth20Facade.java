@@ -1,6 +1,6 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
-import com.fushun.framework.util.exception.exception.BusinessException;
+import com.fushun.framework.exception.BusinessException;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
@@ -35,7 +35,7 @@ public class WeiXinOAuth20Facade {
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.REQUEST_AUTHORIZATION_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.REQUEST_AUTHORIZATION_FAILED);
         }
     }
 
@@ -87,7 +87,7 @@ public class WeiXinOAuth20Facade {
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.REQUEST_AUTHORIZATION_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.REQUEST_AUTHORIZATION_FAILED);
         }
     }
 

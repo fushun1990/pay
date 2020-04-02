@@ -9,8 +9,8 @@ import com.fushun.framework.base.BaseEnum;
  * @author zhoup
  */
 public enum ERefundNotityStatus implements BaseEnum<Integer> {
-    Yes(1, "已通知 "),
-    No(2, "未通知");
+    YES(1, "已通知 "),
+    NO(2, "未通知");
 
     private Integer code;
 

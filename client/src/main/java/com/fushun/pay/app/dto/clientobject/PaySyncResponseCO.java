@@ -2,6 +2,7 @@ package com.fushun.pay.app.dto.clientobject;
 
 import com.alibaba.cola.dto.ClientObject;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 
 /**
@@ -19,7 +20,7 @@ public class PaySyncResponseCO extends ClientObject {
 
     private String outTradeNo;
 
-    private Integer status;
+    private ERecordPayStatus status;
 
     /**
      * 支付方式

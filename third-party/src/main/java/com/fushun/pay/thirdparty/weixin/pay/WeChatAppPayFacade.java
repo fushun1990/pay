@@ -118,20 +118,20 @@ public class WeChatAppPayFacade {
     }
 
     public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyWeixinAppCO recordPayDTO) {
-        recordPayDTO.setNotifyReturnDTO(this.notifyReturnDTO);
+        recordPayDTO.setNotifyReturnDTO(WeChatAppPayFacade.notifyReturnDTO);
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(requestParams);
         if (!Signature.checkIsSignValidFromResponseString(map, AppCConfigure.initMethod())) {
-            throw new PayException(PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         NotifyResData notifyResData = JsonUtil.hashMapToClass(map, NotifyResData.class);
         if ("FAIL".equals(notifyResData.getReturn_code())) {
-            recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+            recordPayDTO.setStatus(ERecordPayStatus.FAILED);
             return;
         }
         recordPayDTO.setPayNo(notifyResData.getTransaction_id());
         recordPayDTO.setOutTradeNo(notifyResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
         recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(notifyResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
     }
 
@@ -145,21 +145,21 @@ public class WeChatAppPayFacade {
     public void payResultAlipayReust(String requestParams, PaySyncResponseWeixinAppCO recordPayDTO) {
         Map<String, Object> map = JsonUtil.jsonToHashMap(requestParams);
         if (map == null || StringUtils.isEmpty(map.get("orderPayNo"))) {
-            throw new PayException(PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
         recordPayDTO.setOutTradeNo(map.get("orderPayNo").toString());
-        recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
 
         if (!"0".equals(map.get("result"))) {
-            throw new PayException(PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
-        recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
 
         OrderQueryResData orderQueryResData = weiXinPayQueryFacade.getOrderQuery(map.get("orderPayNo").toString(), AppCConfigure.initMethod());
 
         recordPayDTO.setPayNo(orderQueryResData.getTransaction_id());
         recordPayDTO.setOutTradeNo(orderQueryResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
         recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(orderQueryResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
     }
 

@@ -8,6 +8,7 @@ import com.fushun.pay.app.dto.clientobject.refund.RefundWeixinCO;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
 import com.fushun.pay.app.dto.enumeration.ERefundAccount;
 import com.fushun.pay.domain.exception.PayException;
+import com.fushun.pay.domain.exception.RefundException;
 import com.fushun.pay.thirdparty.weixin.pay.exception.WeiXinRefundException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
@@ -85,7 +86,7 @@ public class WeiXinRefundFacade {
                 refundReqData = new RefundReqData(null, AppCConfigure.initMethod());
                 break;
             default:
-                throw new PayException(PayException.Enum.REFUND_ERROR_EXCEPTION);
+                throw new PayException(PayException.PayExceptionEnum.REFUND_ERROR);
         }
         if(!refundWeixinCO.getIsSpecial()){
             refundReqData.setOut_trade_no(refundWeixinCO.getERefundFrom().getEPayFrom().getPreStr()+refundWeixinCO.getTradeNo());
@@ -112,7 +113,7 @@ public class WeiXinRefundFacade {
         @Override
         public void onFail(RefundResData refundResData) {
             if ("NOTENOUGH".equals(refundResData.getErr_code())) {
-                throw new WeiXinRefundException(new Throwable(refundResData.getErr_code_des()), PayException.Enum.REFUND_ERROR_EXCEPTION);
+                throw new WeiXinRefundException(RefundException.RefundExceptionEnum.REFUND_ERROR,refundResData.getErr_code_des());
             }
             logger.error("支付错误，错误信息：[{}]",JsonUtil.classToJson(refundResData));
             throw new RuntimeException("退款失败:"+refundResData.getErr_code_des());

@@ -40,7 +40,7 @@ public class PayNotifyCmdExe implements CommandExecutorI<SingleResponse, PayNoti
         boolean analysisNotify = true;
         try {
             //解析 通知信息
-            payNotifyCO = extensionExecutor.execute(PayNotifyThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.created(cmd.getPayNotifyCO()));
+            payNotifyCO = extensionExecutor.execute(PayNotifyThirdPartyExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.created(cmd.getPayNotifyCO()));
         } catch (Exception e) {
             analysisNotify = false;
             logger.error("analysis notify fail, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyCO().getParamMap()), e);
@@ -52,10 +52,10 @@ public class PayNotifyCmdExe implements CommandExecutorI<SingleResponse, PayNoti
 
         try {
             //1, validation
-            extensionExecutor.executeVoid(PayNotifyValidatorExtPt.class, cmd.getContext(), validator -> validator.validate(cmd));
+            extensionExecutor.executeVoid(PayNotifyValidatorExtPt.class, cmd.getBizScenario(), validator -> validator.validate(cmd));
 
             //2, invoke domain service or directly operate domain to do business logic process
-            PayE payE = extensionExecutor.execute(PayNotifyConvertorExtPt.class, cmd.getContext(), convertor -> convertor.clientToEntity(cmd.getPayNotifyCO(), cmd.getContext()));
+            PayE payE = extensionExecutor.execute(PayNotifyConvertorExtPt.class, cmd.getBizScenario(), convertor -> convertor.clientToEntity(cmd.getPayNotifyCO(),cmd.getBizScenario()));
             payE.payNotify();
         } catch (Exception e) {
             analysisNotify = false;

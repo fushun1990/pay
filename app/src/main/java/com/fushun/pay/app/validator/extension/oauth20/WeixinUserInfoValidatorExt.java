@@ -16,8 +16,9 @@ import org.springframework.util.StringUtils;
  * @version 1.0
  * @description
  * @creation 2019年01月31日21时36分
+ * @TODO 删除
  */
-@Extension(bizCode = BizCode.USER_INFO_WEIXIN)
+@Extension(scenario = BizCode.USER_INFO_WEIXIN)
 public class WeixinUserInfoValidatorExt implements OAuth20ValidatorExtPt<UserInfoWeixinCmd> {
 
     @Override

@@ -1,6 +1,6 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
-import com.fushun.framework.util.exception.exception.BusinessException;
+import com.fushun.framework.exception.BusinessException;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
@@ -43,9 +43,9 @@ public class WeiXinPayQueryFacade {
         }
         String errorMsg = trade_stateMap.get(tradeState);
         if (StringUtils.isEmpty(errorMsg)) {
-            throw new PayException(PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
-        throw new PayException(PayException.Enum.PAY_FAILED_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
     }
 
     private OrderQueryReqData getReq(String payNo, Configure configure) {
@@ -65,7 +65,7 @@ public class WeiXinPayQueryFacade {
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.QUERY_REQUEST_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.QUERY_REQUEST_FAILED);
         }
 
     }

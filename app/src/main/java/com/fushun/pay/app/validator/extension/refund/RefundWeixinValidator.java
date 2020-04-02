@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年02月03日22时51分
  */
-@Extension(bizCode = BizCode.REFUND_WEIXIN)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.refundUseCase,scenario = BizCode.REFUND_SCENARIO_WEIXIN)
 public class RefundWeixinValidator implements RefundValidatorExtPt<RefundWeixinCmd> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月21日23时37分
  */
-@Extension(bizCode = BizCode.CREATEPAY_WEIXIN_GZH)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.payScenario_WEIXIN_GZH)
 public class PayNotifyWeixinGZHValidatorExt implements PayNotifyValidatorExtPt<PayNotifyWeixinGZHCmd> {
 
     private Logger logger = LoggerFactory.getLogger(PayNotifyWeixinGZHValidatorExt.class);

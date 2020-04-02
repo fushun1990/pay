@@ -1,7 +1,7 @@
 package com.fushun.pay.app.convertor;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.convertor.ConvertorI;
+import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.dto.clientobject.PayCO;
 import com.fushun.pay.app.dto.clientobject.RefundCO;
 import com.fushun.pay.domain.refund.entity.RefundE;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RefundConvertor implements ConvertorI {
 
-    public RefundE clientToEntity(RefundCO refundCO, Context context) {
+    public RefundE clientToEntity(RefundCO refundCO, BizScenario bizScenario) {
         RefundE refundE = new RefundE();
         if(!refundCO.getIsSpecial()){
             refundE.setOutTradeNo(refundCO.getERefundFrom().getEPayFrom().getPreStr()+refundCO.getTradeNo());
@@ -29,6 +29,7 @@ public class RefundConvertor implements ConvertorI {
         refundE.setRefundMoney(refundCO.getRefundMoney());
         refundE.setRefundNo(refundCO.getRefundNo());
         refundE.setERefundFrom(refundCO.getERefundFrom());
+        refundE.setBizScenario(bizScenario);
         return refundE;
     }
 

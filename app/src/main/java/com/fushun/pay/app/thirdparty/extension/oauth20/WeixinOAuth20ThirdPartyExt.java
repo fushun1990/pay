@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 1.0
  * @description
  * @creation 2019年02月02日23时55分
+ * @TODO 删除
  */
-@Extension(bizCode = BizCode.OAUTH20_WEIXIN)
+@Extension(scenario = BizCode.OAUTH20_WEIXIN)
+
 public class WeixinOAuth20ThirdPartyExt implements OAuth20ThirartExtPt<WeixinOauth20CO> {
 
     @Autowired

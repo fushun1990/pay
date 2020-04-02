@@ -10,86 +10,47 @@ package com.fushun.pay.domain.exception;
 public class PayNotityException extends BasePayException {
 
 
-    public PayNotityException(Enum baseExceptionEnum) {
-        super(baseExceptionEnum);
+    public PayNotityException(IPayNotityExceptionEnum payNotityExceptionEnum) {
+        super(payNotityExceptionEnum);
     }
 
-    public PayNotityException(String message, PayNotityCustomizeMessageEnum baseCustomizeMessageExceptionEnum) {
-        super(message, baseCustomizeMessageExceptionEnum);
+    public PayNotityException(IPayNotityExceptionEnum payNotityExceptionEnum, String logMessage) {
+        super(payNotityExceptionEnum, logMessage);
     }
 
-    public PayNotityException(String message, Throwable cause, PayNotityCustomizeMessageEnum baseCustomizeMessageExceptionEnum) {
-        super(message, cause, baseCustomizeMessageExceptionEnum);
+    public PayNotityException(Throwable cause, IPayNotityExceptionEnum payNotityExceptionEnum) {
+        super(cause, payNotityExceptionEnum);
     }
 
-    public PayNotityException(Throwable cause, Enum baseExceptionEnum) {
-        super(cause, baseExceptionEnum);
+    public PayNotityException(Throwable cause, IPayNotityExceptionEnum payNotityExceptionEnum, String logMessage) {
+        super(cause, payNotityExceptionEnum, logMessage);
     }
 
-    public static enum Enum implements BasePayExceptionEnum {
-        BASE(30002L, "支付通知异常"),
-        PAYENT_ERROR(30004L, "支付方式错误"),;
-        private Long code;
+    @Override
+    protected String getExceptionCode() {
+        return "PAY_NOTITY_";
+    }
 
-        private String text;
+    public static enum PayNotityExceptionEnum implements IPayNotityExceptionEnum {
+        /**
+         * 支付通知异常
+         */
+        PAY_ENTITY_ERROR( "支付通知异常");
 
-        Enum(Long code, String text) {
-            this.code = code;
-            this.text = text;
-        }
+        private String msg;
 
-        public Long getCode() {
-            return code;
-        }
-
-        public void setCode(Long code) {
-            this.code = code;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
+        private PayNotityExceptionEnum(String msg) {
+            this.msg = msg;
         }
 
         @Override
-        public String toString() {
-            return text;
+        public String getMsg() {
+            return this.msg;
         }
     }
 
-    public static enum PayNotityCustomizeMessageEnum implements BasePayCustomizeMessageExceptionEnum {
-        BASE(30001L, "自定义支付通知异常");
-        private Long code;
-
-        private String text;
-
-        PayNotityCustomizeMessageEnum(Long code, String text) {
-            this.code = code;
-            this.text = text;
-        }
-
-        public Long getCode() {
-            return code;
-        }
-
-        public void setCode(Long code) {
-            this.code = code;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
+    public interface IPayNotityExceptionEnum extends IBasePayExceptionEnum {
     }
+
+
 }

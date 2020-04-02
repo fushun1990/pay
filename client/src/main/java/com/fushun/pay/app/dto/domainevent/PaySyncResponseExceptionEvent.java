@@ -1,6 +1,6 @@
 package com.fushun.pay.app.dto.domainevent;
 
-import com.alibaba.cola.dto.event.DomainEvent;
+import com.alibaba.cola.event.DomainEventI;
 import lombok.Data;
 
 /**
@@ -10,7 +10,7 @@ import lombok.Data;
  * @creation 2019年01月29日21时46分
  */
 @Data
-public class PaySyncResponseExceptionEvent extends DomainEvent {
+public class PaySyncResponseExceptionEvent implements DomainEventI {
 
     private String outTradeNo;
 }

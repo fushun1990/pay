@@ -119,23 +119,23 @@ public class WeChatGZHPayFacade {
         return JsonUtil.toJson(map);
     }
 
-    public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyWeixinGZHCO recordPayDTO) {
-        recordPayDTO.setNotifyReturnDTO(this.notifyReturnDTO);
+    public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyWeixinGZHCO payNotifyWeixinGZHCO) {
+        payNotifyWeixinGZHCO.setNotifyReturnDTO(WeChatGZHPayFacade.notifyReturnDTO);
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(requestParams);
         NotifyResData notifyResData = JsonUtil.hashMapToClass(map, NotifyResData.class);
         if ("FAIL".equals(notifyResData.getReturn_code())) {
-            recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+            payNotifyWeixinGZHCO.setStatus(ERecordPayStatus.FAILED);
             return;
         }
 
         if (!Signature.checkIsSignValidFromResponseString(map, GZHConfigure.initMethod())) {
-            throw new PayException(PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
-        recordPayDTO.setPayNo(notifyResData.getTransaction_id());
-        recordPayDTO.setOutTradeNo(notifyResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
-        recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(notifyResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+        payNotifyWeixinGZHCO.setPayNo(notifyResData.getTransaction_id());
+        payNotifyWeixinGZHCO.setOutTradeNo(notifyResData.getOut_trade_no());
+        payNotifyWeixinGZHCO.setStatus(ERecordPayStatus.SUCCESS);
+        payNotifyWeixinGZHCO.setPayMoney(BigDecimal.valueOf(Double.valueOf(notifyResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
     }
 
     /**
@@ -147,13 +147,13 @@ public class WeChatGZHPayFacade {
     public void payResultAlipayReust(String requestParams, PaySyncResponseWeixinGZHCO recordPayDTO) {
         Map<String, Object> map = JsonUtil.jsonToHashMap(requestParams);
         if (map == null || StringUtils.isEmpty(map.get("orderPayNo"))) {
-            throw new PayException(null, PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_FAILED);
         }
         recordPayDTO.setOutTradeNo(map.get("orderPayNo").toString());
-        recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
 
         if (!"get_brand_wcpay_request:ok".equals(map.get("result"))) {
-            throw new PayException(null, PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_FAILED);
         }
 
         OrderQueryResData orderQueryResData = weiXinPayQueryFacade.getOrderQuery(map.get("orderPayNo").toString(), GZHConfigure.initMethod());
@@ -161,7 +161,7 @@ public class WeChatGZHPayFacade {
 
         recordPayDTO.setPayNo(orderQueryResData.getTransaction_id());
         recordPayDTO.setOutTradeNo(orderQueryResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
         recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(orderQueryResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
         recordPayDTO.setReceiveWay(EPayWay.PAY_WAY_WEIXINPAY);
     }
@@ -174,7 +174,7 @@ public class WeChatGZHPayFacade {
      */
     public OAuth20ResData getAuthorizeByCode(String weiXinAuthCode) {
         if (StringUtils.isEmpty(weiXinAuthCode)) {
-            throw new PayException(null, PayException.Enum.WECHAT_CODE_NOT_NULL_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.WECHAT_CODE_NOT_NULL);
         }
         OAuth20ResData oAuth20ResData = weiXinOAuth20Facade.getOAuth20Data(weiXinAuthCode);
         return oAuth20ResData;
@@ -188,7 +188,7 @@ public class WeChatGZHPayFacade {
      */
     public UserInfoResData getUserInfoByOpenId(String accessToken, String openId){
         if (StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId)) {
-            throw new PayException(null, PayException.Enum.WECHAT_CODE_NOT_NULL_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.WECHAT_CODE_NOT_NULL);
         }
         UserInfoResData userInfoResData = weiXinOAuth20Facade.getUserInfoByOpenId(accessToken,openId);
         return userInfoResData;

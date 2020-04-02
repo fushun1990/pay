@@ -1,7 +1,7 @@
 package com.fushun.pay.thirdparty.alipay.pay;
 
 import com.alipay.api.AlipayResponse;
-import com.fushun.framework.util.exception.exception.BaseException;
+import com.fushun.pay.domain.exception.BasePayException;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.sdk.alipay.utils.AlipayCore;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class ValidatorServiceResponse {
             Object code = alipayResponse.getCode();
             //支付失败
             if (code == null) {
-                throw new PayException(PayException.Enum.PAY_RETURN_STATUS_ERROR_EXCEPTION);
+                throw new PayException(PayException.PayExceptionEnum.PAY_RETURN_STATUS_ERROR);
             }
             // 支付失败
             if (!"10000".equals(code)) {
@@ -41,10 +41,10 @@ public class ValidatorServiceResponse {
                 return;
             }
             return;
-        } catch (BaseException e) {
+        } catch (BasePayException e) {
             throw e;
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.BASECODE_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.PAY_FAILED);
         }
     }
 
@@ -62,13 +62,13 @@ public class ValidatorServiceResponse {
     private void errorCode(String code, String sub_code, Map<String, String> errorMap) {
         String error = errorMap.get(sub_code);
         if (!StringUtils.isEmpty(error)) {
-            throw new PayException(error, PayException.PayCustomizeMessageEnum.CUSTOMIZE_MESSAGE_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,error);
         }
         error = AlipayCore.errorMessage(code, sub_code);
         if (!StringUtils.isEmpty(error)) {
-            throw new PayException(error, PayException.PayCustomizeMessageEnum.CUSTOMIZE_MESSAGE_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,error);
         }
-        throw new PayException(PayException.Enum.BASECODE_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
     }
 
 }

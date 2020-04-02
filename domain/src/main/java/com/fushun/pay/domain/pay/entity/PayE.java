@@ -7,7 +7,6 @@ import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.base.SpringContextUtil;
 import com.fushun.framework.util.util.BeanUtils;
-import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.pay.app.dto.domainevent.CreatedPayEvent;
 import com.fushun.pay.app.dto.domainevent.PaySuccessNotityEvent;
 import com.fushun.pay.app.dto.enumeration.EPayFrom;
@@ -20,7 +19,6 @@ import com.fushun.pay.infrastructure.common.util.DomainEventPublisher;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -74,7 +72,7 @@ public class PayE extends EntityObject {
     /**
      * 支付状态
      */
-    private Integer status;
+    private ERecordPayStatus status;
 
     /**
      * 支付账号
@@ -119,20 +117,20 @@ public class PayE extends EntityObject {
         }
         recordPayDO = optional.get();
 
-        ERecordPayStatus eRecordPayStatus = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
-        if (eRecordPayStatus != ERecordPayStatus.success) {
+        ERecordPayStatus eRecordPayStatus = recordPayDO.getStatus();
+        if (eRecordPayStatus != ERecordPayStatus.SUCCESS) {
             payRepository.updateCreatePayInfo(this, recordPayDO);
             return;
         }
 
         //支付成功，已通知
-        ERecordPayNotityStatus eRecordPayNotityStatus = EnumUtil.getEnum(ERecordPayNotityStatus.class, recordPayDO.getNotityStatus());
-        if (eRecordPayStatus == ERecordPayStatus.success && eRecordPayNotityStatus == ERecordPayNotityStatus.yes) {
-            throw new PayException(PayException.Enum.PAY_SUCCESS_EXCEPTION);
+        ERecordPayNotityStatus eRecordPayNotityStatus = recordPayDO.getNotityStatus();
+        if (eRecordPayStatus == ERecordPayStatus.SUCCESS && eRecordPayNotityStatus == ERecordPayNotityStatus.YES) {
+            throw new PayException(PayException.PayExceptionEnum.PAY_SUCCESS);
         }
 
         //支付成功，为通知成功
-        if (eRecordPayStatus == ERecordPayStatus.success && eRecordPayNotityStatus == ERecordPayNotityStatus.no) {
+        if (eRecordPayStatus == ERecordPayStatus.SUCCESS && eRecordPayNotityStatus == ERecordPayNotityStatus.NO) {
             PaySuccessNotityEvent paySuccessNotityEvent = new PaySuccessNotityEvent();
             paySuccessNotityEvent.setOutTradeNo(recordPayDO.getOutTradeNo());
             paySuccessNotityEvent.setOrderPayNo(recordPayDO.getPayNo());
@@ -140,7 +138,7 @@ public class PayE extends EntityObject {
             return;
         }
 
-        throw new PayException(PayException.Enum.PAY_FAILED_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
 
     }
 
@@ -157,20 +155,20 @@ public class PayE extends EntityObject {
         Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
 
         if (!optional.isPresent()) {
-            throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
         RecordPayDO recordPayDO = optional.get();
 
-        ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
-        ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());
+        ERecordPayStatus now =recordPayDO.getStatus();
+        ERecordPayStatus next =  this.getStatus();
 
-        if (now == ERecordPayStatus.success) {
+        if (now == ERecordPayStatus.SUCCESS) {
             logger.info("already pay,outTradeNo:[{}]", this.getOutTradeNo());
             return;
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.failed.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
@@ -179,7 +177,7 @@ public class PayE extends EntityObject {
 
         if (BeanUtils.isEmpty(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
-            throw new PayException(null, PayException.Enum.PAY_MONEY_MISMATCHING_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
         }
 
         recordPayDO.setPayNo(this.payNo);
@@ -188,7 +186,7 @@ public class PayE extends EntityObject {
         recordPayDO.setPayAccount(this.payAccount);
         recordPayDO.setReceiveAccourt(this.receiveAccourt);
         recordPayDO.setReceiveWay(this.receiveWay.getCode());
-        recordPayDO.setNotityStatus(ERecordPayNotityStatus.no.getCode());
+        recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
         payRepository.update(recordPayDO);
         logger.info("pay notify,outTradeNo:[{}],status:[{}]", this.outTradeNo, this.status);
     }
@@ -205,19 +203,19 @@ public class PayE extends EntityObject {
         Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
 
         if (!optional.isPresent()) {
-            throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
         RecordPayDO recordPayDO = optional.get();
-        ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
-        ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());
+        ERecordPayStatus now = recordPayDO.getStatus();
+        ERecordPayStatus next = this.getStatus();
 
-        if (now == ERecordPayStatus.success) {
+        if (now == ERecordPayStatus.SUCCESS) {
             logger.info("paid is pay,outTradeNo:[{}]", this.getOutTradeNo());
             return;
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.failed.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
@@ -226,7 +224,7 @@ public class PayE extends EntityObject {
 
         if (BeanUtils.isEmpty(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
-            throw new PayException(null, PayException.Enum.PAY_MONEY_MISMATCHING_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
         }
 
         recordPayDO.setPayNo(this.payNo);
@@ -235,7 +233,7 @@ public class PayE extends EntityObject {
 //        recordPayDO.setPayAccount(this.payAccount);
 //        recordPayDO.setReceiveAccourt(this.receiveAccourt);
         recordPayDO.setReceiveWay(this.receiveWay.getCode());
-        recordPayDO.setNotityStatus(ERecordPayNotityStatus.no.getCode());
+        recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
         payRepository.update(recordPayDO);
     }
 
@@ -252,21 +250,21 @@ public class PayE extends EntityObject {
         Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
 
         if (!optional.isPresent()) {
-            throw new PayException(null, PayException.Enum.PAY_INFO_NO_EXISTS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
         RecordPayDO recordPayDO = optional.get();
 
 
-        ERecordPayStatus now = EnumUtil.getEnum(ERecordPayStatus.class, recordPayDO.getStatus());
-        ERecordPayStatus next = EnumUtil.getEnum(ERecordPayStatus.class, this.getStatus());
+        ERecordPayStatus now = recordPayDO.getStatus();
+        ERecordPayStatus next = this.getStatus();
 
-        if (now == ERecordPayStatus.success) {
+        if (now == ERecordPayStatus.SUCCESS) {
             logger.info("paid is pay,outTradeNo:[{}]", this.getOutTradeNo());
             return;
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.failed.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年02月03日22时51分
  */
-@Extension(bizCode = BizCode.REFUND_ALIPAY)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.refundUseCase,scenario = BizCode.REFUND_SCENARIO_ALIPAY)
 public class RefundAlipayValidator implements RefundValidatorExtPt<RefundAlipayCmd> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

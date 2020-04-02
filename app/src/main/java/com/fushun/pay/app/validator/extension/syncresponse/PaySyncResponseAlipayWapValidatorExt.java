@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月29日23时46分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_WAP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_WAP)
 public class PaySyncResponseAlipayWapValidatorExt implements PaySyncResponseValidatorExtPt<PaySyncResponseAlipayWapCmd> {
 
     private Logger logger = LoggerFactory.getLogger(PaySyncResponseAlipayWapValidatorExt.class);

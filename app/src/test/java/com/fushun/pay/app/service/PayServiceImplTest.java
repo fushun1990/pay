@@ -1,12 +1,11 @@
 package com.fushun.pay.app.service;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.api.PayServiceI;
-import com.fushun.pay.app.config.TestConfig;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
@@ -19,10 +18,6 @@ import mockit.Mocked;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -73,9 +68,8 @@ public class PayServiceImplTest {
      */
     public void testCreatePayAlipayApp() {
         CreatePayAlipayAppCmd createPayAlipayAppCmd = new CreatePayAlipayAppCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_ALIPAY_APP);
-        createPayAlipayAppCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_APP);
+        createPayAlipayAppCmd.setBizScenario(bizScenario);
 
         CreatePayAlipayAppCO createPayAlipayWapCO = new CreatePayAlipayAppCO();
         createPayAlipayWapCO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
@@ -105,9 +99,8 @@ public class PayServiceImplTest {
      */
     public void testCreatePayAlipayWapPay() {
         CreatePayAlipayWapCmd createPayAlipayWapCmd = new CreatePayAlipayWapCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_ALIPAY_WAP);
-        createPayAlipayWapCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_WAP);
+        createPayAlipayWapCmd.setBizScenario(bizScenario);
 
         CreatePayAlipayWapCO createPayAlipayWapCO = new CreatePayAlipayWapCO();
         createPayAlipayWapCO.setPayWay(EPayWay.PAY_WAY_ALIPAY);

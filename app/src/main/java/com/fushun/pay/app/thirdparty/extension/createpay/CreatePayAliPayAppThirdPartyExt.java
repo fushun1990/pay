@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月20日19时36分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_APP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_APP)
 public class CreatePayAliPayAppThirdPartyExt implements CreatePayThirdPartyExtPt<CreatePayAlipayAppCO> {
 
     private Logger logger = LoggerFactory.getLogger(CreatePayAliPayAppThirdPartyExt.class);

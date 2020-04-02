@@ -11,8 +11,8 @@ import com.fushun.framework.base.BaseEnum;
  * @creation 2016年9月17日
  */
 public enum ERecordPayNotityStatus implements BaseEnum<Integer> {
-    yes(1, "已通知 "),
-    no(2, "未通知");
+    YES(1, "已通知 "),
+    NO(2, "未通知");
 
     private Integer code;
 

@@ -1,6 +1,7 @@
 package com.fushun.pay.app.dto.clientobject;
 
 import com.alibaba.cola.dto.ClientObject;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -23,7 +24,7 @@ public class PayNotifyCO extends ClientObject {
 
     private String payNo;
 
-    private Integer status;
+    private ERecordPayStatus status;
 
     private BigDecimal payMoney;
 

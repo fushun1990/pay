@@ -1,6 +1,7 @@
 package com.fushun.pay.app.convertor.extension.createpay;
 
-import com.alibaba.cola.context.Context;
+
+import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.CreatePayConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
@@ -14,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 1.0
  * @creation 2019年01月18日23时38分
  */
-@Extension(bizCode = BizCode.CREATEPAY_WEIXIN_APP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_WEIXIN_APP)
 public class CreatePayWeiXinAppConvertorExt implements CreatePayConvertorExtPt<CreatePayWeiXinAppCO> {
 
     @Autowired
     private CreatePayConvertor payConvertor;
 
     @Override
-    public PayE clientToEntity(CreatePayWeiXinAppCO payCO, Context context) {
-        PayE payE = payConvertor.clientToEntity(payCO, context);
+    public PayE clientToEntity(CreatePayWeiXinAppCO payCO, BizScenario bizScenario) {
+        PayE payE = payConvertor.clientToEntity(payCO, bizScenario);
         return payE;
     }
 }

@@ -1,6 +1,6 @@
 package com.fushun.pay.app.convertor.extension.syncresponse;
 
-import com.alibaba.cola.context.Context;
+import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.PaySyncResponseConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.PaySyncResponseConvertorExtPt;
@@ -15,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月24日01时04分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_WAP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_WAP)
 public class PaySyncResponseAlipyWapConvertorExtPt implements PaySyncResponseConvertorExtPt<PaySyncResponseAlipayAppCO> {
 
     @Autowired
     private PaySyncResponseConvertor payConvertor;
 
     @Override
-    public PayE clientToEntity(PaySyncResponseAlipayAppCO paySyncResponseAlipayAppCO, Context context) {
-        PayE payE = payConvertor.clientToEntity(paySyncResponseAlipayAppCO, context);
+    public PayE clientToEntity(PaySyncResponseAlipayAppCO paySyncResponseAlipayAppCO, BizScenario bizScenario) {
+        PayE payE = payConvertor.clientToEntity(paySyncResponseAlipayAppCO, bizScenario);
         payE.setPayMoney(paySyncResponseAlipayAppCO.getPayMoney());
         payE.setPayNo(paySyncResponseAlipayAppCO.getPayNo());
         payE.setOutTradeNo(paySyncResponseAlipayAppCO.getOutTradeNo());

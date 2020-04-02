@@ -1,6 +1,6 @@
 package com.fushun.pay.app.convertor.extension.notify;
 
-import com.alibaba.cola.context.Context;
+import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.PayNotifyConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.PayNotifyConvertorExtPt;
@@ -16,17 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月22日22时44分
  */
-@Extension(bizCode = BizCode.CREATEPAY_WEIXIN_GZH)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.payScenario_WEIXIN_GZH)
 public class PayNotitfyWeixinGZHConvertorExt implements PayNotifyConvertorExtPt<PayNotifyWeixinGZHCO> {
 
     @Autowired
     private PayNotifyConvertor payConvertor;
 
     @Override
-    public PayE clientToEntity(PayNotifyWeixinGZHCO payNotifyWeixinGZHCO, Context context) {
+    public PayE clientToEntity(PayNotifyWeixinGZHCO payNotifyWeixinGZHCO, BizScenario bizScenario) {
         payNotifyWeixinGZHCO.setReceiveWay(EPayWay.PAY_WAY_WEIXINPAY);
 
-        PayE payE = payConvertor.clientToEntity(payNotifyWeixinGZHCO, context);
+        PayE payE = payConvertor.clientToEntity(payNotifyWeixinGZHCO, bizScenario);
         payE.setReceiveAccourt(payNotifyWeixinGZHCO.getReceiveAccourt());
         payE.setReceiveWay(payNotifyWeixinGZHCO.getReceiveWay());
         return payE;

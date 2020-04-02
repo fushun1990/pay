@@ -12,7 +12,9 @@ import com.fushun.pay.domain.pay.repository.PayRepository;
 import com.fushun.pay.domain.refund.exception.ErrorCode;
 import com.fushun.pay.domain.refund.repository.RefundRepository;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
+import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import lombok.Data;
 
 import javax.transaction.Transactional;
@@ -106,11 +108,11 @@ public class RefundE extends EntityObject {
         }
         RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
         if (BeanUtils.isNotEmpty(refundDO)) {
-            if (ERefundStatus.success.getCode().equals(refundDO.getStatus())) {
+            if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {
                 //已退款
                 throw new BizException(ErrorCode.REFUND_IS_SUCCESS, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
             }
-            if (ERefundStatus.wait.getCode().equals(refundDO.getStatus())) {
+            if (ERefundStatus.WAIT.getCode().equals(refundDO.getStatus())) {
                 //正在退款
                 throw new BizException(ErrorCode.REFUNDING, ErrorCode.REFUNDING.getErrDesc());
             }
@@ -120,7 +122,7 @@ public class RefundE extends EntityObject {
         BigDecimal returnableAmount = recordPayDO.getPayMoney().subtract(recordPayDO.getRefundAmount());
         recordPayDO.setRefundAmount(this.refundMoney.add(recordPayDO.getRefundAmount()));
 
-        if (!ERecordPayStatus.success.getCode().equals(recordPayDO.getStatus())) {
+        if (!ERecordPayStatus.SUCCESS.getCode().equals(recordPayDO.getStatus())) {
             //支付未成功
             throw new BizException(ErrorCode.PAY_IS_NOT_SUCCESS, ErrorCode.PAY_IS_NOT_SUCCESS.getErrDesc());
         }
@@ -140,7 +142,7 @@ public class RefundE extends EntityObject {
         if (BeanUtils.isNotEmpty(refundDO)) {
             //退款存在，更状态
             logger.info("refund is exist,refundNo:[{}]", refundDO.getRefundNo());
-            refundDO.setStatus(ERefundStatus.wait.getCode());
+            refundDO.setStatus(ERefundStatus.WAIT);
             refundRepository.update(refundDO);
             payRepository.update(recordPayDO);
             return;
@@ -171,13 +173,13 @@ public class RefundE extends EntityObject {
         if (BeanUtils.isEmpty(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
-        if (ERefundStatus.success.getCode().equals(refundDO.getStatus())) {
+        if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {
             //已退款
             throw new BizException(ErrorCode.REFUND_IS_SUCCESS, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
 
         //更新退款状态为失败
-        refundDO.setStatus(this.eRefundStatus.getCode());
+        refundDO.setStatus(this.eRefundStatus);
         refundDO.setResult(this.result);
         refundRepository.update(refundDO);
 
@@ -200,13 +202,13 @@ public class RefundE extends EntityObject {
         if (BeanUtils.isEmpty(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
-        if (ERefundStatus.success.getCode().equals(refundDO.getStatus())) {
+        if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {
             //已退款
             throw new BizException(ErrorCode.REFUND_IS_SUCCESS, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
 
         //更新退款成功
-        refundDO.setStatus(this.eRefundStatus.getCode());
+        refundDO.setStatus(this.eRefundStatus);
         refundDO.setThirdRefundNo(this.thirdRefundNo);
         refundRepository.update(refundDO);
     }

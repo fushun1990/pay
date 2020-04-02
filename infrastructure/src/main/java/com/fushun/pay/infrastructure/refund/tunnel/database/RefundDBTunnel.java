@@ -1,6 +1,5 @@
 package com.fushun.pay.infrastructure.refund.tunnel.database;
 
-import com.alibaba.cola.tunnel.DataTunnelI;
 import com.fushun.framework.jpa.CustomerRepository;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +14,7 @@ import java.math.BigDecimal;
  * @creation 2019年02月08日23时31分
  */
 @Repository
-public interface RefundDBTunnel extends DataTunnelI, CustomerRepository<RefundDO, BigDecimal> {
+public interface RefundDBTunnel extends CustomerRepository<RefundDO, BigDecimal> {
 
     /**
      * 获取退款数据

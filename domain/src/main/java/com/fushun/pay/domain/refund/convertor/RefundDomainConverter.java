@@ -3,7 +3,6 @@ package com.fushun.pay.domain.refund.convertor;
 import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
 import com.fushun.pay.app.dto.enumeration.ERefundNotityStatus;
 import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import com.fushun.pay.domain.refund.entity.RefundE;
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Component;
  * @creation 2019年02月09日00时00分
  */
 @Component
-public class RefundDomainConverter implements ConvertorI<RefundCO, RefundE, RefundDO> {
+public class RefundDomainConverter implements ConvertorI {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Override
+
     public RefundDO entityToData(RefundE refundE) {
         RefundDO refundDO = new RefundDO();
         refundDO.setOutTradeNo(refundE.getOutTradeNo());
@@ -30,8 +29,8 @@ public class RefundDomainConverter implements ConvertorI<RefundCO, RefundE, Refu
         refundDO.setRefundMoney(refundE.getRefundMoney());
         refundDO.setRefundNo(refundE.getRefundNo());
         refundDO.setRefundReason(refundE.getRefundReason());
-        refundDO.setStatus(ERefundStatus.wait.getCode());
-        refundDO.setNoticeStatus(ERefundNotityStatus.No.getCode());
+        refundDO.setStatus(ERefundStatus.WAIT);
+        refundDO.setNoticeStatus(ERefundNotityStatus.NO);
         return refundDO;
     }
 }

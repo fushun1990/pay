@@ -128,13 +128,13 @@ public class AlipayAppPayFacade {
             String str = "{\"orderPayNo\":\"" + map.get("orderPayNo") + "\",\"payForm\":\"" + form + "\"}";
             return str;
         } catch (AlipayApiException e) {
-            throw new PayException(e, PayException.Enum.PAY_CREATE_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.PAY_CREATE_FAILED);
         } //调用SDK生成表单
 //		return AlipaySubmitApp.buildRequest(map,AlipayConfig.RSA_PRIVATE);
     }
 
     public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyAlipayAppCO recordPayDTO) {
-        recordPayDTO.setNotifyReturnDTO(this.notifyReturnDTO);
+        recordPayDTO.setNotifyReturnDTO(AlipayAppPayFacade.notifyReturnDTO);
         // 获取支付宝POST过来反馈信息
         Map<String, String> params = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : requestParams.entrySet()) {
@@ -172,7 +172,7 @@ public class AlipayAppPayFacade {
         try {
             signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAliPayPublicKey(), alipayConfig.getInputCharset());
         } catch (AlipayApiException e) {
-            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         if (signVerified == false) {
         }
@@ -182,27 +182,26 @@ public class AlipayAppPayFacade {
 
         recordPayDTO.setOutTradeNo(out_trade_no);
         recordPayDTO.setPayNo(trade_no);
-        ETradeStatus tradeStatus = EnumUtil.getEnum(ETradeStatus.class, trade_status);
+        ETradeStatus tradeStatus = EnumUtil.getEnumByName(ETradeStatus.class, trade_status);
         if (tradeStatus == null) {
-            throw new PayException(null, PayException.Enum.ALIPAY_ORDER_STATUS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS);
         }
         switch (tradeStatus) {
             case WAIT_BUYER_PAY:
-                recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
-                return;
+                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+                break;
             case TRADE_CLOSED:
-                recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
-                return;
+                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+                break;
             case TRADE_SUCCESS:
-                recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
+                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
                 return;
             case TRADE_FINISHED:
-                recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
-                return;
-            default:
+                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
+            default:
+                throw new PayException(null, PayException.PayExceptionEnum.PAY_BUSINESS);
         }
-        throw new PayException(null, PayException.Enum.PAY_BUSINESS_EXCEPTION);
 
     }
 
@@ -223,12 +222,12 @@ public class AlipayAppPayFacade {
         String resultStatus = (String) resultmap.get("resultStatus");
 
         recordPayDTO.setOutTradeNo(String.valueOf(requestParamsMap.get("orderPayNo")));
-        recordPayDTO.setStatus(ERecordPayStatus.failed.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
         recordPayDTO.setEPayWay(EPayWay.PAY_WAY_ALIPAY);
         recordPayDTO.setReceiveWay(EPayWay.PAY_WAY_ALIPAY);
 
         if (StringUtils.isEmpty(resultStatus)) {
-            throw new PayException(null, PayException.Enum.PAY_RETURN_STATUS_ERROR_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_RETURN_STATUS_ERROR);
         }
 
         if (!resultStatus.equals("9000")) {
@@ -257,13 +256,13 @@ public class AlipayAppPayFacade {
         } catch (AlipayApiException e) {
         }
         if (signVerified == false) {
-            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         // 验证成功
         // ////////////////////////////////////////////////////////////////////////////////////////
         // 请在这里加上商户的业务逻辑程序代码
         if (!code.equals("10000")) {
-            throw new PayException(null, PayException.Enum.PAY_CODE_ERROR_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_CODE_ERROR);
         }
 
 
@@ -272,7 +271,7 @@ public class AlipayAppPayFacade {
         double total_fee = Double.valueOf(map2.get("total_amount").toString());
         recordPayDTO.setPayNo(trade_no);
         recordPayDTO.setPayMoney(BigDecimal.valueOf(total_fee));
-        recordPayDTO.setStatus(ERecordPayStatus.success.getCode());
+        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
         return;
     }
 
@@ -289,9 +288,9 @@ public class AlipayAppPayFacade {
     private String getErrorCode(String code) {
         String error = map.get(code);
         if (!StringUtils.isEmpty(error)) {
-            throw new PayException(error, PayException.PayCustomizeMessageEnum.CUSTOMIZE_MESSAGE_EXCEPTION);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,error);
         }
-        throw new PayException(null, PayException.Enum.BASECODE_EXCEPTION);
+        throw new PayException(null, PayException.PayExceptionEnum.PAY_FAILED);
     }
 
 }

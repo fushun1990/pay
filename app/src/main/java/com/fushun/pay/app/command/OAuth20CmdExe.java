@@ -25,10 +25,10 @@ public class OAuth20CmdExe implements CommandExecutorI<SingleResponse<OAuth20Res
     @Override
     public SingleResponse<OAuth20ResponseVO> execute(OAuth20Cmd cmd) {
 
-        extensionExecutor.executeVoid(OAuth20ValidatorExtPt.class, cmd.getContext(), validator -> validator.validate(cmd));
+        extensionExecutor.executeVoid(OAuth20ValidatorExtPt.class, cmd.getBizScenario(), validator -> validator.validate(cmd));
 
         //获取支付信息
-        OAuth20ResponseVO oAuth20ResponseVO = extensionExecutor.execute(OAuth20ThirartExtPt.class, cmd.getContext(), thirdparty -> thirdparty.getOAuth20(cmd.getOAuth20CO()));
+        OAuth20ResponseVO oAuth20ResponseVO = extensionExecutor.execute(OAuth20ThirartExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.getOAuth20(cmd.getOAuth20CO()));
 
         return SingleResponse.of(oAuth20ResponseVO);
     }

@@ -1,6 +1,8 @@
 package com.fushun.pay.infrastructure.refund.tunnel.database.dataobject;
 
 import com.fushun.framework.base.BaseCMP;
+import com.fushun.pay.app.dto.enumeration.ERefundNotityStatus;
+import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -79,16 +81,16 @@ public class RefundDO extends BaseCMP implements Serializable {
 
     /**
      * 退款状态
-     * {@link com.fushun.pay.app.dto.enumeration.ERefundStatus}
      */
-    @Column(columnDefinition = "int(2) DEFAULT 1 comment '退款状态1:等待退款,2:退款成功,3:退款失败'")
-    private Integer status;
+    @Column(columnDefinition = "varchar(10) DEFAULT 'WAIT' comment '退款状态1:等待退款,2:退款成功,3:退款失败'")
+    @Enumerated(EnumType.STRING)
+    private ERefundStatus status;
 
     /**
      * 通知状态 1:已通知，2：未通知
-     * {@link com.fushun.pay.app.dto.enumeration.ERefundNotityStatus}
      */
-    @Column(columnDefinition = "int(2) DEFAULT 2 comment '通知状态 1:已通知，2：未通知'")
-    private Integer noticeStatus;
+    @Column(columnDefinition = "varchar(10) DEFAULT 'NO' comment '通知状态 1:已通知，2：未通知'")
+    @Enumerated(EnumType.STRING)
+    private ERefundNotityStatus noticeStatus;
 
 }

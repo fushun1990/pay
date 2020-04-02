@@ -1,7 +1,7 @@
 package com.fushun.pay.app.convertor.extensionpoint;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.convertor.ConvertorI;
+import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.ExtensionPointI;
 import com.fushun.pay.app.dto.clientobject.PaySyncResponseCO;
 import com.fushun.pay.domain.pay.entity.PayE;
@@ -14,5 +14,5 @@ import com.fushun.pay.domain.pay.entity.PayE;
  */
 public interface PaySyncResponseConvertorExtPt<T extends PaySyncResponseCO> extends ConvertorI, ExtensionPointI {
 
-    public PayE clientToEntity(T paySyncResponseCO, Context context);
+    public PayE clientToEntity(T paySyncResponseCO, BizScenario bizScenario);
 }

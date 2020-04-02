@@ -1,6 +1,6 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
-import com.fushun.framework.util.exception.exception.BusinessException;
+import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.StringUtils;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinCO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinGZHCO;
@@ -67,7 +67,7 @@ public class WeiXinUnifiedOrderFacade {
                 if (StringUtils.isEmpty(payParamDTO.getOpenId())) {
                     CreatePayWeiXinGZHCO createWeiXinGZHPayCO = (CreatePayWeiXinGZHCO) payParamDTO;
                     if (StringUtils.isEmpty(createWeiXinGZHPayCO.getWeiXinAuthCode())) {
-                        throw new PayException(PayException.Enum.WECHAT_CODE_NOT_NULL_EXCEPTION);
+                        throw new PayException(PayException.PayExceptionEnum.WECHAT_CODE_NOT_NULL);
                     }
                     OAuth20ResData oAuth20ResData = weiXinOAuth20Facade.getOAuth20Data(createWeiXinGZHPayCO.getWeiXinAuthCode());
                     openId = oAuth20ResData.getOpenid();
@@ -87,9 +87,9 @@ public class WeiXinUnifiedOrderFacade {
             UnifiedorderResData resData = unifiedOrderResultListener.getResData();
             return resData;
         } catch (BusinessException e) {
-            throw new PayException(e, PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.PAY_FAILED);
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.PAY_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.PAY_FAILED);
         }
     }
 

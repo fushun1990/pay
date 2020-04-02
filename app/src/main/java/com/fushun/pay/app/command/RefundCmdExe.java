@@ -36,26 +36,26 @@ public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
     public Response execute(RefundCmd cmd) {
 
         //1, validation
-        extensionExecutor.executeVoid(RefundValidatorExtPt.class, cmd.getContext(), validator -> validator.validate(cmd));
+        extensionExecutor.executeVoid(RefundValidatorExtPt.class, cmd.getBizScenario(), validator -> validator.validate(cmd));
 
         //2, invoke domain service or directly operate domain to do business logic process
-        RefundE refundE = extensionExecutor.execute(RefundConvertorExtPt.class, cmd.getContext(), convertor -> convertor.clientToEntity(cmd.getRefundCO(), cmd.getContext()));
+        RefundE refundE = extensionExecutor.execute(RefundConvertorExtPt.class, cmd.getBizScenario(), convertor -> convertor.clientToEntity(cmd.getRefundCO(),cmd.getBizScenario()));
         refundE.refund();
         cmd.getRefundCO().setPayMoney(refundE.getPayMoney());
 
         //获取支付信息
         try {
-            RefundCO refundCO = extensionExecutor.execute(RefundThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.refund(cmd.getRefundCO()));
+            RefundCO refundCO = extensionExecutor.execute(RefundThirdPartyExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.refund(cmd.getRefundCO()));
         } catch (Exception e) {
             logger.error("refund exception,param:[{}]", JsonUtil.toJson(cmd.getRefundCO()), e);
-            refundE.setERefundStatus(ERefundStatus.fail);
+            refundE.setERefundStatus(ERefundStatus.FAIL);
             refundE.setResult(e.getMessage());
             refundE.fail();
             return Response.buildFailure(ErrorCode.REFUND_FAIL.getErrCode(),ErrorCode.REFUND_FAIL.getErrDesc());
         }
 
         refundE.setThirdRefundNo(cmd.getRefundCO().getThirdRefundNo());
-        refundE.setERefundStatus(ERefundStatus.success);
+        refundE.setERefundStatus(ERefundStatus.SUCCESS);
         refundE.success();
 
         return Response.buildSuccess();

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月29日23时46分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_APP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_APP)
 public class PaySyncResponseAlipayAppValidatorExt implements PaySyncResponseValidatorExtPt<PaySyncResponseAlipayAppCmd> {
 
     private Logger logger = LoggerFactory.getLogger(PaySyncResponseAlipayAppValidatorExt.class);

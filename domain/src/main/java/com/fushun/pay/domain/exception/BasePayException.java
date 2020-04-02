@@ -1,6 +1,7 @@
 package com.fushun.pay.domain.exception;
 
-import com.fushun.framework.util.exception.exception.BusinessException;
+
+import com.fushun.framework.exception.BusinessException;
 
 /**
  * 支付通知异常
@@ -13,29 +14,28 @@ public class BasePayException extends BusinessException {
 
     private static final long serialVersionUID = 1L;
 
-    public BasePayException(BasePayExceptionEnum baseExceptionEnum) {
-        super(baseExceptionEnum);
+    public BasePayException(IBasePayExceptionEnum businessExceptionEnum) {
+        super(businessExceptionEnum);
     }
 
-    public BasePayException(String message, BasePayCustomizeMessageExceptionEnum baseCustomizeMessageExceptionEnum) {
-        super(message, baseCustomizeMessageExceptionEnum);
+    public BasePayException(IBasePayExceptionEnum businessExceptionEnum, String logMessage) {
+        super(businessExceptionEnum, logMessage);
     }
 
-    public BasePayException(String message, Throwable cause, BasePayCustomizeMessageExceptionEnum baseCustomizeMessageExceptionEnum) {
-        super(message, cause, baseCustomizeMessageExceptionEnum);
+    public BasePayException(Throwable cause, IBasePayExceptionEnum businessExceptionEnum) {
+        super(cause, businessExceptionEnum);
     }
 
-    public BasePayException(Throwable cause, BasePayExceptionEnum baseExceptionEnum) {
-        super(cause, baseExceptionEnum);
+    public BasePayException(Throwable cause, IBasePayExceptionEnum businessExceptionEnum, String logMessage) {
+        super(cause, businessExceptionEnum, logMessage);
     }
 
-    public interface BasePayExceptionEnum extends BusinessExceptionEnum {
+
+    @Override
+    protected String getExceptionCode() {
+        return "";
     }
 
-    ;
-
-    public interface BasePayCustomizeMessageExceptionEnum extends BusinessCustomizeMessageExceptionEnum {
+    public interface IBasePayExceptionEnum extends IBusinessExceptionEnum {
     }
-
-    ;
 }

@@ -17,18 +17,18 @@ public abstract class AResultListener<T extends BaseResData> implements ResultLi
 
     @Override
     public void onFail(T t) {
-        throw new PayException(new RuntimeException("接口调用错误：" + JsonUtil.classToJson(t)), PayException.Enum.BASECODE_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,"接口调用错误：" + JsonUtil.classToJson(t));
     }
 
     @Override
     public void onFail(String response) {
-        throw new PayException(new RuntimeException("接口调用错误：" + response), PayException.Enum.BASECODE_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,"接口调用错误：" + response);
     }
 
 
     @Override
     public void onFailBySignInvalid(T t) {
-        throw new PayException(new RuntimeException("签名错误:" + JsonUtil.classToJson(t)), PayException.Enum.BASECODE_EXCEPTION);
+        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED,"签名错误:" + JsonUtil.classToJson(t));
     }
 
     @Override

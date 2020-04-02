@@ -1,7 +1,7 @@
 package com.fushun.pay.start.restful;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.cola.extension.BizScenario;
 import com.fushun.framework.web.exception.BadRequestException;
 import com.fushun.pay.app.api.PayServiceI;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
@@ -26,9 +26,8 @@ public class ResponseValidatorController {
     @RequestMapping("/sync/gzh")
     public String payGZHResponseValidator(PaySyncResponseWeixinGZHCO paySyncResponseWeixinGZHCO){
         PaySyncResponseWeiXinGZHCmd paySyncResponseWeiXinGZHCmd=new PaySyncResponseWeiXinGZHCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_WEIXIN_GZH);
-        paySyncResponseWeiXinGZHCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
+        paySyncResponseWeiXinGZHCmd.setBizScenario(bizScenario);
         paySyncResponseWeiXinGZHCmd.setPaySyncResponseWeixinGZHCO(paySyncResponseWeixinGZHCO);
         SingleResponse<String> singleResponse= payServiceI.payResponseValidator(paySyncResponseWeiXinGZHCmd);
         if(!singleResponse.isSuccess()){

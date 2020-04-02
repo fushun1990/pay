@@ -1,6 +1,7 @@
 package com.fushun.pay.app.dto.domainevent;
 
-import com.alibaba.cola.dto.event.DomainEvent;
+
+import com.alibaba.cola.event.DomainEventI;
 import lombok.Data;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Data;
  * @creation 2019年01月20日19时25分
  */
 @Data
-public class PaySuccessNotityEvent extends DomainEvent {
+public class PaySuccessNotityEvent implements DomainEventI {
     /**
      * 支付订单号
      */

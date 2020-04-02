@@ -4,7 +4,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.fushun.framework.util.exception.exception.BusinessException;
+import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
@@ -92,7 +92,7 @@ public class AlipayAppTradeQueryFacade {
             AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGateway(), alipayConfig.getAppId(), alipayConfig.getRsaPrivateKeyPkcs8(), "json", alipayConfig.getInputCharset(), alipayConfig.getAliPayPublicKey(), alipayConfig.getSignType());
             response = alipayClient.execute(request);
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.QUERY_REQUEST_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.QUERY_REQUEST_FAILED);
         }
 
         TradeQueryResponseCO recordPayDTO = new TradeQueryResponseCO();
@@ -100,7 +100,7 @@ public class AlipayAppTradeQueryFacade {
         //交易不存在
         if ("ACQ.TRADE_NOT_EXIST".equals(response.getSubCode())) {
             recordPayDTO.setOutTradeNo(tradeQueryRequestDTO.getOutTradeNo());
-            recordPayDTO.setStatus(ERecordPayStatus.failed);
+            recordPayDTO.setStatus(ERecordPayStatus.FAILED);
             recordPayDTO.setEPayFrom(tradeQueryRequestDTO.getEPayFrom());
             return recordPayDTO;
         }
@@ -110,7 +110,7 @@ public class AlipayAppTradeQueryFacade {
             //验证失败，修改支付状态是失败
             throw e;
         } catch (Exception e) {
-            throw new PayException(e, PayException.Enum.VALIDATION_RETURN_UNDEFINED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.VALIDATION_RETURN_UNDEFINED);
         }
 
         recordPayDTO.setOutTradeNo(response.getOutTradeNo());
@@ -120,22 +120,22 @@ public class AlipayAppTradeQueryFacade {
         //		TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）、
         //		TRADE_SUCCESS（交易支付成功）、
         //		TRADE_FINISHED（交易结束，不可退款）
-        ETradeStatus tradeStatus = EnumUtil.getEnum(ETradeStatus.class, response.getTradeStatus());
+        ETradeStatus tradeStatus = EnumUtil.getEnumByName(ETradeStatus.class, response.getTradeStatus());
         if (tradeStatus == null) {
-            throw new PayException(null, PayException.Enum.ALIPAY_ORDER_STATUS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS);
         }
         switch (tradeStatus) {
             case WAIT_BUYER_PAY:
-                recordPayDTO.setStatus(ERecordPayStatus.failed);
+                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_CLOSED:
-                recordPayDTO.setStatus(ERecordPayStatus.failed);
+                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_SUCCESS:
-                recordPayDTO.setStatus(ERecordPayStatus.success);
+                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
             case TRADE_FINISHED:
-                recordPayDTO.setStatus(ERecordPayStatus.success);
+                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
             default:
                 break;

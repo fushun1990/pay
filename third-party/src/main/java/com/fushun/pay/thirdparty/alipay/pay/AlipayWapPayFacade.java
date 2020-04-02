@@ -122,7 +122,7 @@ public class AlipayWapPayFacade {
             String form = client.pageExecute(alipayRequest, "GET").getBody();
             return form;
         } catch (AlipayApiException e) {
-            throw new PayException(e, PayException.Enum.PAY_CREATE_FAILED_EXCEPTION);
+            throw new PayException(e, PayException.PayExceptionEnum.PAY_CREATE_FAILED);
         } //调用SDK生成表单
     }
 
@@ -197,10 +197,10 @@ public class AlipayWapPayFacade {
         try {
             signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAliPayPublicKey(), alipayConfig.getInputCharset());
         } catch (AlipayApiException e) {
-            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         if (signVerified == false) {
-            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         // 验证成功
         // ////////////////////////////////////////////////////////////////////////////////////////
@@ -215,28 +215,28 @@ public class AlipayWapPayFacade {
         } catch (Exception e) {
         }
 
-        ETradeStatus tradeStatus = EnumUtil.getEnum(ETradeStatus.class, trade_status);
+        ETradeStatus tradeStatus = EnumUtil.getEnumByName(ETradeStatus.class, trade_status);
         if (tradeStatus == null) {
-            throw new PayException(null, PayException.Enum.ALIPAY_ORDER_STATUS_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS);
         }
         switch (tradeStatus) {
             case WAIT_BUYER_PAY:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.failed.getCode());
-                return;
-            case TRADE_CLOSED:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.failed.getCode());
-                return;
-            case TRADE_SUCCESS:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.success.getCode());
-                return;
-            case TRADE_FINISHED:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.success.getCode());
-                return;
-            default:
+                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
                 break;
+            case TRADE_CLOSED:
+                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
+                break;
+            case TRADE_SUCCESS:
+                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.SUCCESS);
+                break;
+            case TRADE_FINISHED:
+                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.SUCCESS);
+                break;
+            default:
+                throw new PayException(null, PayException.PayExceptionEnum.PAY_BUSINESS);
         }
 
-        throw new PayException(null, PayException.Enum.PAY_BUSINESS_EXCEPTION);
+
     }
 
 
@@ -248,7 +248,7 @@ public class AlipayWapPayFacade {
         boolean signVerified = false;
         String out_trade_no = (String) requestParamsMap.get("out_trade_no");
         paySyncResponseAlipayWapCO.setOutTradeNo(out_trade_no);
-        paySyncResponseAlipayWapCO.setStatus(ERecordPayStatus.failed.getCode());
+        paySyncResponseAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
 
         try {
             Map<String, String> params = new HashMap<String, String>();
@@ -259,11 +259,11 @@ public class AlipayWapPayFacade {
         } catch (AlipayApiException e) {
         }
         if (signVerified == false) {
-            throw new PayException(null, PayException.Enum.SIGNATURE_VALIDATION_FAILED_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
 
         if (StringUtils.isEmpty(out_trade_no)) {
-            throw new PayException(null, PayException.Enum.PAY_RETURN_STATUS_ERROR_EXCEPTION);
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_RETURN_STATUS_ERROR);
         }
 
         TradeQueryRequestDTO tradeQueryRequestDTO = new TradeQueryRequestDTO();

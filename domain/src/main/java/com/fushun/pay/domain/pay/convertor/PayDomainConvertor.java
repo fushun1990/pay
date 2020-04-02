@@ -32,11 +32,11 @@ public class PayDomainConvertor implements ConvertorI {
         recordPayDO.setOutTradeNo(outTradeNo);
         recordPayDO.setOrderPayNo(payE.getTradeNo());
         recordPayDO.setPayMoney(payE.getPayMoney());
-        recordPayDO.setPayWay(payE.getPayWay().getCode());
+        recordPayDO.setPayWay(payE.getPayWay());
         recordPayDO.setRefundAmount(BigDecimal.ZERO);
-        recordPayDO.setPayFrom(payE.getPayFrom().getCode());
-        recordPayDO.setStatus(ERecordPayStatus.created.getCode());
-        recordPayDO.setNotityStatus(ERecordPayNotityStatus.no.getCode());
+        recordPayDO.setPayFrom(payE.getPayFrom());
+        recordPayDO.setStatus(ERecordPayStatus.CREATED);
+        recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
         return recordPayDO;
     }
 }

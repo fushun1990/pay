@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 获取微信用户信息
+ * @TODO 删除
  */
-@Extension(bizCode = BizCode.USER_INFO_WEIXIN)
+@Extension(scenario = BizCode.USER_INFO_WEIXIN)
 public class WeiXinUserInfoThirdPartyExt implements OAuth20ThirartExtPt<WeixinUserInfoCO> {
 
     @Autowired

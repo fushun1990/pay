@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月23日23时58分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_WAP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_WAP)
 public class PaySyncResponseAlipayWapThirdPartyExtPt implements PaySyncResponseThirdPartyExtPt<PaySyncResponseAlipayWapCO> {
 
     @Autowired

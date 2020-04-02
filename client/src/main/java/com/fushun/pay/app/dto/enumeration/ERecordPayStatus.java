@@ -8,9 +8,9 @@ import com.fushun.framework.base.BaseEnum;
  * @author zhoup
  */
 public enum ERecordPayStatus implements BaseEnum<Integer> {
-    success(1, "成功"),
-    failed(2, "失败"),
-    created(3, "创建");
+    SUCCESS(1, "成功"),
+    FAILED(2, "失败"),
+    CREATED(3, "创建");
 
     private Integer code;
 

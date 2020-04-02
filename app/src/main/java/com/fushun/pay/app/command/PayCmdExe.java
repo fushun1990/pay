@@ -14,6 +14,7 @@ import com.fushun.pay.app.thirdparty.extensionpoint.CreatePayThirdPartyExtPt;
 import com.fushun.pay.app.validator.extensionpoint.CreatePayValidatorExtPt;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.common.util.DomainEventPublisher;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -34,14 +35,14 @@ public class PayCmdExe implements CommandExecutorI<SingleResponse<CreatedPayRequ
     @Override
     public SingleResponse<CreatedPayRequestBodyCO> execute(CreatePayCmd cmd) {
         //1, validation
-        extensionExecutor.executeVoid(CreatePayValidatorExtPt.class, cmd.getContext(), validator -> validator.validate(cmd));
+        extensionExecutor.executeVoid(CreatePayValidatorExtPt.class, cmd.getBizScenario(), validator -> validator.validate(cmd));
 
         //2, invoke domain service or directly operate domain to do business logic process
-        PayE payE = extensionExecutor.execute(CreatePayConvertorExtPt.class, cmd.getContext(), convertor -> convertor.clientToEntity(cmd.getPayCO(), cmd.getContext()));
+        PayE payE = extensionExecutor.execute(CreatePayConvertorExtPt.class, cmd.getBizScenario(), convertor -> convertor.clientToEntity(cmd.getPayCO(), cmd.getBizScenario()));
         payE.pay();
 
         //获取支付信息
-        CreatedPayRequestBodyCO payRequestBody = extensionExecutor.execute(CreatePayThirdPartyExtPt.class, cmd.getContext(), thirdparty -> thirdparty.created(cmd.getPayCO()));
+        CreatedPayRequestBodyCO payRequestBody = extensionExecutor.execute(CreatePayThirdPartyExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.created(cmd.getPayCO()));
 
         if (payRequestBody.getStatus() == EStatus.FAIL) {
             CreatedPayExceptionEvent createdPayExceptionEvent = new CreatedPayExceptionEvent();
@@ -49,7 +50,7 @@ public class PayCmdExe implements CommandExecutorI<SingleResponse<CreatedPayRequ
             createdPayExceptionEvent.setOrderPayNo(payE.getTradeNo());
             domainEventPublisher.publish(createdPayExceptionEvent);
 
-            payE.setStatus(payRequestBody.getStatus().getCode());
+            payE.setStatus(ERecordPayStatus.FAILED);
             payE.payFail();
             return SingleResponse.buildFailure(ErrorCode.CREATED_PAY_BODY.getErrCode(), ErrorCode.CREATED_PAY_BODY.getErrDesc());
         }

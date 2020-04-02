@@ -8,9 +8,9 @@ import com.fushun.framework.base.BaseEnum;
  * @author zhoup
  */
 public enum ERefundStatus implements BaseEnum<Integer> {
-    wait(1, "等待退款 "),
-    success(2, "退款成功"),
-    fail(3, "退款失败");
+    WAIT(1, "等待退款 "),
+    SUCCESS(2, "退款成功"),
+    FAIL(3, "退款失败");
 
     private Integer code;
 

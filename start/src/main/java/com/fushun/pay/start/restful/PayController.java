@@ -1,16 +1,13 @@
 package com.fushun.pay.start.restful;
 
-import com.alibaba.cola.context.Context;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.cola.extension.BizScenario;
 import com.fushun.framework.web.exception.BadRequestException;
 import com.fushun.pay.app.api.PayServiceI;
 import com.fushun.pay.app.dto.clientobject.createpay.*;
-import com.fushun.pay.app.dto.clientobject.oauth20.OAuth20ResponseVO;
-import com.fushun.pay.app.dto.clientobject.oauth20.WeixinOauth20CO;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayAppCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayWapCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayWeixinGZHCmd;
-import com.fushun.pay.app.dto.cmd.oauth20.Oauth20WeixinCmd;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,9 +38,8 @@ public class PayController {
     @PostMapping("/pay/alipay/app")
     public CreatedPayRequestBodyCO createdPay(@RequestBody CreatePayAlipayAppCO createPayAlipayAppCO) {
         CreatePayAlipayAppCmd createPayAlipayAppCmd = new CreatePayAlipayAppCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_ALIPAY_APP);
-        createPayAlipayAppCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_APP);
+        createPayAlipayAppCmd.setBizScenario(bizScenario);
         createPayAlipayAppCmd.setCreatePayAlipayAppCO(createPayAlipayAppCO);
         SingleResponse<CreatedPayRequestBodyCO> singleResponse= payServiceI.createPay(createPayAlipayAppCmd);
         if(!singleResponse.isSuccess()){
@@ -60,9 +56,8 @@ public class PayController {
     @PostMapping("/pay/alipay/wap")
     public CreatedPayRequestBodyCO createdAlipayWay(@RequestBody CreatePayAlipayWapCO createPayAlipayWapCO) {
         CreatePayAlipayWapCmd createPayAlipayWapCmd = new CreatePayAlipayWapCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_ALIPAY_WAP);
-        createPayAlipayWapCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_WAP);
+        createPayAlipayWapCmd.setBizScenario(bizScenario);
         createPayAlipayWapCmd.setCreatePayAlipayWapCO(createPayAlipayWapCO);
         SingleResponse<CreatedPayRequestBodyCO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);
         if(!singleResponse.isSuccess()){
@@ -79,9 +74,8 @@ public class PayController {
     @PostMapping("/pay/weixingzh")
     public CreatedPayRequestBodyCO createdWeixinGZH(@RequestBody CreatePayWeiXinGZHCO createPayWeiXinGZHCO){
         CreatePayWeixinGZHCmd createPayAlipayWapCmd = new CreatePayWeixinGZHCmd();
-        Context context = new Context();
-        context.setBizCode(BizCode.CREATEPAY_WEIXIN_GZH);
-        createPayAlipayWapCmd.setContext(context);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
+        createPayAlipayWapCmd.setBizScenario(bizScenario);
         createPayAlipayWapCmd.setCreatePayWeiXinGZHCO(createPayWeiXinGZHCO);
         SingleResponse<CreatedPayRequestBodyCO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);
         if(!singleResponse.isSuccess()){

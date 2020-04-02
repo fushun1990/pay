@@ -1,6 +1,5 @@
 package com.fushun.pay.infrastructure.pay.tunnel.database;
 
-import com.alibaba.cola.tunnel.DataTunnelI;
 import com.fushun.framework.jpa.CustomerRepository;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * @creation 2019年01月19日23时24分
  */
 @Repository
-public interface PayDBTunnel extends DataTunnelI, CustomerRepository<RecordPayDO, RecordPayId> {
+public interface PayDBTunnel extends CustomerRepository<RecordPayDO, RecordPayId> {
 
     /**
      * @param outTradeNo 支付单号

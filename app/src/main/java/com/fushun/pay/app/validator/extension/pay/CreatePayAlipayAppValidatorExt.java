@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 1.0
  * @creation 2019年01月18日22时58分
  */
-@Extension(bizCode = BizCode.CREATEPAY_ALIPAY_APP)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_APP)
 public class CreatePayAlipayAppValidatorExt implements CreatePayValidatorExtPt<CreatePayAlipayAppCmd> {
 
 
