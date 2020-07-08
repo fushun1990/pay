@@ -7,7 +7,7 @@ import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.convertor.extensionpoint.PayNotifyConvertorExtPt;
 import com.fushun.pay.app.dto.PayNotifyCmd;
-import com.fushun.pay.app.dto.clientobject.PayNotifyCO;
+import com.fushun.pay.dto.clientobject.PayNotifyCO;
 import com.fushun.pay.app.dto.domainevent.AnalysisNotifyExceptionEvent;
 import com.fushun.pay.app.thirdparty.extensionpoint.PayNotifyThirdPartyExtPt;
 import com.fushun.pay.app.validator.extensionpoint.PayNotifyValidatorExtPt;

@@ -6,15 +6,15 @@ import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.api.PayServiceI;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayAppCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayWapCmd;
-import com.fushun.pay.app.dto.enumeration.EPayFrom;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.EPayFrom;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.infrastructure.common.BizCode;
 import mockit.Mocked;
 import org.junit.Assert;
@@ -73,7 +73,7 @@ public class PayServiceImplTest {
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_APP);
         createPayAlipayAppCmd.setBizScenario(bizScenario);
 
-        CreatePayAlipayAppCO createPayAlipayWapCO = new CreatePayAlipayAppCO();
+        CreatePayAlipayAppDTO createPayAlipayWapCO = new CreatePayAlipayAppDTO();
         createPayAlipayWapCO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
         createPayAlipayWapCO.setPayFrom(EPayFrom.PAY_FROM_BUY_MEMBERS);
         createPayAlipayWapCO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
@@ -82,7 +82,7 @@ public class PayServiceImplTest {
         createPayAlipayWapCO.setTotalFee(BigDecimal.valueOf(0.1));
         createPayAlipayWapCO.setSubject("支付测试");
 
-        createPayAlipayAppCmd.setCreatePayAlipayAppCO(createPayAlipayWapCO);
+        createPayAlipayAppCmd.setCreatePayAlipayAppDTO(createPayAlipayWapCO);
         SingleResponse<CreatedPayVO> singleResponse = payServiceI.createPay(createPayAlipayAppCmd);
         CreatePayAliPayAppVO createPayAliPayAppVO= (CreatePayAliPayAppVO) singleResponse.getData();
         Assert.assertTrue(singleResponse.isSuccess());
@@ -105,16 +105,16 @@ public class PayServiceImplTest {
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_WAP);
         createPayAlipayWapCmd.setBizScenario(bizScenario);
 
-        CreatePayAlipayWapCO createPayAlipayWapCO = new CreatePayAlipayWapCO();
-        createPayAlipayWapCO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
-        createPayAlipayWapCO.setPayFrom(EPayFrom.PAY_FROM_BUY_MEMBERS);
-        createPayAlipayWapCO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
-        createPayAlipayWapCO.setReturnUrl("http://f.superisong.com/Home/pay/payNotice");
-        createPayAlipayWapCO.setTradeNo("20151016000000455566");
-        createPayAlipayWapCO.setTotalFee(BigDecimal.valueOf(0.1));
-        createPayAlipayWapCO.setSubject("支付测试");
-        createPayAlipayWapCmd.setCreatePayAlipayWapCO(createPayAlipayWapCO);
-        System.out.println(JsonUtil.classToJson(createPayAlipayWapCO));
+        CreatePayAlipayWapDTO createPayAlipayWapDTO = new CreatePayAlipayWapDTO();
+        createPayAlipayWapDTO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
+        createPayAlipayWapDTO.setPayFrom(EPayFrom.PAY_FROM_BUY_MEMBERS);
+        createPayAlipayWapDTO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
+        createPayAlipayWapDTO.setReturnUrl("http://f.superisong.com/Home/pay/payNotice");
+        createPayAlipayWapDTO.setTradeNo("20151016000000455566");
+        createPayAlipayWapDTO.setTotalFee(BigDecimal.valueOf(0.1));
+        createPayAlipayWapDTO.setSubject("支付测试");
+        createPayAlipayWapCmd.setCreatePayAlipayWapDTO(createPayAlipayWapDTO);
+        System.out.println(JsonUtil.classToJson(createPayAlipayWapDTO));
         SingleResponse<CreatedPayVO> singleResponse = payServiceI.createPay(createPayAlipayWapCmd);
         Assert.assertTrue(singleResponse.isSuccess());
         CreatePayAliPayWapVO createPayAliPayWapVO= (CreatePayAliPayWapVO) singleResponse.getData();

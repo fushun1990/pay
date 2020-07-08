@@ -1,7 +1,7 @@
 package com.fushun.pay.app.dto;
 
 import com.alibaba.cola.dto.Command;
-import com.fushun.pay.app.dto.clientobject.OAuth20CO;
+import com.fushun.pay.dto.clientobject.OAuth20CO;
 
 /**
  * @author wangfushun

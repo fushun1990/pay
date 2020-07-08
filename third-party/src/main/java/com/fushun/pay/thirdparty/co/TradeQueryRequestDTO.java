@@ -1,7 +1,7 @@
 package com.fushun.pay.thirdparty.co;
 
 import com.alibaba.cola.dto.ClientObject;
-import com.fushun.pay.app.dto.enumeration.EPayFrom;
+import com.fushun.pay.dto.enumeration.EPayFrom;
 import lombok.Data;
 
 @Data

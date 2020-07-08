@@ -4,7 +4,7 @@ import com.alibaba.cola.dto.SingleResponse;
 import com.fushun.pay.app.common.exception.ErrorCode;
 import com.fushun.pay.app.convertor.CreatePayConvertor;
 import com.fushun.pay.app.dto.PayFindByCriteriaQry;
-import com.fushun.pay.app.dto.clientobject.PayCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.PayDBTunnel;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
@@ -27,14 +27,14 @@ public class PayFindByCriteriaQueryExe {
     @Autowired
     private CreatePayConvertor payConvertor;
 
-    public SingleResponse<PayCO> execute(PayFindByCriteriaQry cmd) {
+    public SingleResponse<PayDTO> execute(PayFindByCriteriaQry cmd) {
         RecordPayId recordPayId = new RecordPayId();
         recordPayId.setOutTradeNo(cmd.getOutTradeNo());
         Optional<RecordPayDO> optional = payDBTunnel.findById(recordPayId);
         if(!optional.isPresent()){
             return SingleResponse.buildFailure(ErrorCode.PAY_FAIL.getErrCode(),"支付信息不存在");
         }
-        PayCO payCO=payConvertor.dataToClient(optional.get());
-        return SingleResponse.of(payCO);
+        PayDTO payDTO =payConvertor.dataToClient(optional.get());
+        return SingleResponse.of(payDTO);
     }
 }

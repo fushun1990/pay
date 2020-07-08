@@ -10,14 +10,14 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
-import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
-import com.fushun.pay.app.dto.clientobject.notify.PayNotifyAlipayAppCO;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseAlipayAppCO;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
+import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayAppCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayAppCO;
+import com.fushun.pay.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
@@ -77,7 +77,7 @@ public class AlipayAppPayFacade {
      * @creation 2017年1月18日
      * @records <p>  fushun 2017年1月18日</p>
      */
-    public CreatePayAliPayAppVO getRequest(CreatePayAlipayAppCO payParamDTO) {
+    public CreatePayAliPayAppVO getRequest(CreatePayAlipayAppDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayAliPayAppVO createPayAliPayAppVO = new CreatePayAliPayAppVO();
         createPayAliPayAppVO.setStatus(EStatus.SUCCESS);
@@ -93,7 +93,7 @@ public class AlipayAppPayFacade {
         return createPayAliPayAppVO;
     }
 
-    private Map<String, String> getRequestData(CreatePayAlipayAppCO payParamDTO) {
+    private Map<String, String> getRequestData(CreatePayAlipayAppDTO payParamDTO) {
         String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
 
         // 把请求参数打包成数组

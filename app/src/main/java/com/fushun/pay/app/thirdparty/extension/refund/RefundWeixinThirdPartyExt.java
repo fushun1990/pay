@@ -1,8 +1,8 @@
 package com.fushun.pay.app.thirdparty.extension.refund;
 
 import com.alibaba.cola.extension.Extension;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
-import com.fushun.pay.app.dto.clientobject.refund.RefundWeixinCO;
+import com.fushun.pay.dto.clientobject.RefundCO;
+import com.fushun.pay.dto.clientobject.refund.RefundWeixinCO;
 import com.fushun.pay.app.thirdparty.extensionpoint.RefundThirdPartyExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.weixin.pay.WeiXinRefundFacade;

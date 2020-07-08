@@ -24,6 +24,7 @@
         <module>start</module>
         <module>third-party</module>
         <module>wxpay-java-sdk</module>
+        <module>sdk</module>
     </modules>
 
     <properties>
@@ -64,6 +65,11 @@
             <dependency>
                 <groupId>com.fushun.pay</groupId>
                 <artifactId>third-party</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

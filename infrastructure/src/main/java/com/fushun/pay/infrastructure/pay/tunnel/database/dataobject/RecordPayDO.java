@@ -1,10 +1,10 @@
 package com.fushun.pay.infrastructure.pay.tunnel.database.dataobject;
 
 import com.fushun.framework.base.BaseCMP;
-import com.fushun.pay.app.dto.enumeration.EPayFrom;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.EPayFrom;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;

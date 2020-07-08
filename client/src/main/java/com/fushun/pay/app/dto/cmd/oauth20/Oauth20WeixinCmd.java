@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.oauth20;
 
 import com.fushun.pay.app.dto.OAuth20Cmd;
-import com.fushun.pay.app.dto.clientobject.OAuth20CO;
-import com.fushun.pay.app.dto.clientobject.oauth20.WeixinOauth20CO;
+import com.fushun.pay.dto.clientobject.OAuth20CO;
+import com.fushun.pay.dto.clientobject.oauth20.WeixinOauth20CO;
 import lombok.Data;
 
 /**

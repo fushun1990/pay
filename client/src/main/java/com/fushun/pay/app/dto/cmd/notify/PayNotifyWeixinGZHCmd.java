@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.notify;
 
 import com.fushun.pay.app.dto.PayNotifyCmd;
-import com.fushun.pay.app.dto.clientobject.PayNotifyCO;
-import com.fushun.pay.app.dto.clientobject.notify.PayNotifyWeixinGZHCO;
+import com.fushun.pay.dto.clientobject.PayNotifyCO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinGZHCO;
 import lombok.Data;
 
 /**

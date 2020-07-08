@@ -1,6 +1,6 @@
 package com.fushun.pay.domain.refund.repository;
 
-import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.domain.refund.convertor.RefundDomainConverter;
 import com.fushun.pay.domain.refund.entity.RefundE;
 import com.fushun.pay.infrastructure.refund.tunnel.database.RefundDBTunnel;

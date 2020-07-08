@@ -7,7 +7,7 @@ import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;

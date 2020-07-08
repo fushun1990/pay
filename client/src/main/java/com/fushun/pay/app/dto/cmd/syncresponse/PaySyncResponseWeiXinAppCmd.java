@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.syncresponse;
 
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
-import com.fushun.pay.app.dto.clientobject.PaySyncResponseCO;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinAppCO;
+import com.fushun.pay.dto.clientobject.PaySyncResponseCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinAppCO;
 import lombok.Data;
 
 /**

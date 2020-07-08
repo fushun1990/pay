@@ -5,7 +5,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.dto.clientobject.refund.RefundAlipayCO;
+import com.fushun.pay.dto.clientobject.refund.RefundAlipayCO;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.alipay.pay.ValidatorServiceResponse;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;

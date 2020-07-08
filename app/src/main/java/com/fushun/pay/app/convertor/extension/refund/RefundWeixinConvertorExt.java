@@ -4,7 +4,7 @@ import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.RefundConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.RefundConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.refund.RefundWeixinCO;
+import com.fushun.pay.dto.clientobject.refund.RefundWeixinCO;
 import com.fushun.pay.domain.refund.entity.RefundE;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;

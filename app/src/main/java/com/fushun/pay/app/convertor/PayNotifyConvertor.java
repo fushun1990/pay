@@ -2,8 +2,8 @@ package com.fushun.pay.app.convertor;
 
 import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.convertor.extensionpoint.PayNotifyConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.PayNotifyCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.PayNotifyCO;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class PayNotifyConvertor implements PayNotifyConvertorExtPt<PayNotifyCO> 
         return payE;
     }
 
-    public PayCO dataToClient(RecordPayDO dataObject) {
+    public PayDTO dataToClient(RecordPayDO dataObject) {
         return null;
     }
 }

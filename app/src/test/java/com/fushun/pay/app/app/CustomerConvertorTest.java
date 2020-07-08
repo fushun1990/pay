@@ -3,7 +3,7 @@ package com.fushun.pay.app.app;
 import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.ExtensionExecutor;
 import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.common.BizCode;
 import mockit.Mocked;
@@ -20,11 +20,11 @@ public class CustomerConvertorTest {
     @Mocked
     private ExtensionExecutor extensionExecutor;
 
-    private CreatePayAlipayAppCO customerCO;
+    private CreatePayAlipayAppDTO customerCO;
 
     @Before
     public void setup() {
-        customerCO = new CreatePayAlipayAppCO();
+        customerCO = new CreatePayAlipayAppDTO();
     }
 
     @Test

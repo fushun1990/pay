@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.refund;
 
 import com.fushun.pay.app.dto.RefundCmd;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
-import com.fushun.pay.app.dto.clientobject.refund.RefundAlipayCO;
+import com.fushun.pay.dto.clientobject.RefundCO;
+import com.fushun.pay.dto.clientobject.refund.RefundAlipayCO;
 import lombok.Data;
 
 /**

@@ -4,14 +4,14 @@ import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.DateUtil;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinGZHCO;
-import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayWeiXinGZHVO;
-import com.fushun.pay.app.dto.clientobject.notify.PayNotifyWeixinGZHCO;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinGZHDTO;
+import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatePayWeiXinGZHVO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinGZHCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
+import com.fushun.pay.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.tencent.common.GZHConfigure;
 import com.tencent.common.Signature;
@@ -68,7 +68,7 @@ public class WeChatGZHPayFacade {
      * @creation 2017年1月18日
      * @records <p>  fushun 2017年1月18日</p>
      */
-    public CreatePayWeiXinGZHVO getRequest(CreatePayWeiXinGZHCO payParamDTO) {
+    public CreatePayWeiXinGZHVO getRequest(CreatePayWeiXinGZHDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayWeiXinGZHVO createPayWeiXinGZHVO = new CreatePayWeiXinGZHVO();
         createPayWeiXinGZHVO.setStatus(EStatus.SUCCESS);
@@ -93,7 +93,7 @@ public class WeChatGZHPayFacade {
      * @creation 2017年1月4日
      * @records <p>  fushun 2017年1月4日</p>
      */
-    protected void getRequestData(CreatePayWeiXinGZHCO payParamDTO,CreatePayWeiXinGZHVO createPayWeiXinGZHVO) {
+    protected void getRequestData(CreatePayWeiXinGZHDTO payParamDTO, CreatePayWeiXinGZHVO createPayWeiXinGZHVO) {
         String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
         UnifiedorderResData unifiedorderResData = null;
         unifiedorderResData = weiXinUnifiedOrderFacade.unifiedOrderPay(payParamDTO);

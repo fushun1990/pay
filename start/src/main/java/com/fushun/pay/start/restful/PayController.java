@@ -5,12 +5,15 @@ import com.alibaba.cola.extension.BizScenario;
 import com.fushun.framework.util.response.ApiResult;
 import com.fushun.framework.web.annotations.NoApiResult;
 import com.fushun.pay.app.api.PayServiceI;
-import com.fushun.pay.app.dto.clientobject.createpay.*;
-import com.fushun.pay.app.dto.clientobject.createpay.response.*;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayAppCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayWapCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayWeixinAppCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayWeixinGZHCmd;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinAppDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinGZHDTO;
+import com.fushun.pay.dto.clientobject.createpay.response.*;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +34,8 @@ public class PayController {
 
     /**
      * 支付宝 app
-     * @param createPayAlipayAppCO
-     * @return com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO
+     * @param createPayAlipayAppDTO
+     * @return com.fushun.pay.dto.clientobject.createpay.CreatedPayRequestBodyCO
      * @description
      * @date 2019年03月15日22时43分
      * @author wangfushun
@@ -40,11 +43,11 @@ public class PayController {
      */
     @PostMapping("/pay/alipay/app")
     @NoApiResult
-    public ApiResult<CreatePayAliPayAppVO> createdPay(@RequestBody CreatePayAlipayAppCO createPayAlipayAppCO) {
+    public ApiResult<CreatePayAliPayAppVO> createdPay(@RequestBody CreatePayAlipayAppDTO createPayAlipayAppDTO) {
         CreatePayAlipayAppCmd createPayAlipayAppCmd = new CreatePayAlipayAppCmd();
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_APP);
         createPayAlipayAppCmd.setBizScenario(bizScenario);
-        createPayAlipayAppCmd.setCreatePayAlipayAppCO(createPayAlipayAppCO);
+        createPayAlipayAppCmd.setCreatePayAlipayAppDTO(createPayAlipayAppDTO);
         SingleResponse<CreatedPayVO> singleResponse= payServiceI.createPay(createPayAlipayAppCmd);
         if(!singleResponse.isSuccess()){
             return ApiResult.ofFail(singleResponse.getErrCode(),singleResponse.getErrMessage());
@@ -54,16 +57,16 @@ public class PayController {
 
     /**
      * 支付宝 wap
-     * @param createPayAlipayWapCO
+     * @param createPayAlipayWapDTO
      * @return
      */
     @PostMapping("/pay/alipay/wap")
     @NoApiResult
-    public ApiResult<CreatePayAliPayWapVO> createdAlipayWay(@RequestBody CreatePayAlipayWapCO createPayAlipayWapCO) {
+    public ApiResult<CreatePayAliPayWapVO> createdAlipayWay(@RequestBody CreatePayAlipayWapDTO createPayAlipayWapDTO) {
         CreatePayAlipayWapCmd createPayAlipayWapCmd = new CreatePayAlipayWapCmd();
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_ALIPAY_WAP);
         createPayAlipayWapCmd.setBizScenario(bizScenario);
-        createPayAlipayWapCmd.setCreatePayAlipayWapCO(createPayAlipayWapCO);
+        createPayAlipayWapCmd.setCreatePayAlipayWapDTO(createPayAlipayWapDTO);
         SingleResponse<CreatedPayVO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);
         if(!singleResponse.isSuccess()){
             return ApiResult.ofFail(singleResponse.getErrCode(),singleResponse.getErrMessage());
@@ -73,16 +76,16 @@ public class PayController {
 
     /**
      * 微信 app支付
-     * @param createPayWeiXinAppCO
+     * @param createPayWeiXinAppDTO
      * @return
      */
     @PostMapping("/pay/weixin/app")
     @NoApiResult
-    public ApiResult<CreatePayWeiXinAppVO> createdWeixinGZH(@RequestBody CreatePayWeiXinAppCO createPayWeiXinAppCO){
+    public ApiResult<CreatePayWeiXinAppVO> createdWeixinGZH(@RequestBody CreatePayWeiXinAppDTO createPayWeiXinAppDTO){
         CreatePayWeixinAppCmd createPayAlipayWapCmd = new CreatePayWeixinAppCmd();
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_WEIXIN_APP);
         createPayAlipayWapCmd.setBizScenario(bizScenario);
-        createPayAlipayWapCmd.setCreatePayWeiXinAppCO(createPayWeiXinAppCO);
+        createPayAlipayWapCmd.setCreatePayWeiXinAppDTO(createPayWeiXinAppDTO);
         SingleResponse<CreatedPayVO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);
         if(!singleResponse.isSuccess()){
             return ApiResult.ofFail(singleResponse.getErrCode(),singleResponse.getErrMessage());
@@ -92,16 +95,16 @@ public class PayController {
 
     /**
      * 微信公众号
-     * @param createPayWeiXinGZHCO
+     * @param createPayWeiXinGZHDTO
      * @return
      */
     @PostMapping("/pay/weixin/gzh")
     @NoApiResult
-    public ApiResult<CreatePayWeiXinGZHVO> createdWeixinGZH(@RequestBody CreatePayWeiXinGZHCO createPayWeiXinGZHCO){
+    public ApiResult<CreatePayWeiXinGZHVO> createdWeixinGZH(@RequestBody CreatePayWeiXinGZHDTO createPayWeiXinGZHDTO){
         CreatePayWeixinGZHCmd createPayAlipayWapCmd = new CreatePayWeixinGZHCmd();
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
         createPayAlipayWapCmd.setBizScenario(bizScenario);
-        createPayAlipayWapCmd.setCreatePayWeiXinGZHCO(createPayWeiXinGZHCO);
+        createPayAlipayWapCmd.setCreatePayWeiXinGZHDTO(createPayWeiXinGZHDTO);
         SingleResponse<CreatedPayVO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);
         if(!singleResponse.isSuccess()){
             return ApiResult.ofFail(singleResponse.getErrCode(),singleResponse.getErrMessage());

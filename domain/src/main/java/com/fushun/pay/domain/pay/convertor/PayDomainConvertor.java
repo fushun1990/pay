@@ -3,7 +3,7 @@ package com.fushun.pay.domain.pay.convertor;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;

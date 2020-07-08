@@ -1,18 +1,5 @@
 package com.fushun.pay.start.restful;
 
-import com.alibaba.cola.dto.SingleResponse;
-import com.fushun.framework.util.beans.ConverterUtil;
-import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.framework.web.exception.BadRequestException;
-import com.fushun.pay.app.api.OAuthServiceI;
-import com.fushun.pay.app.dto.clientobject.oauth20.*;
-import com.fushun.pay.app.dto.cmd.oauth20.Oauth20WeixinCmd;
-import com.fushun.pay.app.dto.cmd.oauth20.UserInfoWeixinCmd;
-import com.fushun.pay.infrastructure.common.BizCode;
-import com.tencent.protocol.userinfo_protocol.UserInfoResData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

@@ -37,6 +37,10 @@
             <groupId>com.fushun.pay</groupId>
             <artifactId>client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fushun.pay</groupId>
+            <artifactId>sdk</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.fushun.pay</groupId>

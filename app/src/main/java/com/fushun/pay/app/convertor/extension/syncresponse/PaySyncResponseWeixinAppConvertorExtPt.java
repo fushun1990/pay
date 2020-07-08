@@ -4,7 +4,7 @@ import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.PaySyncResponseConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.PaySyncResponseConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinAppCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinAppCO;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;

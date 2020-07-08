@@ -1,8 +1,8 @@
 package com.fushun.pay.app.thirdparty.extension.syncresponse;
 
 import com.alibaba.cola.extension.Extension;
-import com.fushun.pay.app.dto.clientobject.PaySyncResponseCO;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
+import com.fushun.pay.dto.clientobject.PaySyncResponseCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
 import com.fushun.pay.app.thirdparty.extensionpoint.PaySyncResponseThirdPartyExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.weixin.pay.WeChatGZHPayFacade;

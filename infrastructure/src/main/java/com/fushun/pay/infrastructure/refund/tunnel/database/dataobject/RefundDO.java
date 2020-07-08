@@ -1,7 +1,7 @@
 package com.fushun.pay.infrastructure.refund.tunnel.database.dataobject;
 
 import com.fushun.framework.base.BaseCMP;
-import com.fushun.pay.app.dto.enumeration.ERefundNotityStatus;
+import com.fushun.pay.dto.enumeration.ERefundNotityStatus;
 import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;

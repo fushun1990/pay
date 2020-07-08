@@ -1,10 +1,9 @@
 package com.fushun.pay.app.thirdparty.extension.oauth20;
 
 import com.alibaba.cola.extension.Extension;
-import com.fushun.framework.util.beans.ConverterUtil;
-import com.fushun.pay.app.dto.clientobject.oauth20.OAuth20ResponseVO;
-import com.fushun.pay.app.dto.clientobject.oauth20.WeixinUserInfoCO;
-import com.fushun.pay.app.dto.clientobject.oauth20.WeixinUserInfoResponseVO;
+import com.fushun.pay.dto.clientobject.oauth20.OAuth20ResponseVO;
+import com.fushun.pay.dto.clientobject.oauth20.WeixinUserInfoCO;
+import com.fushun.pay.dto.clientobject.oauth20.WeixinUserInfoResponseVO;
 import com.fushun.pay.app.thirdparty.extensionpoint.OAuth20ThirartExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.weixin.pay.WeChatGZHPayFacade;

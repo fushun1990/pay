@@ -10,8 +10,8 @@ import com.fushun.pay.app.dto.CreatePayCmd;
 import com.fushun.pay.app.dto.PayFindByCriteriaQry;
 import com.fushun.pay.app.dto.PayNotifyCmd;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class PayServiceImpl implements PayServiceI {
 
     /**
      * @param payCmd
-     * @return com.alibaba.cola.dto.SingleResponse<com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO>
+     * @return com.alibaba.cola.dto.SingleResponse<com.fushun.pay.dto.clientobject.createpay.CreatedPayRequestBodyCO>
      * @description 创建支付信息
      * @date 2019年02月15日21时57分
      * @author wangfushun
@@ -51,8 +51,8 @@ public class PayServiceImpl implements PayServiceI {
     }
 
     @Override
-    public SingleResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry) {
-        return (SingleResponse<PayCO>) payFindByCriteriaQueryExe.execute(payFindByCriteriaQry);
+    public SingleResponse<PayDTO> pay(PayFindByCriteriaQry payFindByCriteriaQry) {
+        return (SingleResponse<PayDTO>) payFindByCriteriaQueryExe.execute(payFindByCriteriaQry);
     }
 
     /**

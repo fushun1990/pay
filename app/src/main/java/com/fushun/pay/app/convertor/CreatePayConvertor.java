@@ -3,7 +3,7 @@ package com.fushun.pay.app.convertor;
 import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.PayCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
@@ -14,29 +14,29 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月18日23时39分
  */
 @Component
-public class CreatePayConvertor implements CreatePayConvertorExtPt<PayCO> {
+public class CreatePayConvertor implements CreatePayConvertorExtPt<PayDTO> {
 
     @Override
-    public PayE clientToEntity(PayCO payCO, BizScenario bizScenario) {
+    public PayE clientToEntity(PayDTO payDTO, BizScenario bizScenario) {
         PayE payE = DomainFactory.create(PayE.class);
-        String outTradeNo = payCO.getPayFrom().getPreStr() + payCO.getTradeNo();
-        payE.setTradeNo(payCO.getTradeNo());
+        String outTradeNo = payDTO.getPayFrom().getPreStr() + payDTO.getTradeNo();
+        payE.setTradeNo(payDTO.getTradeNo());
         payE.setOutTradeNo(outTradeNo);
-        payE.setPayMoney(payCO.getTotalFee());
-        payE.setPayWay(payCO.getPayWay());
-        payE.setPayFrom(payCO.getPayFrom());
+        payE.setPayMoney(payDTO.getTotalFee());
+        payE.setPayWay(payDTO.getPayWay());
+        payE.setPayFrom(payDTO.getPayFrom());
         payE.setBizScenario(bizScenario);
         return payE;
     }
 
-    public PayCO dataToClient(RecordPayDO dataObject) {
-        PayCO payCO = new PayCO();
-        payCO.setPayFrom( dataObject.getPayFrom());
-        payCO.setPayWay( dataObject.getPayWay());
-        payCO.setTotalFee(dataObject.getPayMoney());
-        payCO.setTradeNo(dataObject.getOutTradeNo());
-        payCO.setOrderPayNo(dataObject.getOrderPayNo());
-        payCO.setPayNo(dataObject.getPayNo());
-        return payCO;
+    public PayDTO dataToClient(RecordPayDO dataObject) {
+        PayDTO payDTO = new PayDTO();
+        payDTO.setPayFrom( dataObject.getPayFrom());
+        payDTO.setPayWay( dataObject.getPayWay());
+        payDTO.setTotalFee(dataObject.getPayMoney());
+        payDTO.setTradeNo(dataObject.getOutTradeNo());
+        payDTO.setOrderPayNo(dataObject.getOrderPayNo());
+        payDTO.setPayNo(dataObject.getPayNo());
+        return payDTO;
     }
 }

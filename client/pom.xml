@@ -14,6 +14,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.fushun.pay</groupId>
+            <artifactId>sdk</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>cola-common</artifactId>
         </dependency>

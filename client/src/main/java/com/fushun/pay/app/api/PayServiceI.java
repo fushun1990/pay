@@ -5,8 +5,8 @@ import com.fushun.pay.app.dto.CreatePayCmd;
 import com.fushun.pay.app.dto.PayFindByCriteriaQry;
 import com.fushun.pay.app.dto.PayNotifyCmd;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
 
 /**
  * @author wangfushun
@@ -17,7 +17,7 @@ public interface PayServiceI {
 
     /**
      * @param payCmd
-     * @return com.alibaba.cola.dto.SingleResponse<com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO>
+     * @return com.alibaba.cola.dto.SingleResponse<com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO>
      * @description 创建支付信息
      * @date 2019年02月15日21时57分
      * @author wangfushun
@@ -25,7 +25,7 @@ public interface PayServiceI {
      */
     SingleResponse<CreatedPayVO> createPay(CreatePayCmd payCmd);
 
-    SingleResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry);
+    SingleResponse<PayDTO> pay(PayFindByCriteriaQry payFindByCriteriaQry);
 
     /**
      * @param payNotifyCmd

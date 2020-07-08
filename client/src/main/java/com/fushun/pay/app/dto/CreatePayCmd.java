@@ -1,7 +1,7 @@
 package com.fushun.pay.app.dto;
 
 import com.alibaba.cola.dto.Command;
-import com.fushun.pay.app.dto.clientobject.PayCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
 
 /**
  * @author wangfushun
@@ -10,5 +10,5 @@ import com.fushun.pay.app.dto.clientobject.PayCO;
  */
 public abstract class CreatePayCmd extends Command {
 
-    public abstract PayCO getPayCO();
+    public abstract PayDTO getPayCO();
 }

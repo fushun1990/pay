@@ -1,7 +1,7 @@
 package com.fushun.pay.app.dto;
 
 import com.alibaba.cola.dto.Command;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
+import com.fushun.pay.dto.clientobject.RefundCO;
 
 /**
  * @version 1.0

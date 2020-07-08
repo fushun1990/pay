@@ -1,8 +1,8 @@
 package com.fushun.pay.app.thirdparty.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.fushun.pay.app.dto.clientobject.OAuth20CO;
-import com.fushun.pay.app.dto.clientobject.oauth20.OAuth20ResponseVO;
+import com.fushun.pay.dto.clientobject.OAuth20CO;
+import com.fushun.pay.dto.clientobject.oauth20.OAuth20ResponseVO;
 
 /**
  * @author wangfushun

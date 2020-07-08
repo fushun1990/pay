@@ -2,8 +2,8 @@ package com.fushun.pay.app.convertor;
 
 import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.convertor.extensionpoint.RefundConvertorExtPt;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.RefundCO;
 import com.fushun.pay.domain.refund.entity.RefundE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class RefundConvertor implements RefundConvertorExtPt<RefundCO> {
         return refundE;
     }
 
-    public PayCO dataToClient(RecordPayDO dataObject) {
+    public PayDTO dataToClient(RecordPayDO dataObject) {
         return null;
     }
 }

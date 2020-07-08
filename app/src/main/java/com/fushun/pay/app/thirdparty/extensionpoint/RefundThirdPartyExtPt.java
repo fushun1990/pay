@@ -1,7 +1,7 @@
 package com.fushun.pay.app.thirdparty.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.fushun.pay.app.dto.clientobject.RefundCO;
+import com.fushun.pay.dto.clientobject.RefundCO;
 
 /**
  * @author wangfushun

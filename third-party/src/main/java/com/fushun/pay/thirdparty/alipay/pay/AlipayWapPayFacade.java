@@ -11,13 +11,13 @@ import com.fushun.framework.util.beans.ConverterUtil;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
-import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
-import com.fushun.pay.app.dto.clientobject.notify.PayNotifyAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseAlipayWapCO;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
+import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayWapCO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayWapCO;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
@@ -58,7 +58,7 @@ public class AlipayWapPayFacade {
     @Autowired
     private AlipayConfig alipayConfig;
 
-    public CreatePayAliPayWapVO getRequest(CreatePayAlipayWapCO payParamDTO) {
+    public CreatePayAliPayWapVO getRequest(CreatePayAlipayWapDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayAliPayWapVO createdPayThirdPartyCO = new CreatePayAliPayWapVO();
         createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
@@ -73,7 +73,7 @@ public class AlipayWapPayFacade {
         return createdPayThirdPartyCO;
     }
 
-    private Map<String, String> getRequestData(CreatePayAlipayWapCO payParamDTO) {
+    private Map<String, String> getRequestData(CreatePayAlipayWapDTO payParamDTO) {
 
 
         String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();

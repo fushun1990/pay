@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.createdpay;
 
 import com.fushun.pay.app.dto.CreatePayCmd;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
 import lombok.Data;
 
 /**
@@ -13,10 +13,10 @@ import lombok.Data;
 @Data
 public class CreatePayAlipayAppCmd extends CreatePayCmd {
 
-    private CreatePayAlipayAppCO createPayAlipayAppCO;
+    private CreatePayAlipayAppDTO createPayAlipayAppDTO;
 
     @Override
-    public PayCO getPayCO() {
-        return this.createPayAlipayAppCO;
+    public PayDTO getPayCO() {
+        return this.createPayAlipayAppDTO;
     }
 }

@@ -2,9 +2,9 @@ package com.fushun.pay.thirdparty.weixin.pay;
 
 import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.StringUtils;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinGZHCO;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinGZHDTO;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
@@ -36,7 +36,7 @@ public class WeiXinUnifiedOrderFacade {
     @Autowired
     private WeiXinOAuth20Facade weiXinOAuth20Facade;
 
-    private AppUnifiedOrderReqData getReq(AppUnifiedOrderReqData unifiedorderReqData, CreatePayWeiXinCO payParamDTO) {
+    private AppUnifiedOrderReqData getReq(AppUnifiedOrderReqData unifiedorderReqData, CreatePayWeiXinDTO payParamDTO) {
         String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
         unifiedorderReqData.setBody(payParamDTO.getBody());
         unifiedorderReqData.setOut_trade_no(outTradeNo);
@@ -55,7 +55,7 @@ public class WeiXinUnifiedOrderFacade {
      * @creation 2017年1月4日
      * @records <p>  fushun 2017年1月4日</p>
      */
-    public UnifiedorderResData unifiedOrderPay(CreatePayWeiXinCO payParamDTO) {
+    public UnifiedorderResData unifiedOrderPay(CreatePayWeiXinDTO payParamDTO) {
         UnifiedOrderResultListener unifiedOrderResultListener = new UnifiedOrderResultListener();
 
         try {
@@ -65,7 +65,7 @@ public class WeiXinUnifiedOrderFacade {
                 String openId = "";
                 //判断是否存在openId
                 if (StringUtils.isEmpty(payParamDTO.getOpenId())) {
-                    CreatePayWeiXinGZHCO createWeiXinGZHPayCO = (CreatePayWeiXinGZHCO) payParamDTO;
+                    CreatePayWeiXinGZHDTO createWeiXinGZHPayCO = (CreatePayWeiXinGZHDTO) payParamDTO;
                     if (StringUtils.isEmpty(createWeiXinGZHPayCO.getWeiXinAuthCode())) {
                         throw new PayException(PayException.PayExceptionEnum.WECHAT_CODE_NOT_NULL);
                     }

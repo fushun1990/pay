@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.cmd.createdpay;
 
 import com.fushun.pay.app.dto.CreatePayCmd;
-import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
+import com.fushun.pay.dto.clientobject.PayDTO;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import lombok.Data;
 
 /**
@@ -13,10 +13,10 @@ import lombok.Data;
 @Data
 public class CreatePayAlipayWapCmd extends CreatePayCmd {
 
-    private CreatePayAlipayWapCO createPayAlipayWapCO;
+    private CreatePayAlipayWapDTO createPayAlipayWapDTO;
 
     @Override
-    public PayCO getPayCO() {
-        return this.createPayAlipayWapCO;
+    public PayDTO getPayCO() {
+        return this.createPayAlipayWapDTO;
     }
 }
