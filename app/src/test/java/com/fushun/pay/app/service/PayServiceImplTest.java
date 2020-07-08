@@ -8,7 +8,9 @@ import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.api.PayServiceI;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayAppCmd;
 import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayWapCmd;
 import com.fushun.pay.app.dto.enumeration.EPayFrom;
@@ -81,10 +83,11 @@ public class PayServiceImplTest {
         createPayAlipayWapCO.setSubject("支付测试");
 
         createPayAlipayAppCmd.setCreatePayAlipayAppCO(createPayAlipayWapCO);
-        SingleResponse<CreatedPayRequestBodyCO> singleResponse = payServiceI.createPay(createPayAlipayAppCmd);
+        SingleResponse<CreatedPayVO> singleResponse = payServiceI.createPay(createPayAlipayAppCmd);
+        CreatePayAliPayAppVO createPayAliPayAppVO= (CreatePayAliPayAppVO) singleResponse.getData();
         Assert.assertTrue(singleResponse.isSuccess());
-        logger.info(singleResponse.getData().getPayStr());
-        HashMap<String, Object> map = JsonUtil.jsonToHashMap(singleResponse.getData().getPayStr());
+        logger.info(createPayAliPayAppVO.getPayStr());
+        HashMap<String, Object> map = JsonUtil.jsonToHashMap(createPayAliPayAppVO.getPayStr());
         Assert.assertNotNull(map.get("orderPayNo"));
         Assert.assertNotNull(map.get("payForm"));
     }
@@ -112,9 +115,10 @@ public class PayServiceImplTest {
         createPayAlipayWapCO.setSubject("支付测试");
         createPayAlipayWapCmd.setCreatePayAlipayWapCO(createPayAlipayWapCO);
         System.out.println(JsonUtil.classToJson(createPayAlipayWapCO));
-        SingleResponse<CreatedPayRequestBodyCO> singleResponse = payServiceI.createPay(createPayAlipayWapCmd);
+        SingleResponse<CreatedPayVO> singleResponse = payServiceI.createPay(createPayAlipayWapCmd);
         Assert.assertTrue(singleResponse.isSuccess());
-        logger.info(singleResponse.getData().getPayStr());
+        CreatePayAliPayWapVO createPayAliPayWapVO= (CreatePayAliPayWapVO) singleResponse.getData();
+        logger.info(createPayAliPayWapVO.getPayStr());
     }
 
 }

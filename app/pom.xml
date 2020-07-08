@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pay</artifactId>
         <groupId>com.fushun.pay</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>app</artifactId>
@@ -30,11 +30,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba.cola</groupId>
+            <groupId>com.aliyun</groupId>
             <artifactId>cola-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cola</groupId>
+            <groupId>com.aliyun</groupId>
             <artifactId>cola-core</artifactId>
         </dependency>
         <dependency>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>pay</artifactId>
         <groupId>com.fushun.pay</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.fushun.framework</groupId>
+            <artifactId>framework-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fushun.framework</groupId>
+            <artifactId>framework-spring-data-jpa</artifactId>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.fushun.pay</groupId>
             <artifactId>infrastructure</artifactId>
         </dependency>
@@ -23,19 +33,15 @@
             <artifactId>client</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cola</groupId>
+            <groupId>com.aliyun</groupId>
             <artifactId>cola-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cola</groupId>
+            <groupId>com.aliyun</groupId>
             <artifactId>cola-core</artifactId>
         </dependency>
 
 
-        <dependency>
-            <groupId>com.fushun.framework</groupId>
-            <artifactId>framework-base</artifactId>
-        </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
@@ -66,12 +72,6 @@
             <artifactId>httpmime</artifactId>
         </dependency>
 
-        <!--MySQL Driver驱动包-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -81,10 +81,6 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk14</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

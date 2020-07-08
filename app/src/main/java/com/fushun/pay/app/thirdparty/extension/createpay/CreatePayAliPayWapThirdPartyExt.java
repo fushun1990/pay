@@ -4,7 +4,7 @@ import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
 import com.fushun.pay.app.thirdparty.extensionpoint.CreatePayThirdPartyExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.alipay.pay.AlipayWapPayFacade;
@@ -24,7 +24,8 @@ public class CreatePayAliPayWapThirdPartyExt implements CreatePayThirdPartyExtPt
     @Autowired
     private AlipayWapPayFacade payFacade;
 
-    public CreatedPayRequestBodyCO created(CreatePayAlipayWapCO payCO) {
+    @Override
+    public CreatedPayVO created(CreatePayAlipayWapCO payCO) {
         return payFacade.getRequest(payCO);
     }
 }

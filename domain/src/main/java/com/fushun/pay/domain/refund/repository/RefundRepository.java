@@ -1,16 +1,12 @@
 package com.fushun.pay.domain.refund.repository;
 
-import com.alibaba.cola.repository.RepositoryI;
-import com.fushun.pay.app.dto.enumeration.EPayFrom;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
-import com.fushun.pay.app.dto.enumeration.ERefundFrom;
 import com.fushun.pay.domain.refund.convertor.RefundDomainConverter;
 import com.fushun.pay.domain.refund.entity.RefundE;
 import com.fushun.pay.infrastructure.refund.tunnel.database.RefundDBTunnel;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author wangfushun
@@ -19,7 +15,7 @@ import org.springframework.stereotype.Repository;
  * @creation 2019年02月04日00时09分
  */
 @Component
-public class RefundRepository implements RepositoryI {
+public class RefundRepository {
 
     @Autowired
     private RefundDBTunnel refundDBTunnel;

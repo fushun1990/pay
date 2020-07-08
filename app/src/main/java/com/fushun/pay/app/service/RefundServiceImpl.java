@@ -1,8 +1,8 @@
 package com.fushun.pay.app.service;
 
-import com.alibaba.cola.command.CommandBusI;
 import com.alibaba.cola.dto.Response;
 import com.fushun.pay.app.api.RefundServiceI;
+import com.fushun.pay.app.command.RefundCmdExe;
 import com.fushun.pay.app.dto.RefundCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class RefundServiceImpl implements RefundServiceI {
 
     @Autowired
-    private CommandBusI commandBus;
+    private RefundCmdExe refundCmdExe;
 
 
     /**
@@ -30,7 +30,7 @@ public class RefundServiceImpl implements RefundServiceI {
      */
     @Override
     public Response refund(RefundCmd refundCmd) {
-        Response response = commandBus.send(refundCmd);
+        Response response = refundCmdExe.execute(refundCmd);
         return response;
     }
 }

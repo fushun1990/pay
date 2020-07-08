@@ -1,6 +1,5 @@
 package com.fushun.pay.domain.pay.repository;
 
-import com.alibaba.cola.repository.RepositoryI;
 import com.fushun.pay.domain.pay.convertor.PayDomainConvertor;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.PayDBTunnel;
@@ -8,7 +7,6 @@ import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -19,7 +17,7 @@ import java.util.Optional;
  * @creation 2019年01月20日18时39分
  */
 @Component
-public class PayRepository implements RepositoryI {
+public class PayRepository {
 
     @Autowired
     private PayDBTunnel payDBTunnel;

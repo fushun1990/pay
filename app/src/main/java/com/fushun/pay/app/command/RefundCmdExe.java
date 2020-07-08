@@ -1,7 +1,5 @@
 package com.fushun.pay.app.command;
 
-import com.alibaba.cola.command.Command;
-import com.alibaba.cola.command.CommandExecutorI;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.extension.ExtensionExecutor;
 import com.alibaba.cola.logger.Logger;
@@ -16,6 +14,7 @@ import com.fushun.pay.app.thirdparty.extensionpoint.RefundThirdPartyExtPt;
 import com.fushun.pay.app.validator.extensionpoint.RefundValidatorExtPt;
 import com.fushun.pay.domain.refund.entity.RefundE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author wangfushun
@@ -23,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年02月03日22时37分
  */
-@Command
-public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
+@Component
+public class RefundCmdExe{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -32,7 +31,6 @@ public class RefundCmdExe implements CommandExecutorI<Response, RefundCmd> {
     private ExtensionExecutor extensionExecutor;
 
 
-    @Override
     public Response execute(RefundCmd cmd) {
 
         //1, validation

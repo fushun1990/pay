@@ -13,19 +13,20 @@ public enum EPayFrom implements ECallBackFrom<String> {
 
     private String code;
 
-    private String text;
+    private String desc;
     /**
      * 支付单号前缀
      */
     private String preStr;
 
 
-    EPayFrom(String code, String text, String pre) {
+    EPayFrom(String code, String desc, String pre) {
         this.code = code;
-        this.text = text;
+        this.desc = desc;
         this.preStr = pre;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
@@ -34,17 +35,18 @@ public enum EPayFrom implements ECallBackFrom<String> {
         this.code = code;
     }
 
-    public String getText() {
-        return text;
+    @Override
+    public String getDesc() {
+        return desc;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     @Override
     public String toString() {
-        return text;
+        return desc;
     }
 
     public String getPreStr() {

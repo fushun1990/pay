@@ -6,8 +6,8 @@ import com.fushun.framework.util.util.DateUtil;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinGZHCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
 import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayWeiXinGZHVO;
 import com.fushun.pay.app.dto.clientobject.notify.PayNotifyWeixinGZHCO;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
@@ -68,20 +68,19 @@ public class WeChatGZHPayFacade {
      * @creation 2017年1月18日
      * @records <p>  fushun 2017年1月18日</p>
      */
-    public CreatedPayRequestBodyCO getRequest(CreatePayWeiXinGZHCO payParamDTO) {
+    public CreatePayWeiXinGZHVO getRequest(CreatePayWeiXinGZHCO payParamDTO) {
         //下单是不，更新订单为支付失败
-        CreatedPayRequestBodyCO createdPayThirdPartyCO = new CreatedPayRequestBodyCO();
-        createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
+        CreatePayWeiXinGZHVO createPayWeiXinGZHVO = new CreatePayWeiXinGZHVO();
+        createPayWeiXinGZHVO.setStatus(EStatus.SUCCESS);
         try {
-            Map<String, String> map = getRequestData(payParamDTO);
-            String payStr = createPayHtml(map);
-            createdPayThirdPartyCO.setPayStr(payStr);
+            this.getRequestData(payParamDTO,createPayWeiXinGZHVO);
+            return createPayWeiXinGZHVO;
         } catch (Exception e) {
-            createdPayThirdPartyCO.setStatus(EStatus.FAIL);
+            createPayWeiXinGZHVO.setStatus(EStatus.FAIL);
             logger.warn("created pay error,payParamDTO:[{}]", payParamDTO.toString(), e);
 //			payNotity.updatePayStatus(recordPayDTO, payParamDTO.getPayWay());
         }
-        return createdPayThirdPartyCO;
+        return createPayWeiXinGZHVO;
     }
 
     /**
@@ -94,7 +93,7 @@ public class WeChatGZHPayFacade {
      * @creation 2017年1月4日
      * @records <p>  fushun 2017年1月4日</p>
      */
-    protected Map<String, String> getRequestData(CreatePayWeiXinGZHCO payParamDTO) {
+    protected void getRequestData(CreatePayWeiXinGZHCO payParamDTO,CreatePayWeiXinGZHVO createPayWeiXinGZHVO) {
         String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
         UnifiedorderResData unifiedorderResData = null;
         unifiedorderResData = weiXinUnifiedOrderFacade.unifiedOrderPay(payParamDTO);
@@ -105,14 +104,14 @@ public class WeChatGZHPayFacade {
         jsPayReqData.setSign(Signature.getMD5Sign(Signature.getSignMap(JsPayReqData.class, jsPayReqData), jsPayReqData.getConfigure()));
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put("appId", jsPayReqData.getAppId());
-        map.put("timeStamp", jsPayReqData.getTimeStamp());
-        map.put("nonceStr", jsPayReqData.getNonceStr());
-        map.put("package", jsPayReqData.getPackage_());
-        map.put("signType", jsPayReqData.getSignType());
-        map.put("paySign", jsPayReqData.getSign());
-        map.put("orderPayNo", outTradeNo);
-        return map;
+        createPayWeiXinGZHVO.setAppId(jsPayReqData.getAppId());
+        createPayWeiXinGZHVO.setTimestamp(jsPayReqData.getTimeStamp());
+        createPayWeiXinGZHVO.setNonceStr(jsPayReqData.getNonceStr());
+        createPayWeiXinGZHVO.setPackage_(jsPayReqData.getPackage_());
+        createPayWeiXinGZHVO.setSignType(jsPayReqData.getSignType());
+        createPayWeiXinGZHVO.setPaySign(jsPayReqData.getSign());
+        createPayWeiXinGZHVO.setOrderPayNo(outTradeNo);
+
     }
 
     protected String createPayHtml(Map<String, String> map) {
@@ -147,13 +146,13 @@ public class WeChatGZHPayFacade {
     public void payResultAlipayReust(String requestParams, PaySyncResponseWeixinGZHCO recordPayDTO) {
         Map<String, Object> map = JsonUtil.jsonToHashMap(requestParams);
         if (map == null || StringUtils.isEmpty(map.get("orderPayNo"))) {
-            throw new PayException(null, PayException.PayExceptionEnum.PAY_FAILED);
+            throw new PayException( PayException.PayExceptionEnum.PAY_FAILED);
         }
         recordPayDTO.setOutTradeNo(map.get("orderPayNo").toString());
         recordPayDTO.setStatus(ERecordPayStatus.FAILED);
 
         if (!"get_brand_wcpay_request:ok".equals(map.get("result"))) {
-            throw new PayException(null, PayException.PayExceptionEnum.PAY_FAILED);
+            throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
 
         OrderQueryResData orderQueryResData = weiXinPayQueryFacade.getOrderQuery(map.get("orderPayNo").toString(), GZHConfigure.initMethod());

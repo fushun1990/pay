@@ -1,7 +1,6 @@
 package com.fushun.pay.app.validator.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.alibaba.cola.validator.ValidatorI;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
 
 /**
@@ -10,5 +9,7 @@ import com.fushun.pay.app.dto.PaySyncResponseCmd;
  * @description
  * @creation 2019年01月29日23时47分
  */
-public interface PaySyncResponseValidatorExtPt<T extends PaySyncResponseCmd> extends ValidatorI<T>, ExtensionPointI {
+public interface PaySyncResponseValidatorExtPt<T extends PaySyncResponseCmd> extends ExtensionPointI {
+
+    public void validate(T candidate);
 }

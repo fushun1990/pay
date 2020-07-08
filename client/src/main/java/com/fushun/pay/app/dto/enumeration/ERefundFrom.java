@@ -14,16 +14,16 @@ public enum ERefundFrom implements ECallBackFrom<String> {
 
     private String code;
 
-    private String text;
+    private String desc;
 
     /**
      * 订单号前缀
      */
     private EPayFrom ePayFrom;
 
-    ERefundFrom(String code, String text, EPayFrom ePayFrom) {
+    ERefundFrom(String code, String desc, EPayFrom ePayFrom) {
         this.code = code;
-        this.text = text;
+        this.desc = desc;
         this.ePayFrom = ePayFrom;
     }
 
@@ -34,8 +34,8 @@ public enum ERefundFrom implements ECallBackFrom<String> {
     }
 
     @Override
-    public String getText() {
-        return text;
+    public String getDesc() {
+        return desc;
     }
 
     public EPayFrom getEPayFrom() {

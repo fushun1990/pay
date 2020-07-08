@@ -1,8 +1,8 @@
 package com.fushun.pay.app.dto.enumeration;
 
 
-import com.fushun.framework.base.BaseEnum;
+import com.fushun.framework.base.IBaseEnum;
 
-public interface ECallBackFrom<T> extends BaseEnum<T> {
+public interface ECallBackFrom<T> extends IBaseEnum<T> {
 
 }

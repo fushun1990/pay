@@ -9,7 +9,9 @@ import com.alibaba.cola.dto.ErrorCodeI;
  * @date 2019-01-04 11:00 AM
  */
 public enum ErrorCode implements ErrorCodeI {
-
+    /**
+     *
+     */
     CREATED_PAY_BODY("CREATED_PAY_BODY", "创建支付失败"),
     PAY_FAIL("PAY_FAIL", "支付失败"),
     PAY_SUCCESS("PAY_SUCCESS", "支付成功"),

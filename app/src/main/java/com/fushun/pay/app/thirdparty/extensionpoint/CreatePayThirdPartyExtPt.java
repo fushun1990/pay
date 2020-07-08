@@ -2,7 +2,7 @@ package com.fushun.pay.app.thirdparty.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
 import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
 
 /**
  * @author wangfushun
@@ -12,5 +12,5 @@ import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
  */
 public interface CreatePayThirdPartyExtPt<T extends PayCO> extends ExtensionPointI {
 
-    public CreatedPayRequestBodyCO created(T payCO);
+    public CreatedPayVO created(T payCO);
 }

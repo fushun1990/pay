@@ -7,14 +7,13 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
-import com.fushun.framework.util.constant.SystemConstant;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayAppCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
 import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
 import com.fushun.pay.app.dto.clientobject.notify.PayNotifyAlipayAppCO;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseAlipayAppCO;
 import com.fushun.pay.app.dto.enumeration.EPayWay;
@@ -78,19 +77,20 @@ public class AlipayAppPayFacade {
      * @creation 2017年1月18日
      * @records <p>  fushun 2017年1月18日</p>
      */
-    public CreatedPayRequestBodyCO getRequest(CreatePayAlipayAppCO payParamDTO) {
+    public CreatePayAliPayAppVO getRequest(CreatePayAlipayAppCO payParamDTO) {
         //下单是不，更新订单为支付失败
-        CreatedPayRequestBodyCO createdPayThirdPartyCO = new CreatedPayRequestBodyCO();
-        createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
+        CreatePayAliPayAppVO createPayAliPayAppVO = new CreatePayAliPayAppVO();
+        createPayAliPayAppVO.setStatus(EStatus.SUCCESS);
         try {
             Map<String, String> map = getRequestData(payParamDTO);
             String payStr = createPayHtml(map);
-            createdPayThirdPartyCO.setPayStr(payStr);
+            createPayAliPayAppVO.setOrderPayNo(map.get("orderPayNo"));
+            createPayAliPayAppVO.setPayStr(payStr);
         } catch (Exception e) {
-            createdPayThirdPartyCO.setStatus(EStatus.FAIL);
+            createPayAliPayAppVO.setStatus(EStatus.FAIL);
             logger.warn("created pay error,payParamDTO:[{}]", payParamDTO.toString(), e);
         }
-        return createdPayThirdPartyCO;
+        return createPayAliPayAppVO;
     }
 
     private Map<String, String> getRequestData(CreatePayAlipayAppCO payParamDTO) {
@@ -125,8 +125,7 @@ public class AlipayAppPayFacade {
         alipayRequest.setBizContent(map.get("biz_content"));//填充业务参数
         try {
             String form = client.sdkExecute(alipayRequest).getBody();//app.pageExecute(alipayRequest).getBody();
-            String str = "{\"orderPayNo\":\"" + map.get("orderPayNo") + "\",\"payForm\":\"" + form + "\"}";
-            return str;
+            return form;
         } catch (AlipayApiException e) {
             throw new PayException(e, PayException.PayExceptionEnum.PAY_CREATE_FAILED);
         } //调用SDK生成表单
@@ -155,7 +154,7 @@ public class AlipayAppPayFacade {
         if (!StringUtils.isEmpty(params.get("seller_email"))) {
             seller_email = params.get("seller_email").toString();
             try {
-                recordPayDTO.setReceiveAccourt(DESUtil.encrypt(seller_email, SystemConstant.DES_KEY));
+                recordPayDTO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
             } catch (Exception e) {
             }
         }

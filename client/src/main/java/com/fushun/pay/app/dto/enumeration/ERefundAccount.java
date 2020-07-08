@@ -1,7 +1,7 @@
 package com.fushun.pay.app.dto.enumeration;
 
 
-import com.fushun.framework.base.BaseEnum;
+import com.fushun.framework.base.IBaseEnum;
 
 /**
  * 微信退款源
@@ -10,40 +10,45 @@ import com.fushun.framework.base.BaseEnum;
  * @version VS1.3
  * @creation 2017年7月4日
  */
-public enum ERefundAccount implements BaseEnum<String> {
-
+public enum ERefundAccount implements IBaseEnum<String> {
+    /**
+     *
+     */
     REFUND_SOURCE_UNSETTLED_FUNDS("REFUND_SOURCE_UNSETTLED_FUNDS", "未结算资金退款（默认使用未结算资金退款）"),
     REFUND_SOURCE_RECHARGE_FUNDS("REFUND_SOURCE_RECHARGE_FUNDS", "可用余额退款");
 
     private String code;
 
-    private String text;
+    private String desc;
 
-    ERefundAccount(String code, String text) {
+    ERefundAccount(String code, String desc) {
         this.code = code;
-        this.text = text;
+        this.desc = desc;
     }
 
+
+
+    @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public String getDesc() {
+        return desc;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     @Override
     public String toString() {
-        return text;
+        return desc;
     }
-
 
 }

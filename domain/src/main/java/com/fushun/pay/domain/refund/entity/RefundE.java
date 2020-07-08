@@ -7,14 +7,15 @@ import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.base.SpringContextUtil;
 import com.fushun.framework.util.util.BeanUtils;
-import com.fushun.pay.app.dto.enumeration.*;
+import com.fushun.pay.app.dto.enumeration.EPayWay;
+import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.app.dto.enumeration.ERefundFrom;
+import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import com.fushun.pay.domain.pay.repository.PayRepository;
 import com.fushun.pay.domain.refund.exception.ErrorCode;
 import com.fushun.pay.domain.refund.repository.RefundRepository;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
-import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
-import com.fushun.pay.app.dto.enumeration.ERefundStatus;
 import lombok.Data;
 
 import javax.transaction.Transactional;
@@ -102,12 +103,12 @@ public class RefundE extends EntityObject {
     @Transactional
     public void refund() {
         RecordPayDO recordPayDO = payRepository.findByOutTradeNO(this.outTradeNo);
-        if (BeanUtils.isEmpty(recordPayDO)) {
+        if (BeanUtils.isNull(recordPayDO)) {
             //订单不存在
             throw new BizException(ErrorCode.PAY_IS_NOT_EXIST, ErrorCode.PAY_IS_NOT_EXIST.getErrDesc());
         }
         RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
-        if (BeanUtils.isNotEmpty(refundDO)) {
+        if (BeanUtils.isNotNull(refundDO)) {
             if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {
                 //已退款
                 throw new BizException(ErrorCode.REFUND_IS_SUCCESS, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
@@ -139,7 +140,7 @@ public class RefundE extends EntityObject {
 
         this.payMoney=recordPayDO.getPayMoney();
 
-        if (BeanUtils.isNotEmpty(refundDO)) {
+        if (BeanUtils.isNotNull(refundDO)) {
             //退款存在，更状态
             logger.info("refund is exist,refundNo:[{}]", refundDO.getRefundNo());
             refundDO.setStatus(ERefundStatus.WAIT);
@@ -165,12 +166,12 @@ public class RefundE extends EntityObject {
     @Transactional
     public void fail() {
         RecordPayDO recordPayDO = payRepository.findByOutTradeNO(this.outTradeNo);
-        if (BeanUtils.isEmpty(recordPayDO)) {
+        if (BeanUtils.isNull(recordPayDO)) {
             //订单不存在
             throw new BizException(ErrorCode.PAY_IS_NOT_EXIST, ErrorCode.PAY_IS_NOT_EXIST.getErrDesc());
         }
         RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
-        if (BeanUtils.isEmpty(refundDO)) {
+        if (BeanUtils.isNull(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
         if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {
@@ -199,7 +200,7 @@ public class RefundE extends EntityObject {
     public void success() {
 
         RefundDO refundDO = refundRepository.findByRefundNoAndPayWay(this.refundNo, this.ePayWay);
-        if (BeanUtils.isEmpty(refundDO)) {
+        if (BeanUtils.isNull(refundDO)) {
             throw new BizException(ErrorCode.REFUND_IS_NOT_EXIST, ErrorCode.REFUND_IS_SUCCESS.getErrDesc());
         }
         if (ERefundStatus.SUCCESS.getCode().equals(refundDO.getStatus())) {

@@ -1,6 +1,6 @@
 package com.fushun.pay.app.dto.clientobject.createpay;
 
-import com.fushun.framework.base.BaseEnum;
+import com.fushun.framework.base.IBaseEnum;
 
 /**
  * @author wangfushun
@@ -8,27 +8,44 @@ import com.fushun.framework.base.BaseEnum;
  * @description
  * @creation 2019年01月24日00时38分
  */
-public enum EStatus implements BaseEnum<Integer> {
+public enum EStatus implements IBaseEnum<Integer> {
+    /**
+     *
+     */
     SUCCESS(1, "成功"),
     FAIL(2, "失败");
 
     private Integer code;
 
-    private String text;
+    private String desc;
 
-    EStatus(Integer code, String text) {
+    EStatus(Integer code, String desc) {
         this.code = code;
-        this.text = text;
+        this.desc = desc;
     }
+
 
 
     @Override
     public Integer getCode() {
-        return null;
+        return code;
     }
 
     @Override
-    public String getText() {
-        return null;
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    @Override
+    public String toString() {
+        return desc;
     }
 }

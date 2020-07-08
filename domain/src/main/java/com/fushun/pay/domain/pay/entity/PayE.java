@@ -175,7 +175,7 @@ public class PayE extends EntityObject {
             return;
         }
 
-        if (BeanUtils.isEmpty(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
+        if (BeanUtils.isNull(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
             throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
         }
@@ -222,7 +222,7 @@ public class PayE extends EntityObject {
             return;
         }
 
-        if (BeanUtils.isEmpty(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
+        if (BeanUtils.isNull(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
             throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
         }

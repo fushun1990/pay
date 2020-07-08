@@ -1,12 +1,9 @@
 package com.fushun.pay.app.convertor;
 
-import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.extension.BizScenario;
-import com.fushun.framework.util.util.EnumUtil;
+import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
 import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.enumeration.EPayFrom;
-import com.fushun.pay.app.dto.enumeration.EPayWay;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
@@ -17,8 +14,9 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月18日23时39分
  */
 @Component
-public class CreatePayConvertor implements ConvertorI {
+public class CreatePayConvertor implements CreatePayConvertorExtPt<PayCO> {
 
+    @Override
     public PayE clientToEntity(PayCO payCO, BizScenario bizScenario) {
         PayE payE = DomainFactory.create(PayE.class);
         String outTradeNo = payCO.getPayFrom().getPreStr() + payCO.getTradeNo();

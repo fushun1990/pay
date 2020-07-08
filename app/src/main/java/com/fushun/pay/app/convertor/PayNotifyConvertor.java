@@ -1,7 +1,7 @@
 package com.fushun.pay.app.convertor;
 
-import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.extension.BizScenario;
+import com.fushun.pay.app.convertor.extensionpoint.PayNotifyConvertorExtPt;
 import com.fushun.pay.app.dto.clientobject.PayCO;
 import com.fushun.pay.app.dto.clientobject.PayNotifyCO;
 import com.fushun.pay.domain.pay.entity.PayE;
@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月22日22时45分
  */
 @Component
-public class PayNotifyConvertor implements ConvertorI {
+public class PayNotifyConvertor implements PayNotifyConvertorExtPt<PayNotifyCO> {
 
+    @Override
     public PayE clientToEntity(PayNotifyCO payNotifyCO, BizScenario bizScenario) {
         PayE payE = new PayE();
         payE.setTradeNo(payNotifyCO.getOutTradeNo());

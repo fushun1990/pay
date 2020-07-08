@@ -2,8 +2,8 @@ package com.fushun.pay.app.validator;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.alibaba.cola.validator.ValidatorI;
 import com.fushun.pay.app.dto.CreatePayCmd;
+import com.fushun.pay.app.validator.extensionpoint.CreatePayValidatorExtPt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月18日23时01分
  */
 @Component
-public class CreatePayValidator implements ValidatorI<CreatePayCmd> {
+public class CreatePayValidator implements CreatePayValidatorExtPt<CreatePayCmd> {
 
     private Logger logger = LoggerFactory.getLogger(CreatePayValidator.class);
 

@@ -8,14 +8,13 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.fushun.framework.util.beans.ConverterUtil;
-import com.fushun.framework.util.constant.SystemConstant;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayAlipayWapCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
 import com.fushun.pay.app.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
 import com.fushun.pay.app.dto.clientobject.notify.PayNotifyAlipayWapCO;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseAlipayWapCO;
 import com.fushun.pay.app.dto.enumeration.ERecordPayStatus;
@@ -59,9 +58,9 @@ public class AlipayWapPayFacade {
     @Autowired
     private AlipayConfig alipayConfig;
 
-    public CreatedPayRequestBodyCO getRequest(CreatePayAlipayWapCO payParamDTO) {
+    public CreatePayAliPayWapVO getRequest(CreatePayAlipayWapCO payParamDTO) {
         //下单是不，更新订单为支付失败
-        CreatedPayRequestBodyCO createdPayThirdPartyCO = new CreatedPayRequestBodyCO();
+        CreatePayAliPayWapVO createdPayThirdPartyCO = new CreatePayAliPayWapVO();
         createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
         try {
             Map<String, String> map = getRequestData(payParamDTO);
@@ -210,7 +209,7 @@ public class AlipayWapPayFacade {
         payNotifyAlipayWapCO.setPayNo(trade_no);
         payNotifyAlipayWapCO.setPayMoney(BigDecimal.valueOf(total_fee));
         try {
-            payNotifyAlipayWapCO.setReceiveAccourt(DESUtil.encrypt(seller_email, SystemConstant.DES_KEY));
+            payNotifyAlipayWapCO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
 //			recordPayDTO.setPayAccount(DESUtil.encrypt(buyer_email, SystemConstant.DES_KEY));
         } catch (Exception e) {
         }

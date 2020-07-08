@@ -1,6 +1,5 @@
 package com.fushun.pay.domain.pay.convertor;
 
-import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
  * @creation 2019年01月20日18时29分
  */
 @Component
-public class PayDomainConvertor implements ConvertorI {
+public class PayDomainConvertor {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public RecordPayDO entityToData(PayE payE) {

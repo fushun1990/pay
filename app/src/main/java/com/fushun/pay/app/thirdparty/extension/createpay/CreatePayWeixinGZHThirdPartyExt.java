@@ -4,7 +4,7 @@ import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.dto.clientobject.createpay.CreatePayWeiXinGZHCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
 import com.fushun.pay.app.thirdparty.extensionpoint.CreatePayThirdPartyExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.weixin.pay.WeChatGZHPayFacade;
@@ -24,7 +24,8 @@ public class CreatePayWeixinGZHThirdPartyExt implements CreatePayThirdPartyExtPt
     @Autowired
     private WeChatGZHPayFacade weChatOfficialAccountsPayFacade;
 
-    public CreatedPayRequestBodyCO created(CreatePayWeiXinGZHCO payCO) {
+    @Override
+    public CreatedPayVO created(CreatePayWeiXinGZHCO payCO) {
         return weChatOfficialAccountsPayFacade.getRequest(payCO);
     }
 }

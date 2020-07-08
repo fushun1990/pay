@@ -1,23 +1,13 @@
 package com.tencent.business.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fushun.framework.util.beans.ConverterUtil;
-import com.fushun.framework.util.util.JsonMapper;
 import com.fushun.framework.util.util.JsonUtil;
 import com.tencent.business.BaseBusiness;
 import com.tencent.business.ResultListener;
 import com.tencent.common.Log;
-import com.tencent.protocol.oauth20_protocol.OAuth20ReqData;
-import com.tencent.protocol.oauth20_protocol.OAuth20ResData;
 import com.tencent.protocol.userinfo_protocol.UserInfoReqData;
 import com.tencent.protocol.userinfo_protocol.UserInfoResData;
-import com.tencent.service.impl.OAuth20Service;
 import com.tencent.service.impl.UserInfoService;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * 获取用户信息

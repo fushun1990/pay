@@ -1,7 +1,5 @@
 package com.fushun.pay.app.command;
 
-import com.alibaba.cola.command.Command;
-import com.alibaba.cola.command.CommandExecutorI;
 import com.alibaba.cola.dto.SingleResponse;
 import com.alibaba.cola.extension.ExtensionExecutor;
 import com.alibaba.cola.logger.Logger;
@@ -16,6 +14,7 @@ import com.fushun.pay.app.validator.extensionpoint.PayNotifyValidatorExtPt;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.common.util.DomainEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author wangfushun
@@ -23,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月21日23时08分
  */
-@Command
-public class PayNotifyCmdExe implements CommandExecutorI<SingleResponse, PayNotifyCmd> {
+@Component
+public class PayNotifyCmdExe{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -34,7 +33,6 @@ public class PayNotifyCmdExe implements CommandExecutorI<SingleResponse, PayNoti
     @Autowired
     private DomainEventPublisher domainEventPublisher;
 
-    @Override
     public SingleResponse<String> execute(PayNotifyCmd cmd) {
         PayNotifyCO payNotifyCO = null;
         boolean analysisNotify = true;

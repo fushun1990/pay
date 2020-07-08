@@ -1,7 +1,7 @@
 package com.fushun.pay.app.convertor;
 
-import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.extension.BizScenario;
+import com.fushun.pay.app.convertor.extensionpoint.RefundConvertorExtPt;
 import com.fushun.pay.app.dto.clientobject.PayCO;
 import com.fushun.pay.app.dto.clientobject.RefundCO;
 import com.fushun.pay.domain.refund.entity.RefundE;
@@ -15,8 +15,9 @@ import org.springframework.stereotype.Component;
  * @creation 2019年02月03日23时51分
  */
 @Component
-public class RefundConvertor implements ConvertorI {
+public class RefundConvertor implements RefundConvertorExtPt<RefundCO> {
 
+    @Override
     public RefundE clientToEntity(RefundCO refundCO, BizScenario bizScenario) {
         RefundE refundE = new RefundE();
         if(!refundCO.getIsSpecial()){

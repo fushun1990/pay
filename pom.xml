@@ -7,13 +7,13 @@
 
     <groupId>com.fushun.pay</groupId>
     <artifactId>pay</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>pay</name>
 
     <parent>
         <artifactId>framework-parent</artifactId>
         <groupId>com.fushun.framework</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -27,11 +27,10 @@
     </modules>
 
     <properties>
-        <cola.framework.version>2.0.0</cola.framework.version>
+        <cola.framework.version>3.0.0</cola.framework.version>
         <alipay-sdk-java.version>3.3.2</alipay-sdk-java.version>
         <bcprov-jdk14.version>1.54</bcprov-jdk14.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
-        <lombok.version>1.12.6</lombok.version>
     </properties>
 
 
@@ -77,8 +76,8 @@
 
             <!--Framework-->
             <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-common</artifactId>
+                <groupId>com.aliyun</groupId>
+                <artifactId>cola-core</artifactId>
                 <version>${cola.framework.version}</version>
                 <exclusions>
                     <exclusion>
@@ -87,9 +86,10 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-core</artifactId>
+                <groupId>com.aliyun</groupId>
+                <artifactId>cola-common</artifactId>
                 <version>${cola.framework.version}</version>
                 <exclusions>
                     <exclusion>
@@ -133,12 +133,27 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.projectlombok</groupId>-->
+<!--                <artifactId>lombok</artifactId>-->
+<!--                <version>${lombok.version}</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://192.168.0.184:8999/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>nexus-snapshots</id>
+            <url>http://192.168.0.184:8999/repository/maven-public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

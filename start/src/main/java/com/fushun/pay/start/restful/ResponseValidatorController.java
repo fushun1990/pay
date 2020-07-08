@@ -2,6 +2,8 @@ package com.fushun.pay.start.restful;
 
 import com.alibaba.cola.dto.SingleResponse;
 import com.alibaba.cola.extension.BizScenario;
+import com.fushun.framework.util.response.ApiResult;
+import com.fushun.framework.web.annotations.NoApiResult;
 import com.fushun.framework.web.exception.BadRequestException;
 import com.fushun.pay.app.api.PayServiceI;
 import com.fushun.pay.app.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHCO;
@@ -24,16 +26,17 @@ public class ResponseValidatorController {
      * @param paySyncResponseWeixinGZHCO
      */
     @RequestMapping("/sync/gzh")
-    public String payGZHResponseValidator(PaySyncResponseWeixinGZHCO paySyncResponseWeixinGZHCO){
+    @NoApiResult
+    public ApiResult<String> payGZHResponseValidator(PaySyncResponseWeixinGZHCO paySyncResponseWeixinGZHCO){
         PaySyncResponseWeiXinGZHCmd paySyncResponseWeiXinGZHCmd=new PaySyncResponseWeiXinGZHCmd();
         BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
         paySyncResponseWeiXinGZHCmd.setBizScenario(bizScenario);
         paySyncResponseWeiXinGZHCmd.setPaySyncResponseWeixinGZHCO(paySyncResponseWeixinGZHCO);
         SingleResponse<String> singleResponse= payServiceI.payResponseValidator(paySyncResponseWeiXinGZHCmd);
         if(!singleResponse.isSuccess()){
-            throw new BadRequestException(singleResponse.getErrMessage());
+            return ApiResult.ofFail(singleResponse.getErrCode(),singleResponse.getErrMessage());
         }
-        return singleResponse.getData();
+        return ApiResult.of(singleResponse.getData());
     }
 
 }

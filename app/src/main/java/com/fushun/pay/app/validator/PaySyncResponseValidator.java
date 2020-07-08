@@ -2,8 +2,8 @@ package com.fushun.pay.app.validator;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.alibaba.cola.validator.ValidatorI;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
+import com.fushun.pay.app.validator.extensionpoint.PaySyncResponseValidatorExtPt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月29日23时48分
  */
 @Component
-public class PaySyncResponseValidator implements ValidatorI<PaySyncResponseCmd> {
+public class PaySyncResponseValidator implements PaySyncResponseValidatorExtPt<PaySyncResponseCmd> {
 
     private Logger logger = LoggerFactory.getLogger(PaySyncResponseValidator.class);
 

@@ -1,6 +1,5 @@
 package com.fushun.pay.domain.refund.convertor;
 
-import com.alibaba.cola.convertor.ConvertorI;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.dto.enumeration.ERefundNotityStatus;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
  * @creation 2019年02月09日00时00分
  */
 @Component
-public class RefundDomainConverter implements ConvertorI {
+public class RefundDomainConverter {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 

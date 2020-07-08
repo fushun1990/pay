@@ -1,15 +1,17 @@
 package com.fushun.pay.app.service;
 
-import com.alibaba.cola.command.CommandBusI;
-import com.alibaba.cola.dto.MultiResponse;
 import com.alibaba.cola.dto.SingleResponse;
 import com.fushun.pay.app.api.PayServiceI;
+import com.fushun.pay.app.command.PayCmdExe;
+import com.fushun.pay.app.command.PayNotifyCmdExe;
+import com.fushun.pay.app.command.PaySyncResponseCmdExe;
+import com.fushun.pay.app.command.query.PayFindByCriteriaQueryExe;
 import com.fushun.pay.app.dto.CreatePayCmd;
 import com.fushun.pay.app.dto.PayFindByCriteriaQry;
 import com.fushun.pay.app.dto.PayNotifyCmd;
 import com.fushun.pay.app.dto.PaySyncResponseCmd;
 import com.fushun.pay.app.dto.clientobject.PayCO;
-import com.fushun.pay.app.dto.clientobject.createpay.CreatedPayRequestBodyCO;
+import com.fushun.pay.app.dto.clientobject.createpay.response.CreatedPayVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,16 @@ import org.springframework.stereotype.Service;
 public class PayServiceImpl implements PayServiceI {
 
     @Autowired
-    private CommandBusI commandBus;
+    private PayCmdExe payCmdExe;
+
+    @Autowired
+    private PayFindByCriteriaQueryExe payFindByCriteriaQueryExe;
+
+    @Autowired
+    private PayNotifyCmdExe payNotifyCmdExe;
+
+    @Autowired
+    private PaySyncResponseCmdExe paySyncResponseCmdExe;
 
     /**
      * @param payCmd
@@ -34,14 +45,14 @@ public class PayServiceImpl implements PayServiceI {
      * @version 1.0
      */
     @Override
-    public SingleResponse<CreatedPayRequestBodyCO> createPay(CreatePayCmd payCmd) {
-        SingleResponse<CreatedPayRequestBodyCO> response = (SingleResponse<CreatedPayRequestBodyCO>) commandBus.send(payCmd);
+    public SingleResponse<CreatedPayVO> createPay(CreatePayCmd payCmd) {
+        SingleResponse<CreatedPayVO> response = payCmdExe.execute(payCmd);
         return response;
     }
 
     @Override
     public SingleResponse<PayCO> pay(PayFindByCriteriaQry payFindByCriteriaQry) {
-        return (SingleResponse<PayCO>) commandBus.send(payFindByCriteriaQry);
+        return (SingleResponse<PayCO>) payFindByCriteriaQueryExe.execute(payFindByCriteriaQry);
     }
 
     /**
@@ -54,7 +65,7 @@ public class PayServiceImpl implements PayServiceI {
      */
     @Override
     public SingleResponse<String> payNotifyAlipayReust(PayNotifyCmd payNotifyCmd) {
-        SingleResponse<String> response = (SingleResponse<String>) commandBus.send(payNotifyCmd);
+        SingleResponse<String> response = payNotifyCmdExe.execute(payNotifyCmd);
         return response;
     }
 
@@ -68,7 +79,7 @@ public class PayServiceImpl implements PayServiceI {
      */
     @Override
     public SingleResponse<String> payResponseValidator(PaySyncResponseCmd paySyncResponseCmd) {
-        SingleResponse<String> response = (SingleResponse<String>) commandBus.send(paySyncResponseCmd);
+        SingleResponse<String> response = paySyncResponseCmdExe.execute(paySyncResponseCmd);
         return response;
     }
 

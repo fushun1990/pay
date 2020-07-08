@@ -1,14 +1,14 @@
 package com.fushun.pay.app.dto.enumeration;
 
 
-import com.fushun.framework.base.BaseEnum;
+import com.fushun.framework.base.IBaseEnum;
 
 /**
  * 支付信息状态
  *
  * @author zhoup
  */
-public enum EPayWay implements BaseEnum<String> {
+public enum EPayWay implements IBaseEnum<String> {
     /**
      * 支付宝
      */
@@ -29,32 +29,34 @@ public enum EPayWay implements BaseEnum<String> {
 
     private String code;
 
-    private String text;
+    private String desc;
 
-    EPayWay(String code, String text) {
+    EPayWay(String code, String desc) {
         this.code = code;
-        this.text = text;
+        this.desc = desc;
     }
 
+    @Override
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public String getDesc() {
+        return desc;
     }
 
     public void setCode(String code) {
         this.code = code;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public void setText(String desc) {
+        this.desc = desc;
     }
 
     @Override
     public String toString() {
-        return text;
+        return desc;
     }
 
 }

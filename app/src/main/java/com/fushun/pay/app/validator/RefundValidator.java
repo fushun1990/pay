@@ -2,8 +2,8 @@ package com.fushun.pay.app.validator;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.alibaba.cola.validator.ValidatorI;
 import com.fushun.pay.app.dto.RefundCmd;
+import com.fushun.pay.app.validator.extensionpoint.RefundValidatorExtPt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @creation 2019年02月03日22时42分
  */
 @Component
-public class RefundValidator implements ValidatorI<RefundCmd> {
+public class RefundValidator implements RefundValidatorExtPt<RefundCmd> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
