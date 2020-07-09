@@ -3,7 +3,7 @@ package com.fushun.pay.app.command.query;
 import com.alibaba.cola.dto.SingleResponse;
 import com.fushun.pay.app.common.exception.ErrorCode;
 import com.fushun.pay.app.convertor.CreatePayConvertor;
-import com.fushun.pay.app.dto.PayFindByCriteriaQry;
+import com.fushun.pay.client.dto.PayFindByCriteriaQry;
 import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.PayDBTunnel;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;

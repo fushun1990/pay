@@ -3,10 +3,9 @@ package com.fushun.pay.app.validator.extension.oauth20;
 import com.alibaba.cola.exception.BizException;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.common.exception.ErrorCode;
-import com.fushun.pay.dto.clientobject.oauth20.WeixinOauth20CO;
-import com.fushun.pay.dto.clientobject.oauth20.WeixinUserInfoCO;
-import com.fushun.pay.app.dto.cmd.oauth20.UserInfoWeixinCmd;
 import com.fushun.pay.app.validator.extensionpoint.OAuth20ValidatorExtPt;
+import com.fushun.pay.client.dto.cmd.oauth20.UserInfoWeixinCmd;
+import com.fushun.pay.dto.clientobject.oauth20.WeixinUserInfoCO;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.util.StringUtils;
 

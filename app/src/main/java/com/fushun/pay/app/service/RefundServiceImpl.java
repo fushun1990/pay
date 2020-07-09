@@ -1,9 +1,9 @@
 package com.fushun.pay.app.service;
 
 import com.alibaba.cola.dto.Response;
-import com.fushun.pay.app.api.RefundServiceI;
 import com.fushun.pay.app.command.RefundCmdExe;
-import com.fushun.pay.app.dto.RefundCmd;
+import com.fushun.pay.client.api.RefundServiceI;
+import com.fushun.pay.client.dto.RefundCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

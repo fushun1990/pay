@@ -1,9 +1,9 @@
 package com.fushun.pay.app.service;
 
 import com.alibaba.cola.dto.SingleResponse;
-import com.fushun.pay.app.api.OAuthServiceI;
 import com.fushun.pay.app.command.OAuth20CmdExe;
-import com.fushun.pay.app.dto.OAuth20Cmd;
+import com.fushun.pay.client.api.OAuthServiceI;
+import com.fushun.pay.client.dto.OAuth20Cmd;
 import com.fushun.pay.dto.clientobject.oauth20.OAuth20ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

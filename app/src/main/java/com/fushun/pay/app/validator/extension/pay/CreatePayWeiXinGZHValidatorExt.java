@@ -3,9 +3,9 @@ package com.fushun.pay.app.validator.extension.pay;
 import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.cmd.createdpay.CreatePayWeixinGZHCmd;
 import com.fushun.pay.app.validator.CreatePayValidator;
 import com.fushun.pay.app.validator.extensionpoint.CreatePayValidatorExtPt;
+import com.fushun.pay.client.dto.cmd.createdpay.CreatePayWeixinGZHCmd;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 

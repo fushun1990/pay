@@ -2,9 +2,9 @@ package com.fushun.pay.app.convertor;
 
 import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.convertor.extensionpoint.PaySyncResponseConvertorExtPt;
-import com.fushun.pay.dto.clientobject.PayDTO;
-import com.fushun.pay.dto.clientobject.PaySyncResponseCO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
 import com.fushun.pay.domain.pay.entity.PayE;
+import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
  * @creation 2019年01月24日01时05分
  */
 @Component
-public class PaySyncResponseConvertor implements PaySyncResponseConvertorExtPt<PaySyncResponseCO> {
+public class PaySyncResponseConvertor implements PaySyncResponseConvertorExtPt<PaySyncResponseDTO> {
 
 
     @Override
-    public PayE clientToEntity(PaySyncResponseCO paySyncResponseCO, BizScenario bizScenario) {
+    public PayE clientToEntity(PaySyncResponseDTO paySyncResponseDTO, BizScenario bizScenario) {
         PayE payE = new PayE();
-        payE.setTradeNo(paySyncResponseCO.getOutTradeNo());
-        payE.setStatus(paySyncResponseCO.getStatus());
+        payE.setTradeNo(paySyncResponseDTO.getOutTradeNo());
+        payE.setStatus(paySyncResponseDTO.getStatus());
         payE.setBizScenario(bizScenario);
         return payE;
     }

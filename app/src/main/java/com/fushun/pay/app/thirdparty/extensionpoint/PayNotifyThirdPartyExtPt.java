@@ -1,7 +1,8 @@
 package com.fushun.pay.app.thirdparty.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.fushun.pay.dto.clientobject.PayNotifyCO;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
+import com.fushun.pay.dto.clientobject.PayNotifyDTO;
 
 /**
  * @author wangfushun
@@ -9,7 +10,7 @@ import com.fushun.pay.dto.clientobject.PayNotifyCO;
  * @description
  * @creation 2019年01月20日19时35分
  */
-public interface PayNotifyThirdPartyExtPt<T extends PayNotifyCO> extends ExtensionPointI {
+public interface PayNotifyThirdPartyExtPt<T extends PayNotifyDTO> extends ExtensionPointI {
 
-    public PayNotifyCO created(T payNotifyCO);
+    public PayNotifyThirdPartyDTO created(T payNotifyDTO);
 }

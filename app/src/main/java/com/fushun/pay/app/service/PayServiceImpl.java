@@ -1,15 +1,15 @@
 package com.fushun.pay.app.service;
 
 import com.alibaba.cola.dto.SingleResponse;
-import com.fushun.pay.app.api.PayServiceI;
 import com.fushun.pay.app.command.PayCmdExe;
 import com.fushun.pay.app.command.PayNotifyCmdExe;
 import com.fushun.pay.app.command.PaySyncResponseCmdExe;
 import com.fushun.pay.app.command.query.PayFindByCriteriaQueryExe;
-import com.fushun.pay.app.dto.CreatePayCmd;
-import com.fushun.pay.app.dto.PayFindByCriteriaQry;
-import com.fushun.pay.app.dto.PayNotifyCmd;
-import com.fushun.pay.app.dto.PaySyncResponseCmd;
+import com.fushun.pay.client.api.PayServiceI;
+import com.fushun.pay.client.dto.CreatePayCmd;
+import com.fushun.pay.client.dto.PayFindByCriteriaQry;
+import com.fushun.pay.client.dto.PayNotifyCmd;
+import com.fushun.pay.client.dto.PaySyncResponseCmd;
 import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class PayServiceImpl implements PayServiceI {
      */
     @Override
     public SingleResponse<CreatedPayVO> createPay(CreatePayCmd payCmd) {
-        SingleResponse<CreatedPayVO> response = payCmdExe.execute(payCmd);
+        SingleResponse<CreatedPayVO> response = payCmdExe.createPay(payCmd);
         return response;
     }
 

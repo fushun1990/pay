@@ -3,12 +3,9 @@ package com.fushun.pay.app.event.handler;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;
-import com.alibaba.cola.event.EventI;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.domainevent.CreatedPayEvent;
-
-import java.util.concurrent.ExecutorService;
+import com.fushun.pay.client.dto.domainevent.CreatedPayEvent;
 
 /**
  * 同步搜索器的handler

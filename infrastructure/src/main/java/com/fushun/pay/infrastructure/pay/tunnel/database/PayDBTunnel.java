@@ -3,9 +3,12 @@ package com.fushun.pay.infrastructure.pay.tunnel.database;
 import com.fushun.framework.jpa.CustomerRepository;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.LockModeType;
 
 /**
  * @author wangfushun
@@ -26,4 +29,12 @@ public interface PayDBTunnel extends CustomerRepository<RecordPayDO, RecordPayId
      */
     @Query("select s from RecordPayDO s where s.outTradeNo=:outTradeNo")
     RecordPayDO findByOutTradeNO(@Param("outTradeNo") String outTradeNo);
+
+    /**
+     * 获取数据库锁的主健数据
+     * @param recordPayId
+     */
+    @Query("select s from RecordPayDO s where s.outTradeNo=:outTradeNo")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    RecordPayDO findLockById(@Param("outTradeNo") String recordPayId);
 }

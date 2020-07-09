@@ -2,9 +2,9 @@ package com.fushun.pay.domain.refund.convertor;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.dto.enumeration.ERefundNotityStatus;
-import com.fushun.pay.app.dto.enumeration.ERefundStatus;
+import com.fushun.pay.client.dto.enumeration.ERefundStatus;
 import com.fushun.pay.domain.refund.entity.RefundE;
+import com.fushun.pay.dto.enumeration.ERefundNotityStatus;
 import com.fushun.pay.infrastructure.refund.tunnel.database.dataobject.RefundDO;
 import org.springframework.stereotype.Component;
 

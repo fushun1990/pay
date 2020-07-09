@@ -1,7 +1,8 @@
 package com.fushun.pay.app.thirdparty.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.fushun.pay.dto.clientobject.PaySyncResponseCO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
+import com.fushun.pay.dto.clientobject.PaySyncResponseValidatorDTO;
 
 /**
  * @author wangfushun
@@ -9,7 +10,7 @@ import com.fushun.pay.dto.clientobject.PaySyncResponseCO;
  * @description
  * @creation 2019年01月20日19时35分
  */
-public interface PaySyncResponseThirdPartyExtPt<T extends PaySyncResponseCO> extends ExtensionPointI {
+public interface PaySyncResponseThirdPartyExtPt<T extends PaySyncResponseValidatorDTO> extends ExtensionPointI {
 
-    public PaySyncResponseCO responseValidator(T paySyncResponseCO);
+    public PaySyncResponseDTO responseValidator(T paySyncResponseValidatorDTO);
 }

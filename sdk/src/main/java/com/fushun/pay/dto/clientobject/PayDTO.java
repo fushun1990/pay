@@ -3,6 +3,7 @@ package com.fushun.pay.dto.clientobject;
 import com.alibaba.cola.dto.ClientObject;
 import com.fushun.pay.dto.enumeration.EPayFrom;
 import com.fushun.pay.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -61,5 +62,8 @@ public class PayDTO extends ClientObject {
 //(groups={CreateAlipayAppPayResultValidatorGroup.class,CreateWeiXinJZHPayValidatorGroup.class,CreateAlipayWapResultValidatorGroup.class,CreateWeiXinAppPayValidatorGroup.class,CreateAlipayDirectPayResultValidatorGroup.class})
     private BigDecimal totalFee;
 
-    private Integer status;
+    /**
+     * 支付状态
+     */
+    private ERecordPayStatus status;
 }

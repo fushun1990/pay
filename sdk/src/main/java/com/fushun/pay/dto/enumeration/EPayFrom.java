@@ -7,9 +7,9 @@ package com.fushun.pay.dto.enumeration;
  */
 public enum EPayFrom implements ECallBackFrom<String> {
     /**
-     * 购买会员
+     * 物业缴费
      */
-    PAY_FROM_BUY_MEMBERS("pay_from_buy_members", "公众号", "WDW_");
+    PAY_PROPERTY("pay_property", "物业缴费", "PPT_");
 
     private String code;
 

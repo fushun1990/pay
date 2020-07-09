@@ -3,23 +3,26 @@ package com.fushun.pay.domain.pay.entity;
 
 import com.alibaba.cola.domain.Entity;
 import com.alibaba.cola.domain.EntityObject;
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.base.SpringContextUtil;
 import com.fushun.framework.util.util.BeanUtils;
-import com.fushun.pay.app.dto.domainevent.CreatedPayEvent;
-import com.fushun.pay.app.dto.domainevent.PaySuccessNotityEvent;
-import com.fushun.pay.dto.enumeration.EPayFrom;
-import com.fushun.pay.dto.enumeration.EPayWay;
-import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
-import com.fushun.pay.dto.enumeration.ERecordPayStatus;
+import com.fushun.framework.util.util.ExceptionUtils;
+import com.fushun.pay.client.dto.domainevent.CreatedPayEvent;
+import com.fushun.pay.client.dto.domainevent.PaySuccessNotityEvent;
+import com.fushun.pay.client.dto.enumeration.ERecordPayNotityStatus;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.domain.pay.repository.PayRepository;
+import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
+import com.fushun.pay.dto.enumeration.EPayFrom;
+import com.fushun.pay.dto.enumeration.EPayWay;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.infrastructure.common.util.DomainEventPublisher;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
@@ -89,56 +92,87 @@ public class PayE extends EntityObject {
      */
     private EPayWay receiveWay;
 
+    /**
+     * 系统通知 状态，1：已通知,2：未通知
+     */
+    private ERecordPayNotityStatus notityStatus;
+
+    /**
+     * 已退金额
+     */
+    private BigDecimal refundAmount;
+
     private PayRepository payRepository= SpringContextUtil.getBean(PayRepository.class);
 
     private DomainEventPublisher domainEventPublisher=SpringContextUtil.getBean(DomainEventPublisher.class);;
 
     /**
-     * @param
+     *
+     * 没有创建过 创建支付
+     * 已创建过
+     *      支付没有成功
+     *      支付成功
+     *            已通知
+     *            未通知
+     *
      * @return void
      * @description 保存
      * @date 2019年01月20日19时05分
      * @author wangfushun
      * @version 1.0
      */
-    public void pay() {
+    public ECreatePayStatus pay() {
 
         RecordPayId recordPayId = new RecordPayId(this.outTradeNo);
         Optional<RecordPayDO> optional = payRepository.findById(recordPayId);
         RecordPayDO recordPayDO = null;
-        if (optional.isPresent() == false) {
-            recordPayDO = payRepository.persist(this);
 
+        //没有创建过
+        if (!optional.isPresent()) {
+            this.setRefundAmount(BigDecimal.ZERO);
+            this.setStatus(ERecordPayStatus.CREATED);
+            this.setNotityStatus(ERecordPayNotityStatus.NO);
+            recordPayDO = payRepository.persist(this);
             CreatedPayEvent createdPayEvent = new CreatedPayEvent();
             createdPayEvent.setOutTradeNo(recordPayDO.getOutTradeNo());
             createdPayEvent.setOrderPayNo(recordPayDO.getPayNo());
             domainEventPublisher.publish(createdPayEvent);
-            return;
+            return ECreatePayStatus.SUCCESS;
         }
+
+        //已创建支付，
         recordPayDO = optional.get();
 
         ERecordPayStatus eRecordPayStatus = recordPayDO.getStatus();
+        //没有支付成功的
         if (eRecordPayStatus != ERecordPayStatus.SUCCESS) {
+            this.setRefundAmount(BigDecimal.ZERO);
+            this.setStatus(ERecordPayStatus.CREATED);
+            this.setNotityStatus(ERecordPayNotityStatus.NO);
             payRepository.updateCreatePayInfo(this, recordPayDO);
-            return;
+            return ECreatePayStatus.SUCCESS;
         }
 
         //支付成功，已通知
         ERecordPayNotityStatus eRecordPayNotityStatus = recordPayDO.getNotityStatus();
         if (eRecordPayStatus == ERecordPayStatus.SUCCESS && eRecordPayNotityStatus == ERecordPayNotityStatus.YES) {
-            throw new PayException(PayException.PayExceptionEnum.PAY_SUCCESS);
+            return ECreatePayStatus.HAS_PAY_SUCCESS;
         }
 
-        //支付成功，为通知成功
+        //支付成功，未通知
         if (eRecordPayStatus == ERecordPayStatus.SUCCESS && eRecordPayNotityStatus == ERecordPayNotityStatus.NO) {
             PaySuccessNotityEvent paySuccessNotityEvent = new PaySuccessNotityEvent();
             paySuccessNotityEvent.setOutTradeNo(recordPayDO.getOutTradeNo());
             paySuccessNotityEvent.setOrderPayNo(recordPayDO.getPayNo());
             domainEventPublisher.publish(paySuccessNotityEvent);
-            return;
+
+            //更新通知成功
+            recordPayDO.setNotityStatus(ERecordPayNotityStatus.YES);
+            payRepository.update(recordPayDO);
+            return ECreatePayStatus.HAS_PAY_SUCCESS;
         }
 
-        throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
+        return ECreatePayStatus.FAIL;
 
     }
 
@@ -149,32 +183,31 @@ public class PayE extends EntityObject {
      * @author wangfushun
      * @version 1.0
      */
+    @Transactional(rollbackOn = Exception.class)
     public void payNotify() {
         RecordPayId recordPayId = new RecordPayId(this.getOutTradeNo());
 
-        Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
+        RecordPayDO recordPayDO=payRepository.findLockById(recordPayId);
 
-        if (!optional.isPresent()) {
-            throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
+        if (BeanUtils.isNull(recordPayDO)) {
+            throw new PayException(PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
-        RecordPayDO recordPayDO = optional.get();
 
-        ERecordPayStatus now =recordPayDO.getStatus();
-        ERecordPayStatus next =  this.getStatus();
-
-        if (now == ERecordPayStatus.SUCCESS) {
+        //已支付成功，直接更新
+        if (recordPayDO.getStatus() == ERecordPayStatus.SUCCESS) {
             logger.info("already pay,outTradeNo:[{}]", this.getOutTradeNo());
             return;
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED==this.getStatus()) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
             return;
         }
 
+        //第三方支付返回金额不等于 发出支付金额
         if (BeanUtils.isNull(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
             throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
@@ -206,25 +239,23 @@ public class PayE extends EntityObject {
             throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
         RecordPayDO recordPayDO = optional.get();
-        ERecordPayStatus now = recordPayDO.getStatus();
-        ERecordPayStatus next = this.getStatus();
 
-        if (now == ERecordPayStatus.SUCCESS) {
-            logger.info("paid is pay,outTradeNo:[{}]", this.getOutTradeNo());
-            return;
+        if (recordPayDO.getStatus() == ERecordPayStatus.SUCCESS) {
+            throw new PayException(null, PayException.PayExceptionEnum.PAY_SUCCESS);
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED==this.getStatus()) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
             logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
             return;
         }
 
+        //判断第三方支付返回的金额，不等于支付时的金额
         if (BeanUtils.isNull(this.payMoney) || this.payMoney.compareTo(recordPayDO.getPayMoney()) != 0) {
-            logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
-            throw new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING);
+            ExceptionUtils.rethrow(new PayException(null, PayException.PayExceptionEnum.PAY_MONEY_MISMATCHING),
+                    logger,"pay failed,outTradeNo:[{}]", this.outTradeNo);
         }
 
         recordPayDO.setPayNo(this.payNo);
@@ -250,25 +281,25 @@ public class PayE extends EntityObject {
         Optional<RecordPayDO> optional=payRepository.findById(recordPayId);
 
         if (!optional.isPresent()) {
-            throw new PayException(null, PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
+            logger.warn("pay is not exists,outTradeNo:[{}]", this.getOutTradeNo());
+            throw new PayException(PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
         RecordPayDO recordPayDO = optional.get();
 
-
-        ERecordPayStatus now = recordPayDO.getStatus();
-        ERecordPayStatus next = this.getStatus();
-
-        if (now == ERecordPayStatus.SUCCESS) {
-            logger.info("paid is pay,outTradeNo:[{}]", this.getOutTradeNo());
-            return;
+        //已支付成功，不能更新为失败
+        if (recordPayDO.getStatus() == ERecordPayStatus.SUCCESS) {
+            logger.warn("paid is pay,outTradeNo:[{}]", this.getOutTradeNo());
+            throw new PayException(PayException.PayExceptionEnum.PAY_SUCCESS);
         }
 
         //支付失败，直接更新状态
-        if (ERecordPayStatus.FAILED.getCode().equals(this.getStatus())) {
+        if (ERecordPayStatus.FAILED==this.getStatus()) {
             recordPayDO.setStatus(this.getStatus());
             payRepository.update(recordPayDO);
-            logger.info("pay failed,outTradeNo:[{}]", this.outTradeNo);
-            return;
+            if(logger.isDebugEnabled()){
+                logger.debug("pay failed,outTradeNo:[{}]", this.outTradeNo);
+            }
+            return ;
         }
     }
 }

@@ -2,13 +2,9 @@ package com.fushun.pay.domain.pay.convertor;
 
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
-import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.domain.pay.entity.PayE;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 
 /**
  * @author wangfushun
@@ -32,10 +28,11 @@ public class PayDomainConvertor {
         recordPayDO.setOrderPayNo(payE.getTradeNo());
         recordPayDO.setPayMoney(payE.getPayMoney());
         recordPayDO.setPayWay(payE.getPayWay());
-        recordPayDO.setRefundAmount(BigDecimal.ZERO);
         recordPayDO.setPayFrom(payE.getPayFrom());
-        recordPayDO.setStatus(ERecordPayStatus.CREATED);
-        recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
+        recordPayDO.setRefundAmount(payE.getRefundAmount());
+        recordPayDO.setStatus(payE.getStatus());
+        recordPayDO.setNotityStatus(payE.getNotityStatus());
+        recordPayDO.setNotifyUrl(recordPayDO.getNotifyUrl());
         return recordPayDO;
     }
 }

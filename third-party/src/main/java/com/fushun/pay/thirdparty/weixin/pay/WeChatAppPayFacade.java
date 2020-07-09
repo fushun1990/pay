@@ -1,23 +1,28 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.DateUtil;
+import com.fushun.framework.util.util.ExceptionUtils;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyWeixinAppDTO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseWeixinAppDTO;
+import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinAppDTO;
-import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatePayWeiXinAppVO;
-import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinAppCO;
-import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinAppCO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinAppDTO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinAppValidatorDTO;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
-import com.fushun.pay.domain.exception.PayException;
 import com.tencent.common.AppCConfigure;
 import com.tencent.common.Signature;
 import com.tencent.protocol.apppay_protocol.AppPayReqData;
 import com.tencent.protocol.jspay_protocol.NotifyResData;
 import com.tencent.protocol.order_query_protocol.OrderQueryResData;
 import com.tencent.protocol.unifiedorder_protocol.UnifiedorderResData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -66,12 +71,12 @@ public class WeChatAppPayFacade {
     public CreatePayWeiXinAppVO getRequest(CreatePayWeiXinAppDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayWeiXinAppVO createdPayThirdPartyCO = new CreatePayWeiXinAppVO();
-        createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
+        createdPayThirdPartyCO.setStatus(ECreatePayStatus.SUCCESS);
         try {
-            getRequestData(payParamDTO,createdPayThirdPartyCO);
+            this.getRequestData(payParamDTO,createdPayThirdPartyCO);
             return createdPayThirdPartyCO;
         } catch (Exception e) {
-            createdPayThirdPartyCO.setStatus(EStatus.FAIL);
+            createdPayThirdPartyCO.setStatus(ECreatePayStatus.FAIL);
             logger.warn("created pay error,payParamDTO:[{}]", payParamDTO.toString(), e);
 //			payNotity.updatePayStatus(recordPayDTO, payParamDTO.getPayWay());
         }
@@ -79,7 +84,7 @@ public class WeChatAppPayFacade {
     }
 
     /**
-     * 参数
+     * 获取支付参数
      *
      * @param payParamDTO
      * @return
@@ -111,55 +116,64 @@ public class WeChatAppPayFacade {
 
     }
 
+    /**
+     * 支付成功，异步校验支付状态
+     * @param recordPayDTO
+     */
+    public PayNotifyThirdPartyWeixinAppDTO payNotifyAlipayReust(PayNotifyWeixinAppDTO recordPayDTO) {
+        PayNotifyThirdPartyWeixinAppDTO payNotifyThirdPartyWeixinAppDTO=new PayNotifyThirdPartyWeixinAppDTO();
+        Map<String, String> requestParams=recordPayDTO.getParamMap();
 
-    protected String createPayHtml(Map<String, String> map) {
-        return JsonUtil.toJson(map);
-    }
-
-    public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyWeixinAppCO recordPayDTO) {
-        recordPayDTO.setNotifyReturnDTO(WeChatAppPayFacade.notifyReturnDTO);
+        payNotifyThirdPartyWeixinAppDTO.setEPayWay(EPayWay.PAY_WAY_APPC_WEIXINPAY);
+        payNotifyThirdPartyWeixinAppDTO.setReceiveWay(EPayWay.PAY_WAY_APPC_WEIXINPAY);
+        payNotifyThirdPartyWeixinAppDTO.setNotifyReturnDTO(WeChatAppPayFacade.notifyReturnDTO);
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(requestParams);
         if (!Signature.checkIsSignValidFromResponseString(map, AppCConfigure.initMethod())) {
-            throw new PayException(PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
+            ExceptionUtils.rethrow(new PayException(PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED),logger,"微信app 签名失败，params:[{}]",JsonUtil.toJson(requestParams));
         }
         NotifyResData notifyResData = JsonUtil.hashMapToClass(map, NotifyResData.class);
         if ("FAIL".equals(notifyResData.getReturn_code())) {
-            recordPayDTO.setStatus(ERecordPayStatus.FAILED);
-            return;
+            payNotifyThirdPartyWeixinAppDTO.setStatus(ERecordPayStatus.FAILED);
+            return payNotifyThirdPartyWeixinAppDTO;
         }
-        recordPayDTO.setPayNo(notifyResData.getTransaction_id());
-        recordPayDTO.setOutTradeNo(notifyResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
-        recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(notifyResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+        payNotifyThirdPartyWeixinAppDTO.setPayNo(notifyResData.getTransaction_id());
+        payNotifyThirdPartyWeixinAppDTO.setOutTradeNo(notifyResData.getOut_trade_no());
+        payNotifyThirdPartyWeixinAppDTO.setStatus(ERecordPayStatus.SUCCESS);
+        payNotifyThirdPartyWeixinAppDTO.setPayMoney(BigDecimal.valueOf(Double.parseDouble(notifyResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+        return payNotifyThirdPartyWeixinAppDTO;
     }
 
 
     /**
-     * @param requestParams 返回参数 {"result":"微信返回参数","orderPayNo":"订单支付单号"}
+     * 支付成功，同步校验状态
+     * @param
      * @author fushun
      * @version V3.0商城
      * @creation 2017年1月6日
      */
-    public void payResultAlipayReust(String requestParams, PaySyncResponseWeixinAppCO recordPayDTO) {
-        Map<String, Object> map = JsonUtil.jsonToHashMap(requestParams);
-        if (map == null || StringUtils.isEmpty(map.get("orderPayNo"))) {
+    public PaySyncResponseDTO payResultAlipayReust(PaySyncResponseWeixinAppValidatorDTO paySyncResponseWeixinAppValidatorDTO) {
+        PaySyncResponseWeixinAppDTO paySyncResponseDTO =new PaySyncResponseWeixinAppDTO();
+        Map<String, Object> map = JsonUtil.jsonToHashMap(paySyncResponseWeixinAppValidatorDTO.getResponseStr());
+        if (map == null || StringUtils.isEmpty(paySyncResponseWeixinAppValidatorDTO.getOutTradeNo())) {
             throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
-        recordPayDTO.setOutTradeNo(map.get("orderPayNo").toString());
-        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+        paySyncResponseDTO.setOutTradeNo(paySyncResponseWeixinAppValidatorDTO.getOutTradeNo());
+        paySyncResponseDTO.setStatus(ERecordPayStatus.FAILED);
 
         if (!"0".equals(map.get("result"))) {
             throw new PayException(PayException.PayExceptionEnum.PAY_FAILED);
         }
-        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+        paySyncResponseDTO.setStatus(ERecordPayStatus.FAILED);
 
-        OrderQueryResData orderQueryResData = weiXinPayQueryFacade.getOrderQuery(map.get("orderPayNo").toString(), AppCConfigure.initMethod());
+        OrderQueryResData orderQueryResData = weiXinPayQueryFacade.getOrderQuery(paySyncResponseWeixinAppValidatorDTO.getOutTradeNo(), AppCConfigure.initMethod());
 
-        recordPayDTO.setPayNo(orderQueryResData.getTransaction_id());
-        recordPayDTO.setOutTradeNo(orderQueryResData.getOut_trade_no());
-        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
-        recordPayDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(orderQueryResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+        paySyncResponseDTO.setPayNo(orderQueryResData.getTransaction_id());
+        paySyncResponseDTO.setOutTradeNo(orderQueryResData.getOut_trade_no());
+        paySyncResponseDTO.setStatus(ERecordPayStatus.SUCCESS);
+        paySyncResponseDTO.setPayMoney(BigDecimal.valueOf(Double.valueOf(orderQueryResData.getTotal_fee())).divide(WeiXinUnifiedOrderFacade.bai));
+
+        return paySyncResponseDTO;
     }
 
 }

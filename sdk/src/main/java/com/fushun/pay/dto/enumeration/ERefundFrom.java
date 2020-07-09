@@ -1,7 +1,5 @@
 package com.fushun.pay.dto.enumeration;
 
-import com.fushun.pay.dto.enumeration.EPayFrom;
-
 /**
  * 退款源
  *
@@ -11,7 +9,7 @@ public enum ERefundFrom implements ECallBackFrom<String> {
     /**
      * 退款购买会员金额
      */
-    REFUND_FROM_GZH_BUY_MEMBERS("refund_from_gzh_buy_members", "退款购买会员金额", EPayFrom.PAY_FROM_BUY_MEMBERS);
+    REFUND_FROM_GZH_PROPERTY("refund_from_gzh_property", "退款购买会员金额", EPayFrom.PAY_PROPERTY);
 
 
     private String code;

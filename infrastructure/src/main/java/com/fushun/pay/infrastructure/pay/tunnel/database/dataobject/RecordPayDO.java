@@ -1,9 +1,9 @@
 package com.fushun.pay.infrastructure.pay.tunnel.database.dataobject;
 
 import com.fushun.framework.base.BaseCMP;
+import com.fushun.pay.client.dto.enumeration.ERecordPayNotityStatus;
 import com.fushun.pay.dto.enumeration.EPayFrom;
 import com.fushun.pay.dto.enumeration.EPayWay;
-import com.fushun.pay.app.dto.enumeration.ERecordPayNotityStatus;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
@@ -108,5 +108,13 @@ public class RecordPayDO extends BaseCMP implements Serializable {
     @Column(columnDefinition = "varchar(10) DEFAULT 'NO' comment '已退金额'")
     @Enumerated(EnumType.STRING)
     private ERecordPayNotityStatus notityStatus;
+
+    /**
+     * 通知地址（支付系统同业务系统分开的情况）
+     */
+    @Column(columnDefinition = "varchar(400) DEFAULT NULL comment '通知地址（外部系统的通知地址）'")
+    private String notifyUrl;
+
+
 
 }

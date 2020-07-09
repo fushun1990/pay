@@ -5,7 +5,7 @@ import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.domainevent.CreatedPayExceptionEvent;
+import com.fushun.pay.client.dto.domainevent.CreatedPayExceptionEvent;
 
 /**
  * 记录系统日志的handler

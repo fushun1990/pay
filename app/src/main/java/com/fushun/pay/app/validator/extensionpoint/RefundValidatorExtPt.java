@@ -1,7 +1,7 @@
 package com.fushun.pay.app.validator.extensionpoint;
 
 import com.alibaba.cola.extension.ExtensionPointI;
-import com.fushun.pay.app.dto.RefundCmd;
+import com.fushun.pay.client.dto.RefundCmd;
 
 /**
  * @author wangfushun

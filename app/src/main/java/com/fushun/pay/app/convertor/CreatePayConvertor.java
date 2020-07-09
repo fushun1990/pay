@@ -3,8 +3,8 @@ package com.fushun.pay.app.convertor;
 import com.alibaba.cola.domain.DomainFactory;
 import com.alibaba.cola.extension.BizScenario;
 import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
-import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.domain.pay.entity.PayE;
+import com.fushun.pay.dto.clientobject.PayDTO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +31,7 @@ public class CreatePayConvertor implements CreatePayConvertorExtPt<PayDTO> {
 
     public PayDTO dataToClient(RecordPayDO dataObject) {
         PayDTO payDTO = new PayDTO();
+        payDTO.setStatus(dataObject.getStatus());
         payDTO.setPayFrom( dataObject.getPayFrom());
         payDTO.setPayWay( dataObject.getPayWay());
         payDTO.setTotalFee(dataObject.getPayMoney());

@@ -1,7 +1,5 @@
 package com.fushun.pay.thirdparty.alipay.pay;
 
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -9,18 +7,25 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
+import com.fushun.framework.util.util.ExceptionUtils;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyAlipayAppDTO;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseAlipayAppDTO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
+import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
-import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
-import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayAppCO;
-import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayAppCO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayAppDTO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayAppValidatorDTO;
 import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -65,6 +70,7 @@ public class AlipayAppPayFacade {
 
     @Autowired
     AlipayConfig alipayConfig;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -80,14 +86,14 @@ public class AlipayAppPayFacade {
     public CreatePayAliPayAppVO getRequest(CreatePayAlipayAppDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayAliPayAppVO createPayAliPayAppVO = new CreatePayAliPayAppVO();
-        createPayAliPayAppVO.setStatus(EStatus.SUCCESS);
+        createPayAliPayAppVO.setStatus(ECreatePayStatus.SUCCESS);
         try {
             Map<String, String> map = getRequestData(payParamDTO);
             String payStr = createPayHtml(map);
             createPayAliPayAppVO.setOrderPayNo(map.get("orderPayNo"));
             createPayAliPayAppVO.setPayStr(payStr);
         } catch (Exception e) {
-            createPayAliPayAppVO.setStatus(EStatus.FAIL);
+            createPayAliPayAppVO.setStatus(ECreatePayStatus.FAIL);
             logger.warn("created pay error,payParamDTO:[{}]", payParamDTO.toString(), e);
         }
         return createPayAliPayAppVO;
@@ -132,8 +138,12 @@ public class AlipayAppPayFacade {
 //		return AlipaySubmitApp.buildRequest(map,AlipayConfig.RSA_PRIVATE);
     }
 
-    public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyAlipayAppCO recordPayDTO) {
-        recordPayDTO.setNotifyReturnDTO(AlipayAppPayFacade.notifyReturnDTO);
+    public PayNotifyThirdPartyDTO payNotifyAlipayReust(PayNotifyAlipayAppDTO recordPayDTO) {
+        Map<String, String> requestParams=recordPayDTO.getParamMap();
+        PayNotifyThirdPartyAlipayAppDTO payNotifyThirdPartyDTO=new PayNotifyThirdPartyAlipayAppDTO();
+        payNotifyThirdPartyDTO.setEPayWay(EPayWay.PAY_WAY_ALIPAY);
+        payNotifyThirdPartyDTO.setReceiveWay(EPayWay.PAY_WAY_ALIPAY);
+        payNotifyThirdPartyDTO.setNotifyReturnDTO(AlipayAppPayFacade.notifyReturnDTO);
         // 获取支付宝POST过来反馈信息
         Map<String, String> params = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : requestParams.entrySet()) {
@@ -154,7 +164,7 @@ public class AlipayAppPayFacade {
         if (!StringUtils.isEmpty(params.get("seller_email"))) {
             seller_email = params.get("seller_email").toString();
             try {
-                recordPayDTO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
+                payNotifyThirdPartyDTO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
             } catch (Exception e) {
             }
         }
@@ -162,7 +172,7 @@ public class AlipayAppPayFacade {
         BigDecimal total_fee = null;
         if (!StringUtils.isEmpty(requestParams.get("total_amount"))) {
             total_fee = BigDecimal.valueOf(Double.valueOf(requestParams.get("total_amount").toString()));
-            recordPayDTO.setPayMoney(total_fee);
+            payNotifyThirdPartyDTO.setPayMoney(total_fee);
         }
 
 
@@ -171,59 +181,63 @@ public class AlipayAppPayFacade {
         try {
             signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAliPayPublicKey(), alipayConfig.getInputCharset());
         } catch (AlipayApiException e) {
-            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
+            ExceptionUtils.rethrow(new PayException(e, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED),logger,"异步通知，签名验证异常，params:[{}]",JsonUtil.toJson(params));
         }
-        if (signVerified == false) {
+        if (!signVerified) {
+            ExceptionUtils.rethrow(new PayException(PayException.PayExceptionEnum.PAY_FAILED),logger,"异步通知，签名验证失败，params:[{}]",JsonUtil.toJson(params));
         }
 
         // ////////////////////////////////////////////////////////////////////////////////////////
         // 请在这里加上商户的业务逻辑程序代码
 
-        recordPayDTO.setOutTradeNo(out_trade_no);
-        recordPayDTO.setPayNo(trade_no);
+        payNotifyThirdPartyDTO.setOutTradeNo(out_trade_no);
+        payNotifyThirdPartyDTO.setPayNo(trade_no);
         ETradeStatus tradeStatus = EnumUtil.getEnumByName(ETradeStatus.class, trade_status);
         if (tradeStatus == null) {
             throw new PayException(null, PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS);
         }
         switch (tradeStatus) {
             case WAIT_BUYER_PAY:
-                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+                payNotifyThirdPartyDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_CLOSED:
-                recordPayDTO.setStatus(ERecordPayStatus.FAILED);
+                payNotifyThirdPartyDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_SUCCESS:
-                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
-                return;
+                payNotifyThirdPartyDTO.setStatus(ERecordPayStatus.SUCCESS);
+                break;
             case TRADE_FINISHED:
-                recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
+                payNotifyThirdPartyDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
             default:
-                throw new PayException(null, PayException.PayExceptionEnum.PAY_BUSINESS);
+                ExceptionUtils.rethrow(new PayException(null, PayException.PayExceptionEnum.PAY_BUSINESS),logger,"异步通知，支付状态解析异常，tradeStatus:[[]],param:[{}]",tradeStatus.getCode(),JsonUtil.toJson(params));
         }
+
+        return payNotifyThirdPartyDTO;
 
     }
 
     /**
      * 同步返回信息验证
      *
-     * @param recordPayDTO
+     * @param paySyncResponseAlipayAppValidatorDTO
      * @return
      * @author fushun
      * @version V3.0商城
      * @creation 2016年9月17日
      * @records <p>  fushun 2016年9月17日</p>
      */
-    public void payResultAlipayReust(String requestParamsStr, PaySyncResponseAlipayAppCO recordPayDTO) {
+    public PaySyncResponseDTO payResultAlipayReust(PaySyncResponseAlipayAppValidatorDTO paySyncResponseAlipayAppValidatorDTO) {
 
-        Map<String, Object> requestParamsMap = JsonUtil.jsonToHashMap(requestParamsStr);
+        PaySyncResponseAlipayAppDTO paySyncResponseDTO=new PaySyncResponseAlipayAppDTO();
+        Map<String, Object> requestParamsMap = JsonUtil.jsonToHashMap(paySyncResponseAlipayAppValidatorDTO.getResponseStr());
         Map<String, Object> resultmap = JsonUtil.jsonToHashMap(requestParamsMap.get("result").toString());
         String resultStatus = (String) resultmap.get("resultStatus");
 
-        recordPayDTO.setOutTradeNo(String.valueOf(requestParamsMap.get("orderPayNo")));
-        recordPayDTO.setStatus(ERecordPayStatus.FAILED);
-        recordPayDTO.setEPayWay(EPayWay.PAY_WAY_ALIPAY);
-        recordPayDTO.setReceiveWay(EPayWay.PAY_WAY_ALIPAY);
+        paySyncResponseDTO.setOutTradeNo(String.valueOf(paySyncResponseAlipayAppValidatorDTO.getOutTradeNo()));
+        paySyncResponseDTO.setStatus(ERecordPayStatus.FAILED);
+        paySyncResponseDTO.setEPayWay(EPayWay.PAY_WAY_ALIPAY);
+        paySyncResponseDTO.setReceiveWay(EPayWay.PAY_WAY_ALIPAY);
 
         if (StringUtils.isEmpty(resultStatus)) {
             throw new PayException(null, PayException.PayExceptionEnum.PAY_RETURN_STATUS_ERROR);
@@ -231,16 +245,14 @@ public class AlipayAppPayFacade {
 
         if (!resultStatus.equals("9000")) {
             getErrorCode(resultStatus);
-            return;
+            return null;
         }
 
         Map<String, Object> map = JsonUtil.jsonToHashMap(String.valueOf(resultmap.get("result")));
 
         Map<String, String> map2 = (Map<String, String>) map.get("alipay_trade_app_pay_response");
 
-        String out_trade_no = map2.get("out_trade_no");
-
-        recordPayDTO.setOutTradeNo(out_trade_no);
+        paySyncResponseDTO.setOutTradeNo( paySyncResponseAlipayAppValidatorDTO.getOutTradeNo());
 
         // 交易状态
         String code = map2.get("code");
@@ -254,7 +266,7 @@ public class AlipayAppPayFacade {
                     , alipayConfig.getAliPayPublicKey(), charset, signType);
         } catch (AlipayApiException e) {
         }
-        if (signVerified == false) {
+        if (!signVerified) {
             throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
         // 验证成功
@@ -268,10 +280,10 @@ public class AlipayAppPayFacade {
         // 支付宝交易号
         String trade_no = map2.get("trade_no").toString();
         double total_fee = Double.valueOf(map2.get("total_amount").toString());
-        recordPayDTO.setPayNo(trade_no);
-        recordPayDTO.setPayMoney(BigDecimal.valueOf(total_fee));
-        recordPayDTO.setStatus(ERecordPayStatus.SUCCESS);
-        return;
+        paySyncResponseDTO.setPayNo(trade_no);
+        paySyncResponseDTO.setPayMoney(BigDecimal.valueOf(total_fee));
+        paySyncResponseDTO.setStatus(ERecordPayStatus.SUCCESS);
+        return paySyncResponseDTO;
     }
 
     /**

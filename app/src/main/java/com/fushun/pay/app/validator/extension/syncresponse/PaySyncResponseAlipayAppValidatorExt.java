@@ -3,9 +3,9 @@ package com.fushun.pay.app.validator.extension.syncresponse;
 import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.cmd.syncresponse.PaySyncResponseAlipayAppCmd;
 import com.fushun.pay.app.validator.PaySyncResponseValidator;
 import com.fushun.pay.app.validator.extensionpoint.PaySyncResponseValidatorExtPt;
+import com.fushun.pay.client.dto.cmd.syncresponse.PaySyncResponseAlipayAppCmd;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 

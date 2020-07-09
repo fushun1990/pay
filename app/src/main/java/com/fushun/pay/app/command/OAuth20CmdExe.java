@@ -2,10 +2,10 @@ package com.fushun.pay.app.command;
 
 import com.alibaba.cola.dto.SingleResponse;
 import com.alibaba.cola.extension.ExtensionExecutor;
-import com.fushun.pay.app.dto.OAuth20Cmd;
-import com.fushun.pay.dto.clientobject.oauth20.OAuth20ResponseVO;
 import com.fushun.pay.app.thirdparty.extensionpoint.OAuth20ThirartExtPt;
 import com.fushun.pay.app.validator.extensionpoint.OAuth20ValidatorExtPt;
+import com.fushun.pay.client.dto.OAuth20Cmd;
+import com.fushun.pay.dto.clientobject.oauth20.OAuth20ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

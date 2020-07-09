@@ -34,6 +34,15 @@ public class PayRepository {
     }
 
     /**
+     * 获取带锁的数据
+     * @param recordPayId
+     * @return
+     */
+    public RecordPayDO findLockById(RecordPayId recordPayId) {
+        return payDBTunnel.findLockById(recordPayId.getOutTradeNo());
+    }
+
+    /**
      * @param payE
      * @param recordPayDO
      * @return void
@@ -43,7 +52,6 @@ public class PayRepository {
      * @version 1.0
      */
     public void updateCreatePayInfo(PayE payE, RecordPayDO recordPayDO) {
-
         payDBTunnel.save(payDomainConvertor.entityToData(payE, recordPayDO));
     }
 

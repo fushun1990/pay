@@ -5,14 +5,14 @@ import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.app.api.PayServiceI;
+import com.fushun.pay.client.api.PayServiceI;
+import com.fushun.pay.client.dto.cmd.createdpay.CreatePayAlipayAppCmd;
+import com.fushun.pay.client.dto.cmd.createdpay.CreatePayAlipayWapCmd;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayAppVO;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
-import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayAppCmd;
-import com.fushun.pay.app.dto.cmd.createdpay.CreatePayAlipayWapCmd;
 import com.fushun.pay.dto.enumeration.EPayFrom;
 import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.infrastructure.common.BizCode;
@@ -75,7 +75,7 @@ public class PayServiceImplTest {
 
         CreatePayAlipayAppDTO createPayAlipayWapCO = new CreatePayAlipayAppDTO();
         createPayAlipayWapCO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
-        createPayAlipayWapCO.setPayFrom(EPayFrom.PAY_FROM_BUY_MEMBERS);
+        createPayAlipayWapCO.setPayFrom(EPayFrom.PAY_PROPERTY);
         createPayAlipayWapCO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
 //        createPayAlipayWapCO.setReturnUrl("");
         createPayAlipayWapCO.setTradeNo("2015101600000005555558");
@@ -107,7 +107,7 @@ public class PayServiceImplTest {
 
         CreatePayAlipayWapDTO createPayAlipayWapDTO = new CreatePayAlipayWapDTO();
         createPayAlipayWapDTO.setPayWay(EPayWay.PAY_WAY_ALIPAY);
-        createPayAlipayWapDTO.setPayFrom(EPayFrom.PAY_FROM_BUY_MEMBERS);
+        createPayAlipayWapDTO.setPayFrom(EPayFrom.PAY_PROPERTY);
         createPayAlipayWapDTO.setNotifyUrl("http://f.superisong.com/Home/pay/payNotice");
         createPayAlipayWapDTO.setReturnUrl("http://f.superisong.com/Home/pay/payNotice");
         createPayAlipayWapDTO.setTradeNo("20151016000000455566");

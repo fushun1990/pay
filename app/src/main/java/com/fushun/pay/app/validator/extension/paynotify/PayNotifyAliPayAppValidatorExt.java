@@ -3,9 +3,9 @@ package com.fushun.pay.app.validator.extension.paynotify;
 import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
-import com.fushun.pay.app.dto.cmd.notify.PayNotifyAlipayAppCmd;
 import com.fushun.pay.app.validator.PayNotifyValidator;
 import com.fushun.pay.app.validator.extensionpoint.PayNotifyValidatorExtPt;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @creation 2019年01月21日23时37分
  */
 @Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_APP)
-public class PayNotifyAliPayAppValidatorExt implements PayNotifyValidatorExtPt<PayNotifyAlipayAppCmd> {
+public class PayNotifyAliPayAppValidatorExt implements PayNotifyValidatorExtPt<PayNotifyThirdPartyDTO> {
 
     private Logger logger = LoggerFactory.getLogger(PayNotifyAliPayAppValidatorExt.class);
 
@@ -24,8 +24,8 @@ public class PayNotifyAliPayAppValidatorExt implements PayNotifyValidatorExtPt<P
     private PayNotifyValidator payNotifyValidator;
 
     @Override
-    public void validate(PayNotifyAlipayAppCmd candidate) {
-        payNotifyValidator.validate(candidate);
+    public void validate(PayNotifyThirdPartyDTO payNotifyThirdPartyDTO) {
+        payNotifyValidator.validate(payNotifyThirdPartyDTO);
         logger.debug("Alipay app notify validation");
     }
 }

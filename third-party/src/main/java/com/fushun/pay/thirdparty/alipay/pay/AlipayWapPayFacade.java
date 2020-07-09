@@ -1,7 +1,5 @@
 package com.fushun.pay.thirdparty.alipay.pay;
 
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -10,19 +8,26 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.fushun.framework.util.beans.ConverterUtil;
 import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
+import com.fushun.framework.util.util.ExceptionUtils;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyAlipayWapDTO;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
+import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
+import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
-import com.fushun.pay.dto.clientobject.createpay.EStatus;
+import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatePayAliPayWapVO;
-import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayWapCO;
-import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayWapCO;
+import com.fushun.pay.dto.clientobject.notify.PayNotifyAlipayWapDTO;
+import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseAlipayWapValidatorDTO;
+import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -53,6 +58,7 @@ public class AlipayWapPayFacade {
     }
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private AlipayAppTradeQueryFacade alipayAppTradeQueryFacade;
     @Autowired
@@ -61,13 +67,13 @@ public class AlipayWapPayFacade {
     public CreatePayAliPayWapVO getRequest(CreatePayAlipayWapDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayAliPayWapVO createdPayThirdPartyCO = new CreatePayAliPayWapVO();
-        createdPayThirdPartyCO.setStatus(EStatus.SUCCESS);
+        createdPayThirdPartyCO.setStatus(ECreatePayStatus.SUCCESS);
         try {
             Map<String, String> map = getRequestData(payParamDTO);
             String payStr = createPayHtml(map);
             createdPayThirdPartyCO.setPayStr(payStr);
         } catch (Exception e) {
-            createdPayThirdPartyCO.setStatus(EStatus.FAIL);
+            createdPayThirdPartyCO.setStatus(ECreatePayStatus.FAIL);
             logger.warn("created pay error,payParamDTO:[{}]", payParamDTO.toString(), e);
         }
         return createdPayThirdPartyCO;
@@ -125,7 +131,12 @@ public class AlipayWapPayFacade {
         } //调用SDK生成表单
     }
 
-    public void payNotifyAlipayReust(Map<String, String> requestParams, PayNotifyAlipayWapCO payNotifyAlipayWapCO) {
+    /**
+     * 支付宝 wap 验证框架
+     * @param payNotifyAlipayWapDTO
+     * @return
+     */
+    public PayNotifyThirdPartyDTO payNotifyAlipayReust(PayNotifyAlipayWapDTO payNotifyAlipayWapDTO) {
 //		参数	参数名称	类型	必填	描述	范例
 //		notify_time	通知时间	Date	是	通知的发送时间。格式为yyyy-MM-dd HH:mm:ss	2015-14-27 15:45:58
 //		notify_type	通知类型	String(64)	是	通知的类型	trade_status_sync
@@ -159,7 +170,12 @@ public class AlipayWapPayFacade {
 //		passback_params	回传参数	String(512)	否	公共回传参数，如果请求时传递了该参数，则返回给商户时会在异步通知时将该参数原样返回。本参数必须进行UrlEncode之后才可以发送给支付宝	merchantBizType%3d3C%26merchantBizNo%3d2016010101111
 //		voucher_detail_list	优惠券信息	String	否	本交易支付时所使用的所有优惠券信息，详见优惠券信息说明	[{“amount”:“0.20”,“merchantContribute”:“0.00”,“name”:“一键创建券模板的券名称”,“otherContribute”:“0.20”,“type”:“ALIPAY_DISCOUNT_VOUCHER”,“memo”:“学生卡8折优惠”]
         // 获取支付宝POST过来反馈信息
-        payNotifyAlipayWapCO.setNotifyReturnDTO(this.notifyReturnDTO);
+        PayNotifyThirdPartyAlipayWapDTO payNotifyThirdPartyAlipayWapDTO=new PayNotifyThirdPartyAlipayWapDTO();
+        Map<String, String> requestParams=payNotifyAlipayWapDTO.getParamMap();
+
+        payNotifyThirdPartyAlipayWapDTO.setEPayWay(EPayWay.PAY_WAY_ALIPAY);
+        payNotifyThirdPartyAlipayWapDTO.setReceiveWay(EPayWay.PAY_WAY_ALIPAY);
+        payNotifyThirdPartyAlipayWapDTO.setNotifyReturnDTO(AlipayWapPayFacade.notifyReturnDTO);
         Map<String, String> params = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : requestParams.entrySet()) {
             // String name = (String) iter.next();
@@ -186,7 +202,7 @@ public class AlipayWapPayFacade {
         String trade_status = params.get("trade_status").toString();
 
         String seller_email = params.get("seller_email").toString();
-        float total_fee = Float.valueOf(requestParams.get("total_amount").toString());
+        float total_fee = Float.parseFloat(requestParams.get("total_amount").toString());
 
         // 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
 
@@ -195,59 +211,61 @@ public class AlipayWapPayFacade {
         boolean signVerified = false;
         try {
             signVerified = AlipaySignature.rsaCheckV1(params, alipayConfig.getAliPayPublicKey(), alipayConfig.getInputCharset());
-        } catch (AlipayApiException e) {
-            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
+        } catch (Exception e) {
+            ExceptionUtils.rethrow(new PayException(e, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED),logger,"异步通知，签名异常，params:[{}]",JsonUtil.toJson(params));
+
         }
-        if (signVerified == false) {
-            throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
+        if (!signVerified) {
+            ExceptionUtils.rethrow(new PayException(PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED),logger,"异步通知，签名异常，params:[{}]",JsonUtil.toJson(params));
         }
         // 验证成功
         // ////////////////////////////////////////////////////////////////////////////////////////
         // 请在这里加上商户的业务逻辑程序代码
 
-        payNotifyAlipayWapCO.setOutTradeNo(out_trade_no);
-        payNotifyAlipayWapCO.setPayNo(trade_no);
-        payNotifyAlipayWapCO.setPayMoney(BigDecimal.valueOf(total_fee));
+        payNotifyThirdPartyAlipayWapDTO.setOutTradeNo(out_trade_no);
+        payNotifyThirdPartyAlipayWapDTO.setPayNo(trade_no);
+        payNotifyThirdPartyAlipayWapDTO.setPayMoney(BigDecimal.valueOf(total_fee));
         try {
-            payNotifyAlipayWapCO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
-//			recordPayDTO.setPayAccount(DESUtil.encrypt(buyer_email, SystemConstant.DES_KEY));
+            payNotifyThirdPartyAlipayWapDTO.setReceiveAccourt(DESUtil.encrypt(seller_email, DESUtil.DES_KEY));
         } catch (Exception e) {
+            logger.warn("支付宝支付，解密买家邮箱失败",e);
         }
 
         ETradeStatus tradeStatus = EnumUtil.getEnumByName(ETradeStatus.class, trade_status);
         if (tradeStatus == null) {
-            throw new PayException(null, PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS);
+            ExceptionUtils.rethrow(new PayException(PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS),logger,"支付宝，校验状态，不存在，trade_status:[{}]",trade_status);
         }
         switch (tradeStatus) {
             case WAIT_BUYER_PAY:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
+                payNotifyThirdPartyAlipayWapDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_CLOSED:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
+                payNotifyThirdPartyAlipayWapDTO.setStatus(ERecordPayStatus.FAILED);
                 break;
             case TRADE_SUCCESS:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.SUCCESS);
+                payNotifyThirdPartyAlipayWapDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
             case TRADE_FINISHED:
-                payNotifyAlipayWapCO.setStatus(ERecordPayStatus.SUCCESS);
+                payNotifyThirdPartyAlipayWapDTO.setStatus(ERecordPayStatus.SUCCESS);
                 break;
             default:
-                throw new PayException(null, PayException.PayExceptionEnum.PAY_BUSINESS);
+                ExceptionUtils.rethrow(new PayException(PayException.PayExceptionEnum.ALIPAY_ORDER_STATUS),logger,"支付宝，校验状态，不存在，trade_status:[{}]",trade_status);
         }
 
+        return payNotifyThirdPartyAlipayWapDTO;
 
     }
 
 
-    public void payResultAlipayReust(String requestParams, PaySyncResponseAlipayWapCO paySyncResponseAlipayWapCO) {
+    public PaySyncResponseDTO payResultAlipayReust(PaySyncResponseAlipayWapValidatorDTO paySyncResponseAlipayWapValidatorDTO) {
 
-        Map<String, Object> requestParamsMap = JsonUtil.jsonToHashMap(requestParams);
+        PaySyncResponseDTO paySyncResponseDTO=new PaySyncResponseDTO();
+        Map<String, Object> requestParamsMap = JsonUtil.jsonToHashMap(paySyncResponseAlipayWapValidatorDTO.getResponseStr());
 
         // 获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
         boolean signVerified = false;
-        String out_trade_no = (String) requestParamsMap.get("out_trade_no");
-        paySyncResponseAlipayWapCO.setOutTradeNo(out_trade_no);
-        paySyncResponseAlipayWapCO.setStatus(ERecordPayStatus.FAILED);
+        paySyncResponseDTO.setOutTradeNo(paySyncResponseAlipayWapValidatorDTO.getOutTradeNo());
+        paySyncResponseDTO.setStatus(ERecordPayStatus.FAILED);
 
         try {
             Map<String, String> params = new HashMap<String, String>();
@@ -261,15 +279,15 @@ public class AlipayWapPayFacade {
             throw new PayException(null, PayException.PayExceptionEnum.SIGNATURE_VALIDATION_FAILED);
         }
 
-        if (StringUtils.isEmpty(out_trade_no)) {
+        if (StringUtils.isEmpty(paySyncResponseAlipayWapValidatorDTO.getOutTradeNo())) {
             throw new PayException(null, PayException.PayExceptionEnum.PAY_RETURN_STATUS_ERROR);
         }
 
         TradeQueryRequestDTO tradeQueryRequestDTO = new TradeQueryRequestDTO();
-        tradeQueryRequestDTO.setOutTradeNo(out_trade_no);
+        tradeQueryRequestDTO.setOutTradeNo(paySyncResponseAlipayWapValidatorDTO.getOutTradeNo());
         TradeQueryResponseCO tradeQueryResponseCO = alipayAppTradeQueryFacade.tradeQuery(tradeQueryRequestDTO);
-        ConverterUtil.convert(tradeQueryResponseCO, paySyncResponseAlipayWapCO);
-        return;
+        ConverterUtil.convert(tradeQueryResponseCO, paySyncResponseDTO);
+        return paySyncResponseDTO;
     }
 
 }
