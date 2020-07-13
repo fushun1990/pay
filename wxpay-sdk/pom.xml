@@ -15,10 +15,17 @@
   <name>wxpay-sdk</name>
 
   <dependencies>
+
     <dependency>
       <groupId>com.fushun.framework</groupId>
       <artifactId>framework-logs</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>com.fushun.framework</groupId>
+      <artifactId>framework-util</artifactId>
+    </dependency>
+
   </dependencies>
 
 </project>

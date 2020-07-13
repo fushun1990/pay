@@ -25,6 +25,7 @@ import com.tencent.protocol.order_query_protocol.OrderQueryResData;
 import com.tencent.protocol.unifiedorder_protocol.UnifiedorderResData;
 import com.tencent.protocol.userinfo_protocol.UserInfoResData;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
