@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local,alipay-sandbox,weixin-gzh
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: INFO
+
+app:
+    datasource:
+        jdbcUrl: jdbc:mysql://localhost:3306/pay?serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        pool-size: 30
+        driverClassName: com.mysql.cj.jdbc.Driver

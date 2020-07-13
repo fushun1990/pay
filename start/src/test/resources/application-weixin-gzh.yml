@@ -1,0 +1,11 @@
+pay:
+  weixin:
+    gzh:
+      key: df0w2rfjd3ekldfg23jdf92z4m2ao02a
+      appId: wx3afc97fe948e75e7
+      appSecret: 6246c7566ae703feeea23bf7154c9bcf
+      mchID: 1516499551
+      subMchID:
+      certLocalPath: classpath:/spring/pay/weiXinGJHApiClient_cert.p12
+      certPassword: 1361997202
+      useThreadToDoReport: true
