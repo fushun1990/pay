@@ -1,7 +1,7 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
 import com.fushun.framework.exception.BusinessException;
-import com.fushun.pay.domain.exception.PayException;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
 import com.tencent.common.GZHConfigure;

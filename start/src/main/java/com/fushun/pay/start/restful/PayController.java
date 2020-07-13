@@ -102,7 +102,7 @@ public class PayController {
     @NoApiResult
     public ApiResult<CreatePayWeiXinGZHVO> createdWeixinGZH(@RequestBody CreatePayWeiXinGZHDTO createPayWeiXinGZHDTO){
         CreatePayWeixinGZHCmd createPayAlipayWapCmd = new CreatePayWeixinGZHCmd();
-        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_WEIXIN_GZH);
         createPayAlipayWapCmd.setBizScenario(bizScenario);
         createPayAlipayWapCmd.setCreatePayWeiXinGZHDTO(createPayWeiXinGZHDTO);
         SingleResponse<CreatedPayVO> singleResponse= payServiceI.createPay(createPayAlipayWapCmd);

@@ -26,6 +26,7 @@ public class CreatePayConvertor implements CreatePayConvertorExtPt<PayDTO> {
         payE.setPayWay(payDTO.getPayWay());
         payE.setPayFrom(payDTO.getPayFrom());
         payE.setBizScenario(bizScenario);
+        payE.setNotifyUrl(payDTO.getNotifyUrl());
         return payE;
     }
 

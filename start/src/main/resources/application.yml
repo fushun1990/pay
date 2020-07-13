@@ -31,3 +31,8 @@ logging:
   file:
     max-size: 10MB
     max-history: 30
+
+pay:
+  startWeb: true
+  notifyUrl: http://www.ihaoshenghuo.com/pay/source/web_weixin_notice.php
+

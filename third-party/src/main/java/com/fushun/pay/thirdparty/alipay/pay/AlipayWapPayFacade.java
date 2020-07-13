@@ -10,10 +10,10 @@ import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.ExceptionUtils;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.config.PayConfig;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyAlipayWapDTO;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
 import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
@@ -26,6 +26,7 @@ import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,14 +64,16 @@ public class AlipayWapPayFacade {
     private AlipayAppTradeQueryFacade alipayAppTradeQueryFacade;
     @Autowired
     private AlipayConfig alipayConfig;
+    @Autowired
+    private PayConfig payConfig;
 
     public CreatePayAliPayWapVO getRequest(CreatePayAlipayWapDTO payParamDTO) {
         //下单是不，更新订单为支付失败
         CreatePayAliPayWapVO createdPayThirdPartyCO = new CreatePayAliPayWapVO();
         createdPayThirdPartyCO.setStatus(ECreatePayStatus.SUCCESS);
         try {
-            Map<String, String> map = getRequestData(payParamDTO);
-            String payStr = createPayHtml(map);
+            Map<String, String> map = this.getRequestData(payParamDTO);
+            String payStr = this.createPayHtml(map);
             createdPayThirdPartyCO.setPayStr(payStr);
         } catch (Exception e) {
             createdPayThirdPartyCO.setStatus(ECreatePayStatus.FAIL);
@@ -87,8 +90,13 @@ public class AlipayWapPayFacade {
         // 把请求参数打包成数组
         Map<String, String> sParaTemp = new HashMap<String, String>();
 
+        if(payConfig.getStartWeb()){
+            sParaTemp.put("notify_url", payConfig.getNotifyUrl());
+        }else{
+            sParaTemp.put("notify_url", payParamDTO.getNotifyUrl());
+        }
 
-        sParaTemp.put("notify_url", payParamDTO.getNotifyUrl());
+
         sParaTemp.put("return_url", payParamDTO.getReturnUrl());
 
         Map<String, Object> map = new HashMap<String, Object>();

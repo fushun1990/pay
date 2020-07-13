@@ -5,7 +5,7 @@ import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.pay.app.validator.PayNotifyValidator;
 import com.fushun.pay.app.validator.extensionpoint.PayNotifyValidatorExtPt;
-import com.fushun.pay.client.dto.cmd.notify.PayNotifyAlipayWapCmd;
+import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyAlipayWapDTO;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @creation 2019年01月21日23时37分
  */
 @Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_ALIPAY_WAP)
-public class PayNotifyAliPayWapValidatorExt implements PayNotifyValidatorExtPt<PayNotifyAlipayWapCmd> {
+public class PayNotifyAliPayWapValidatorExt implements PayNotifyValidatorExtPt<PayNotifyThirdPartyAlipayWapDTO> {
 
     private Logger logger = LoggerFactory.getLogger(PayNotifyAliPayWapValidatorExt.class);
 
@@ -24,7 +24,7 @@ public class PayNotifyAliPayWapValidatorExt implements PayNotifyValidatorExtPt<P
     private PayNotifyValidator payNotifyValidator;
 
     @Override
-    public void validate(PayNotifyAlipayWapCmd candidate) {
+    public void validate(PayNotifyThirdPartyAlipayWapDTO candidate) {
         payNotifyValidator.validate(candidate);
         logger.debug("Alipay app notify validation");
     }

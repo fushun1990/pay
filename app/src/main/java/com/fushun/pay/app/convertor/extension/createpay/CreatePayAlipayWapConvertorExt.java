@@ -4,8 +4,8 @@ import com.alibaba.cola.extension.BizScenario;
 import com.alibaba.cola.extension.Extension;
 import com.fushun.pay.app.convertor.CreatePayConvertor;
 import com.fushun.pay.app.convertor.extensionpoint.CreatePayConvertorExtPt;
-import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import com.fushun.pay.domain.pay.entity.PayE;
+import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,8 +21,9 @@ public class CreatePayAlipayWapConvertorExt implements CreatePayConvertorExtPt<C
     private CreatePayConvertor payConvertor;
 
     @Override
-    public PayE clientToEntity(CreatePayAlipayWapDTO payCO, BizScenario bizScenario) {
-        PayE payE = payConvertor.clientToEntity(payCO, bizScenario);
+    public PayE clientToEntity(CreatePayAlipayWapDTO createPayAlipayWapDTO, BizScenario bizScenario) {
+        PayE payE = payConvertor.clientToEntity(createPayAlipayWapDTO, bizScenario);
+        payE.setReturnUrl(createPayAlipayWapDTO.getReturnUrl());
         return payE;
     }
 }

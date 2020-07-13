@@ -1,9 +1,9 @@
 package com.fushun.pay.thirdparty.alipay.pay;
 
 import com.alipay.api.AlipayResponse;
-import com.fushun.pay.domain.exception.BasePayException;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.sdk.alipay.utils.AlipayCore;
+import com.fushun.pay.thirdparty.weixin.pay.exception.BasePayException;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

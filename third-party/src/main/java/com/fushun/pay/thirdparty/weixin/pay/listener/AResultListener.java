@@ -1,7 +1,7 @@
 package com.fushun.pay.thirdparty.weixin.pay.listener;
 
 import com.fushun.framework.util.util.JsonUtil;
-import com.fushun.pay.domain.exception.PayException;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import com.tencent.business.ResultListener;
 import com.tencent.protocol.base_protocol.BaseResData;
 

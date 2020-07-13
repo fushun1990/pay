@@ -28,7 +28,7 @@ public class ResponseValidatorController {
     @NoApiResult
     public ApiResult<String> payGZHResponseValidator(PaySyncResponseWeixinGZHValidatorDTO paySyncResponseWeixinGZHValidatorDTO){
         PaySyncResponseWeiXinGZHCmd paySyncResponseWeiXinGZHCmd=new PaySyncResponseWeiXinGZHCmd();
-        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.payScenario_WEIXIN_GZH);
+        BizScenario bizScenario = BizScenario.valueOf(BizCode.payBizId, BizCode.payUseCase, BizCode.PAY_SCENARIO_WEIXIN_GZH);
         paySyncResponseWeiXinGZHCmd.setBizScenario(bizScenario);
         paySyncResponseWeiXinGZHCmd.setPaySyncResponseWeixinGZHValidatorDTO(paySyncResponseWeixinGZHValidatorDTO);
         SingleResponse<String> singleResponse= payServiceI.payResponseValidator(paySyncResponseWeiXinGZHCmd);

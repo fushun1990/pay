@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>com.fushun.framework</groupId>
+            <artifactId>framework-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fushun.framework</groupId>
             <artifactId>framework-spring-data-jpa</artifactId>
         </dependency>
 

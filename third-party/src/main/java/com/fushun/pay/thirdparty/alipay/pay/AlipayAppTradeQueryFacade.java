@@ -8,11 +8,11 @@ import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.thirdparty.co.TradeQueryRequestDTO;
 import com.fushun.pay.thirdparty.co.TradeQueryResponseCO;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

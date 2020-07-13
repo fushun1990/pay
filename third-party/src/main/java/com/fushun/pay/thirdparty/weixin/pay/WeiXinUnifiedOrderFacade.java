@@ -2,10 +2,11 @@ package com.fushun.pay.thirdparty.weixin.pay;
 
 import com.fushun.framework.exception.BusinessException;
 import com.fushun.framework.util.util.StringUtils;
+import com.fushun.pay.client.config.PayConfig;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinGZHDTO;
 import com.fushun.pay.dto.enumeration.EPayWay;
-import com.fushun.pay.domain.exception.PayException;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import com.fushun.pay.thirdparty.weixin.pay.listener.AResultListener;
 import com.tencent.WXPay;
 import com.tencent.common.AppCConfigure;
@@ -29,6 +30,9 @@ import java.math.BigDecimal;
 @Service
 public class WeiXinUnifiedOrderFacade {
 
+    @Autowired
+    private PayConfig payConfig;
+
     /**
      * 转换为分的常量
      */
@@ -42,7 +46,12 @@ public class WeiXinUnifiedOrderFacade {
         unifiedorderReqData.setOut_trade_no(outTradeNo);
         unifiedorderReqData.setTotal_fee(payParamDTO.getTotalFee().multiply(bai).intValue());
         unifiedorderReqData.setSpbill_create_ip(payParamDTO.getSpbillCreateIp());
-        unifiedorderReqData.setNotify_url(payParamDTO.getNotifyUrl());
+        if(payConfig.getStartWeb()){
+            unifiedorderReqData.setNotify_url(payConfig.getNotifyUrl());
+        }else{
+            unifiedorderReqData.setNotify_url(payParamDTO.getNotifyUrl());
+        }
+
         return unifiedorderReqData;
     }
 
@@ -61,7 +70,7 @@ public class WeiXinUnifiedOrderFacade {
         try {
             if (payParamDTO.getPayWay() == EPayWay.PAY_WAY_WEIXINPAY) {
                 AppUnifiedOrderReqData unifiedorderReqData = new UnifiedorderReqData("WEB", GZHConfigure.initMethod());
-                getReq(unifiedorderReqData, payParamDTO);
+                this.getReq(unifiedorderReqData, payParamDTO);
                 String openId = "";
                 //判断是否存在openId
                 if (StringUtils.isEmpty(payParamDTO.getOpenId())) {

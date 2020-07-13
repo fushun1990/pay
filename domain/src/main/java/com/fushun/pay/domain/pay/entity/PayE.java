@@ -40,17 +40,33 @@ public class PayE extends EntityObject {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * 支付方式
+     * 数据持久对象
      */
-    private EPayWay payWay; //支付宝，网银，银联等
+    private PayRepository payRepository = SpringContextUtil.getBean(PayRepository.class);
+
     /**
-     * 支付源
+     * 领域事件生产者
      */
-    private EPayFrom payFrom; //web端，App端
+    private DomainEventPublisher domainEventPublisher = SpringContextUtil.getBean(DomainEventPublisher.class);
+
+
+    /**
+     * 支付方式 支付宝，网银，银联等
+     */
+    private EPayWay payWay;
+    /**
+     * 支付源  web端，App端
+     */
+    private EPayFrom payFrom;
     /**
      * 通知连接
      */
     private String notifyUrl;
+
+    /**
+     * 支付返回地址 web支付使用
+     */
+    private String returnUrl;
     /**
      * 内部 支付单号
      */
@@ -101,10 +117,6 @@ public class PayE extends EntityObject {
      * 已退金额
      */
     private BigDecimal refundAmount;
-
-    private PayRepository payRepository= SpringContextUtil.getBean(PayRepository.class);
-
-    private DomainEventPublisher domainEventPublisher=SpringContextUtil.getBean(DomainEventPublisher.class);;
 
     /**
      *
@@ -193,8 +205,14 @@ public class PayE extends EntityObject {
             throw new PayException(PayException.PayExceptionEnum.PAY_INFO_NO_EXISTS);
         }
 
-        //已支付成功，直接更新
+        //已支付成功，
         if (recordPayDO.getStatus() == ERecordPayStatus.SUCCESS) {
+            //独立运行，并且没有通知的
+            if(recordPayDO.getNotityStatus()==ERecordPayNotityStatus.NO){
+                //更新通知成功
+                recordPayDO.setNotityStatus(ERecordPayNotityStatus.YES);
+                payRepository.update(recordPayDO);
+            }
             logger.info("already pay,outTradeNo:[{}]", this.getOutTradeNo());
             return;
         }

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年01月22日00时29分
  */
-@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.payScenario_WEIXIN_GZH)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_WEIXIN_GZH)
 public class PayNotifyWeixinGZHThirdPartyExt implements PayNotifyThirdPartyExtPt<PayNotifyWeixinGZHDTO> {
 
     private Logger logger = LoggerFactory.getLogger(PayNotifyWeixinGZHThirdPartyExt.class);

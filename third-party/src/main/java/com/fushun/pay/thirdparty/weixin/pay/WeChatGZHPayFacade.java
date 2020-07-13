@@ -1,13 +1,11 @@
 package com.fushun.pay.thirdparty.weixin.pay;
 
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import com.fushun.framework.util.util.DateUtil;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.config.PayConfig;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyWeixinGZHDTO;
 import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
 import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHDTO;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayWeiXinGZHDTO;
 import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
@@ -16,6 +14,8 @@ import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinGZHDTO;
 import com.fushun.pay.dto.clientobject.syncresponse.PaySyncResponseWeixinGZHValidatorDTO;
 import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
+import com.github.wxpay.sdk.WXPayUtil;
 import com.tencent.common.GZHConfigure;
 import com.tencent.common.Signature;
 import com.tencent.protocol.jspay_protocol.JsPayReqData;
@@ -24,6 +24,7 @@ import com.tencent.protocol.oauth20_protocol.OAuth20ResData;
 import com.tencent.protocol.order_query_protocol.OrderQueryResData;
 import com.tencent.protocol.unifiedorder_protocol.UnifiedorderResData;
 import com.tencent.protocol.userinfo_protocol.UserInfoResData;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -60,6 +61,8 @@ public class WeChatGZHPayFacade {
     private WeiXinPayQueryFacade weiXinPayQueryFacade;
     @Autowired
     private WeiXinOAuth20Facade weiXinOAuth20Facade;
+    @Autowired
+    private PayConfig payConfig;
 
     /**
      * 获取支付参数
@@ -121,17 +124,25 @@ public class WeChatGZHPayFacade {
      */
     public PayNotifyThirdPartyWeixinGZHDTO payNotifyAlipayReust(PayNotifyWeixinGZHDTO payNotifyWeixinGZHDTO) {
         PayNotifyThirdPartyWeixinGZHDTO payNotifyThirdPartyWeixinGZHDTO =new PayNotifyThirdPartyWeixinGZHDTO();
-        Map<String, String> requestParams= payNotifyWeixinGZHDTO.getParamMap();
-
         payNotifyThirdPartyWeixinGZHDTO.setEPayWay(EPayWay.PAY_WAY_WEIXINPAY);
         payNotifyThirdPartyWeixinGZHDTO.setReceiveWay(EPayWay.PAY_WAY_WEIXINPAY);
         payNotifyThirdPartyWeixinGZHDTO.setNotifyReturnDTO(WeChatGZHPayFacade.notifyReturnDTO);
+        Map<String, String> requestParams=null;
+        try{
+            // 转换成map
+            requestParams = WXPayUtil.xmlToMap(payNotifyWeixinGZHDTO.getNotifyContent());
+        }catch (Exception e){
+            logger.error("异步同，转换失败。data:[{}]",payNotifyWeixinGZHDTO.getNotifyContent(),e);
+            payNotifyThirdPartyWeixinGZHDTO.setStatus(ERecordPayStatus.EXCEPTION);
+            return payNotifyThirdPartyWeixinGZHDTO;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(requestParams);
         NotifyResData notifyResData = JsonUtil.hashMapToClass(map, NotifyResData.class);
         if ("FAIL".equals(notifyResData.getReturn_code())) {
             payNotifyThirdPartyWeixinGZHDTO.setStatus(ERecordPayStatus.FAILED);
-            return;
+            return payNotifyThirdPartyWeixinGZHDTO;
         }
 
         if (!Signature.checkIsSignValidFromResponseString(map, GZHConfigure.initMethod())) {

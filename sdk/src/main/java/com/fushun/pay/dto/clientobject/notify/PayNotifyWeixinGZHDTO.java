@@ -12,5 +12,8 @@ import lombok.Data;
 @Data
 public class PayNotifyWeixinGZHDTO extends PayNotifyDTO {
 
-
+    /**
+     * 异步通知字符串
+     */
+    private String notifyContent;
 }

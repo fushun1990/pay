@@ -1,10 +1,6 @@
 package com.fushun.pay.thirdparty.weixin.pay.exception;
 
 
-import com.fushun.framework.exception.BusinessException;
-import com.fushun.pay.domain.exception.BasePayException;
-import com.fushun.pay.domain.exception.PayException;
-import com.fushun.pay.domain.exception.RefundException;
 
 /**
  * 微信退款异常（资金不足），做特殊处理

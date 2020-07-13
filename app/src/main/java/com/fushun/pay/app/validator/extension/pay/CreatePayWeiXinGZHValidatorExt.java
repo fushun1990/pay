@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  * @creation 2019年02月03日00时10分
  */
-@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.payScenario_WEIXIN_GZH)
+@Extension(bizId = BizCode.payBizId,useCase = BizCode.payUseCase,scenario = BizCode.PAY_SCENARIO_WEIXIN_GZH)
 public class CreatePayWeiXinGZHValidatorExt implements CreatePayValidatorExtPt<CreatePayWeixinGZHCmd> {
 
     private Logger logger = LoggerFactory.getLogger(CreatePayAlipayWapValidatorExt.class);

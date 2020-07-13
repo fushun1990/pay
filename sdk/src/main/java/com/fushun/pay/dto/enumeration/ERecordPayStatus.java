@@ -13,7 +13,9 @@ public enum ERecordPayStatus implements IBaseEnum<Integer> {
      */
     SUCCESS(1, "成功"),
     FAILED(2, "失败"),
-    CREATED(3, "创建");
+    CREATED(3, "创建"),
+    EXCEPTION(4, "程序异常，不做支付状态更新"),
+    ;
 
     private Integer code;
 

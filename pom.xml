@@ -13,7 +13,7 @@
     <parent>
         <artifactId>framework-parent</artifactId>
         <groupId>com.fushun.framework</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <modules>
@@ -25,11 +25,13 @@
         <module>third-party</module>
         <module>wxpay-java-sdk</module>
         <module>sdk</module>
+        <module>wxpay-sdk</module>
     </modules>
 
     <properties>
         <cola.framework.version>3.0.0</cola.framework.version>
-        <alipay-sdk-java.version>3.3.2</alipay-sdk-java.version>
+        <alipay.sdk.java.version>3.3.2</alipay.sdk.java.version>
+        <weixin.sdk.java.version>3.0.9</weixin.sdk.java.version>
         <bcprov-jdk14.version>1.54</bcprov-jdk14.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
     </properties>
@@ -72,7 +74,11 @@
                 <artifactId>sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.fushun.pay</groupId>
+                <artifactId>wxpay-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fushun.pay</groupId>
                 <artifactId>wxpay-java-sdk</artifactId>
@@ -119,8 +125,15 @@
             <dependency>
                 <groupId>com.alipay.sdk</groupId>
                 <artifactId>alipay-sdk-java</artifactId>
-                <version>${alipay-sdk-java.version}</version>
+                <version>${alipay.sdk.java.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.wxpay</groupId>
+                <artifactId>wxpay-sdk</artifactId>
+                <version>${alipay.sdk.java.version}</version>
+            </dependency>
+
+            <!-- 银联sdk需要 -->
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk14</artifactId>

@@ -3,9 +3,9 @@ package com.fushun.pay.app.thirdparty.extension.createpay;
 import com.alibaba.cola.extension.Extension;
 import com.alibaba.cola.logger.Logger;
 import com.alibaba.cola.logger.LoggerFactory;
+import com.fushun.pay.app.thirdparty.extensionpoint.CreatePayThirdPartyExtPt;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayWapDTO;
 import com.fushun.pay.dto.clientobject.createpay.response.CreatedPayVO;
-import com.fushun.pay.app.thirdparty.extensionpoint.CreatePayThirdPartyExtPt;
 import com.fushun.pay.infrastructure.common.BizCode;
 import com.fushun.pay.thirdparty.alipay.pay.AlipayWapPayFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CreatePayAliPayWapThirdPartyExt implements CreatePayThirdPartyExtPt
     private AlipayWapPayFacade payFacade;
 
     @Override
-    public CreatedPayVO created(CreatePayAlipayWapDTO payCO) {
-        return payFacade.getRequest(payCO);
+    public CreatedPayVO created(CreatePayAlipayWapDTO createPayAlipayWapDTO) {
+        return payFacade.getRequest(createPayAlipayWapDTO);
     }
 }

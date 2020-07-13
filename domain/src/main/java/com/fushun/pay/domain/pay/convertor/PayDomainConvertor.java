@@ -32,7 +32,8 @@ public class PayDomainConvertor {
         recordPayDO.setRefundAmount(payE.getRefundAmount());
         recordPayDO.setStatus(payE.getStatus());
         recordPayDO.setNotityStatus(payE.getNotityStatus());
-        recordPayDO.setNotifyUrl(recordPayDO.getNotifyUrl());
+        recordPayDO.setNotifyUrl(payE.getNotifyUrl());
+        recordPayDO.setReturnUrl(payE.getReturnUrl());
         return recordPayDO;
     }
 }

@@ -68,7 +68,7 @@ public class SecureUtil {
     /**
      * sha1计算.
      *
-     * @param datas 待计算的数据
+     * @param data 待计算的数据
      * @return 计算结果
      */
     public static byte[] sha1(byte[] data) {
@@ -174,7 +174,6 @@ public class SecureUtil {
      *
      * @param privateKey 私钥
      * @param data       待签名数据
-     * @param signMethod 签名方法
      * @return 结果
      * @throws Exception
      */
@@ -194,7 +193,6 @@ public class SecureUtil {
      * @param publicKey      公钥
      * @param signData       签名数据
      * @param srcData        摘要
-     * @param validateMethod 签名方法.
      * @return
      * @throws Exception
      */

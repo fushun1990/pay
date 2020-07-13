@@ -9,11 +9,11 @@ import com.fushun.framework.util.util.DESUtil;
 import com.fushun.framework.util.util.EnumUtil;
 import com.fushun.framework.util.util.ExceptionUtils;
 import com.fushun.framework.util.util.JsonUtil;
+import com.fushun.pay.client.config.PayConfig;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyAlipayAppDTO;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
 import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseAlipayAppDTO;
 import com.fushun.pay.client.dto.clientobject.syncresponse.PaySyncResponseDTO;
-import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.dto.clientobject.NotifyReturnDTO;
 import com.fushun.pay.dto.clientobject.createpay.CreatePayAlipayAppDTO;
 import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
@@ -24,6 +24,7 @@ import com.fushun.pay.dto.enumeration.EPayWay;
 import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.thirdparty.sdk.alipay.config.AlipayConfig;
 import com.fushun.pay.thirdparty.sdk.alipay.enumeration.ETradeStatus;
+import com.fushun.pay.thirdparty.weixin.pay.exception.PayException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,9 @@ public class AlipayAppPayFacade {
     @Autowired
     AlipayConfig alipayConfig;
 
+    @Autowired
+    private PayConfig payConfig;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -88,7 +92,7 @@ public class AlipayAppPayFacade {
         CreatePayAliPayAppVO createPayAliPayAppVO = new CreatePayAliPayAppVO();
         createPayAliPayAppVO.setStatus(ECreatePayStatus.SUCCESS);
         try {
-            Map<String, String> map = getRequestData(payParamDTO);
+            Map<String, String> map = this.getRequestData(payParamDTO);
             String payStr = createPayHtml(map);
             createPayAliPayAppVO.setOrderPayNo(map.get("orderPayNo"));
             createPayAliPayAppVO.setPayStr(payStr);
@@ -105,7 +109,12 @@ public class AlipayAppPayFacade {
         // 把请求参数打包成数组
         Map<String, String> sParaTemp = new HashMap<String, String>();
 
-        sParaTemp.put("notify_url", payParamDTO.getNotifyUrl());
+        if(payConfig.getStartWeb()){
+            sParaTemp.put("notify_url", payConfig.getNotifyUrl());
+        }else{
+            sParaTemp.put("notify_url", payParamDTO.getNotifyUrl());
+        }
+
 
         Map<String, Object> map = new HashMap<String, Object>();
 

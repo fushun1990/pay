@@ -8,11 +8,13 @@ import com.fushun.framework.util.util.JsonUtil;
 import com.fushun.pay.app.convertor.extensionpoint.PayNotifyConvertorExtPt;
 import com.fushun.pay.app.thirdparty.extensionpoint.PayNotifyThirdPartyExtPt;
 import com.fushun.pay.app.validator.extensionpoint.PayNotifyValidatorExtPt;
+import com.fushun.pay.client.config.PayConfig;
 import com.fushun.pay.client.dto.PayNotifyCmd;
 import com.fushun.pay.client.dto.clientobject.notify.PayNotifyThirdPartyDTO;
 import com.fushun.pay.client.dto.domainevent.AnalysisNotifyExceptionEvent;
 import com.fushun.pay.domain.exception.PayException;
 import com.fushun.pay.domain.pay.entity.PayE;
+import com.fushun.pay.dto.enumeration.ERecordPayStatus;
 import com.fushun.pay.infrastructure.common.util.DomainEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,10 @@ public class PayNotifyCmdExe{
 
     @Autowired
     private DomainEventPublisher domainEventPublisher;
+
+    @Autowired
+    private PayConfig payConfig;
+
 
     public SingleResponse<String> execute(PayNotifyCmd cmd) {
         PayNotifyThirdPartyDTO payNotifyThirdPartyDTO = null;
@@ -58,6 +64,11 @@ public class PayNotifyCmdExe{
             domainEventPublisher.publish(analysisNotifyExceptionEvent);
         }
 
+        //通知，异步通知出现异常，不做任何状态更新
+        if(payNotifyThirdPartyDTO.getStatus()== ERecordPayStatus.EXCEPTION){
+            return SingleResponse.of(payNotifyThirdPartyDTO.getNotifyReturnDTO().getFail());
+        }
+
         try {
             //验证参数
             PayNotifyThirdPartyDTO finalPayNotifyThirdPartyDTO = payNotifyThirdPartyDTO;
@@ -71,6 +82,7 @@ public class PayNotifyCmdExe{
             analysisNotify = false;
             logger.error("pay notify fail, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyDTO()), e);
         }
+
 
         if (!analysisNotify) {
             return SingleResponse.of(payNotifyThirdPartyDTO.getNotifyReturnDTO().getFail());

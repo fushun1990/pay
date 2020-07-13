@@ -28,6 +28,10 @@
             <groupId>com.fushun.pay</groupId>
             <artifactId>wxpay-java-sdk</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fushun.pay</groupId>
+            <artifactId>wxpay-sdk</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.alipay.sdk</groupId>
@@ -41,10 +45,9 @@
             <groupId>com.fushun.pay</groupId>
             <artifactId>sdk</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.fushun.pay</groupId>
-            <artifactId>domain</artifactId>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
         </dependency>
 
     </dependencies>

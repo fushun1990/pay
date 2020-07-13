@@ -115,6 +115,12 @@ public class RecordPayDO extends BaseCMP implements Serializable {
     @Column(columnDefinition = "varchar(400) DEFAULT NULL comment '通知地址（外部系统的通知地址）'")
     private String notifyUrl;
 
+    /**
+     * 支付返回地址 web支付使用
+     */
+    @Column(columnDefinition = "varchar(400) DEFAULT NULL comment '支付返回地址 web支付使用，目前是支付宝支付使用'")
+    private String returnUrl;
+
 
 
 }
