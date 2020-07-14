@@ -11,13 +11,13 @@ logging:
     root: INFO
 
 app:
-    datasource:
-        jdbcUrl: jdbc:mysql://localhost:3306/pay?serverTimezone=Asia/Shanghai
-        username: root
-        password: 123456
-        pool-size: 30
-        driverClassName: com.mysql.cj.jdbc.Driver
+  datasource:
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/pay?serverTimezone=Asia/Shanghai&autoReconnect=true&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    pool-size: 30
+    driverClassName: com.mysql.cj.jdbc.Driver
 
 pay:
   startWeb: true
-  notifyUrl: https://local.ihaoshenghuo.com/source/web_weixin_notice.php
+  notifyUrl: http://local.ihaoshenghuo.com/pay/notify/weixin/gzh

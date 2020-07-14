@@ -1,7 +1,5 @@
 package com.fushun.pay.client.config;
 
-import com.alibaba.cola.logger.Logger;
-import com.alibaba.cola.logger.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +15,5 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {"com.fushun.pay", "com.fushun.framework", "com.alibaba.cola"})
 @EnableAutoConfiguration
 public class TestConfig {
-
-    public TestConfig() {
-        LoggerFactory.activateSysLogger();
-        Logger logger = LoggerFactory.getLogger(TestConfig.class);
-        logger.debug("Spring container is booting");
-    }
 
 }

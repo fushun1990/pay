@@ -80,7 +80,7 @@ public class PayTest {
         String res="<xml><appid><![CDATA[wx3afc97fe948e75e7]]></appid>\\n<bank_type><![CDATA[OTHERS]]></bank_type>\\n<cash_fee><![CDATA[1]]></cash_fee>\\n<device_info><![CDATA[WEB]]></device_info>\\n<fee_type><![CDATA[CNY]]></fee_type>\\n<is_subscribe><![CDATA[N]]></is_subscribe>\\n<mch_id><![CDATA[1516499551]]></mch_id>\\n<nonce_str><![CDATA[60l5p6zed6eqlvg556v92tubd75dslo9]]></nonce_str>\\n<openid><![CDATA[oQQcO5LkHoQD0FMEXJC256YhIzQ4]]></openid>\\n<out_trade_no><![CDATA[PPT_1594651501315]]></out_trade_no>\\n<result_code><![CDATA[SUCCESS]]></result_code>\\n<return_code><![CDATA[SUCCESS]]></return_code>\\n<sign><![CDATA[4B3BD7EB2AB70B9E2935F298B1A67C09]]></sign>\\n<time_end><![CDATA[20200713224545]]></time_end>\\n<total_fee>1</total_fee>\\n<trade_type><![CDATA[JSAPI]]></trade_type>\\n<transaction_id><![CDATA[4200000619202007136122941010]]></transaction_id>\\n</xml>";
 
 
-        ResponseEntity responseEntity = restTemplate.postForEntity("/notify/weixin/gzh", res, String.class);
+        ResponseEntity responseEntity = restTemplate.postForEntity("/pay/notify/weixin/gzh", res, String.class);
         System.out.println(JsonUtil.toJson(responseEntity.getBody()));
     }
 }

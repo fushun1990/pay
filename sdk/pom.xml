@@ -8,32 +8,39 @@
     <groupId>com.fushun.pay</groupId>
     <artifactId>sdk</artifactId>
     <version>3.0.0-SNAPSHOT</version>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>6</source>
-                    <target>6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <name>sdk</name>
+
     <properties>
         <cola.framework.version>3.0.0</cola.framework.version>
-        <com.fushun.framework.version>1.0.2-SNAPSHOT</com.fushun.framework.version>
+        <com.fushun.framework.version>1.0.3-SNAPSHOT</com.fushun.framework.version>
         <org.projectlombok.version>1.18.12</org.projectlombok.version>
         <org.hibernate.validator.version>6.0.18.Final</org.hibernate.validator.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     </properties>
+
+    <!--指定仓库地址-->
+    <distributionManagement>
+        <!--配置说明《Maven私服neuxs的配置.xml》 -->
+        <repository>
+            <!--此名称要和.m2/settings.xml中设置的ID一致-->
+            <id>neuxs-releases</id>
+            <url>http://192.168.0.184:8999/repository/my-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>neuxs-snapshots</id>
+            <url>http://192.168.0.184:8999/repository/my-snapshots/</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>cola-common</artifactId>
             <version>${cola.framework.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fushun.framework</groupId>
@@ -60,4 +67,38 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!--发布代码Jar插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+            </plugin>
+            <!--发布源码插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

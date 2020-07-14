@@ -34,5 +34,5 @@ logging:
 
 pay:
   startWeb: true
-  notifyUrl: http://www.ihaoshenghuo.com/pay/source/web_weixin_notice.php
+  notifyUrl: http://local.ihaoshenghuo.com/pay/notify/weixin/gzh
 

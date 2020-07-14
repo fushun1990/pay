@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 @RestController
-@RequestMapping("/notify")
+@RequestMapping("/pay/notify")
 public class NotifyController {
 
     @Autowired
