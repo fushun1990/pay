@@ -21,6 +21,10 @@
             <groupId>com.fushun.framework</groupId>
             <artifactId>framework-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fushun.framework</groupId>
+            <artifactId>framework-test</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

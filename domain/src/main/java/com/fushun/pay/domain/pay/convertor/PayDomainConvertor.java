@@ -23,9 +23,9 @@ public class PayDomainConvertor {
     }
 
     public RecordPayDO entityToData(PayE payE, RecordPayDO recordPayDO) {
-        String outTradeNo = payE.getPayFrom().getPreStr() + payE.getTradeNo();
+        String outTradeNo = payE.getPayFrom().getPreStr() + payE.getOrderPayNo();
         recordPayDO.setOutTradeNo(outTradeNo);
-        recordPayDO.setOrderPayNo(payE.getTradeNo());
+        recordPayDO.setOrderPayNo(payE.getOrderPayNo());
         recordPayDO.setPayMoney(payE.getPayMoney());
         recordPayDO.setPayWay(payE.getPayWay());
         recordPayDO.setPayFrom(payE.getPayFrom());

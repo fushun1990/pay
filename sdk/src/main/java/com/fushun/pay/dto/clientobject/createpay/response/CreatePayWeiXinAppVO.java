@@ -1,6 +1,5 @@
 package com.fushun.pay.dto.clientobject.createpay.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -50,7 +49,7 @@ public class CreatePayWeiXinAppVO extends CreatedPayVO{
     /**
      * 支付系统支付单号
      */
-    private String orderPayNo;
+    private String outTradeNo;
 
 
 }

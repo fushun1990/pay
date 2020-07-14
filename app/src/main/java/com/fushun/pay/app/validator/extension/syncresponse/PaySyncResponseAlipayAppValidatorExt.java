@@ -26,7 +26,7 @@ public class PaySyncResponseAlipayAppValidatorExt implements PaySyncResponseVali
     @Override
     public void validate(PaySyncResponseAlipayAppCmd candidate) {
         paySyncResponseValidator.validate(candidate);
-        logger.debug("Alipay app sync response validation");
+        logger.debug("PaySyncResponseAlipayAppValidatorExt app sync response validation");
     }
 
 }

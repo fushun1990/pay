@@ -49,7 +49,7 @@ public class PayNotifyCmdExe{
             payNotifyThirdPartyDTO = extensionExecutor.execute(PayNotifyThirdPartyExtPt.class, cmd.getBizScenario(), thirdparty -> thirdparty.created(cmd.getPayNotifyDTO()));
         }catch(PayException e){
             if(!e.isPrinted()){
-                logger.error("异步通知处理失败, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyDTO().getParamMap()), e);
+                logger.error("异步通知处理失败, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyDTO()), e);
             }
             analysisNotify = false;
             AnalysisNotifyExceptionEvent analysisNotifyExceptionEvent = new AnalysisNotifyExceptionEvent();
@@ -57,7 +57,7 @@ public class PayNotifyCmdExe{
             domainEventPublisher.publish(analysisNotifyExceptionEvent);
         } catch (Exception e) {
             analysisNotify = false;
-            logger.error("异步通知处理失败, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyDTO().getParamMap()), e);
+            logger.error("异步通知处理失败, paramMap:[{}]", JsonUtil.toJson(cmd.getPayNotifyDTO()), e);
 
             AnalysisNotifyExceptionEvent analysisNotifyExceptionEvent = new AnalysisNotifyExceptionEvent();
             analysisNotifyExceptionEvent.setOutTradeNo(payNotifyThirdPartyDTO.getOutTradeNo());

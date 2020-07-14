@@ -1,10 +1,10 @@
 pay:
   weixin:
     gzh:
-      key: 8934e7d15453e97507ef794cf7mcb168
-      appId: wx41ae6a71bb9e10d0
-      appSecret: 61fed55059ea3b838bf428dce9f88e07
-      mchID: 1522007251
+      key: df0w2rfjd3ekldfg23jdf92z4m2ao02a
+      appId: wx3afc97fe948e75e7
+      appSecret: 6246c7566ae703feeea23bf7154c9bcf
+      mchID: 1516499551
       subMchID:
       certLocalPath: classpath:/spring/pay/weiXinGJHApiClient_cert.p12
       certPassword: 1361997202

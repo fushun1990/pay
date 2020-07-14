@@ -20,6 +20,6 @@ public class DomainEventPublisher{
     private EventBusI eventBus;
 
     public void publish(DomainEventI domainEvent) {
-        eventBus.fire(domainEvent);
+//        eventBus.fire(domainEvent);
     }
 }

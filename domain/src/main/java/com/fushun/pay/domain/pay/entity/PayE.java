@@ -10,6 +10,7 @@ import com.fushun.pay.client.dto.domainevent.CreatedPayEvent;
 import com.fushun.pay.client.dto.domainevent.PaySuccessNotityEvent;
 import com.fushun.pay.client.dto.enumeration.ERecordPayNotityStatus;
 import com.fushun.pay.domain.exception.PayException;
+import com.fushun.pay.domain.pay.async.PayAsyncService;
 import com.fushun.pay.domain.pay.repository.PayRepository;
 import com.fushun.pay.dto.clientobject.createpay.enumeration.ECreatePayStatus;
 import com.fushun.pay.dto.enumeration.EPayFrom;
@@ -21,6 +22,9 @@ import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -35,6 +39,8 @@ import java.util.Optional;
  */
 @Entity
 @Data
+@Component
+@Scope("prototype")
 public class PayE extends EntityObject {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -42,6 +48,7 @@ public class PayE extends EntityObject {
     /**
      * 数据持久对象
      */
+    @Autowired
     private PayRepository payRepository = SpringContextUtil.getBean(PayRepository.class);
 
     /**
@@ -49,6 +56,7 @@ public class PayE extends EntityObject {
      */
     private DomainEventPublisher domainEventPublisher = SpringContextUtil.getBean(DomainEventPublisher.class);
 
+    private PayAsyncService payAsyncService=  SpringContextUtil.getBean(PayAsyncService.class);
 
     /**
      * 支付方式 支付宝，网银，银联等
@@ -67,13 +75,14 @@ public class PayE extends EntityObject {
      * 支付返回地址 web支付使用
      */
     private String returnUrl;
-    /**
-     * 内部 支付单号
-     */
-    private String tradeNo;
 
     /**
-     * 支付单号
+     * 内部系统 支付单号
+     */
+    private String orderPayNo;
+
+    /**
+     * 支付系统 支付单号
      */
     private String outTradeNo;
 
@@ -240,6 +249,8 @@ public class PayE extends EntityObject {
         recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
         payRepository.update(recordPayDO);
         logger.info("pay notify,outTradeNo:[{}],status:[{}]", this.outTradeNo, this.status);
+
+        payAsyncService.asyncPayNotify(recordPayDO.getOutTradeNo(),recordPayDO.getOrderPayNo());
     }
 
     /**
@@ -284,6 +295,9 @@ public class PayE extends EntityObject {
         recordPayDO.setReceiveWay(this.receiveWay.getCode());
         recordPayDO.setNotityStatus(ERecordPayNotityStatus.NO);
         payRepository.update(recordPayDO);
+
+        //支付成功，通知系统
+        payAsyncService.asyncPayNotify(recordPayDO.getOutTradeNo(),recordPayDO.getOrderPayNo());
     }
 
     /**

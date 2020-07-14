@@ -21,7 +21,7 @@ public class PaySyncResponseConvertor implements PaySyncResponseConvertorExtPt<P
     @Override
     public PayE clientToEntity(PaySyncResponseDTO paySyncResponseDTO, BizScenario bizScenario) {
         PayE payE = new PayE();
-        payE.setTradeNo(paySyncResponseDTO.getOutTradeNo());
+        payE.setOutTradeNo(paySyncResponseDTO.getOutTradeNo());
         payE.setStatus(paySyncResponseDTO.getStatus());
         payE.setBizScenario(bizScenario);
         return payE;

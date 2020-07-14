@@ -73,7 +73,7 @@ public class PayCmdExe {
         if (payRequestBody.getStatus() == ECreatePayStatus.FAIL) {
             CreatedPayExceptionEvent createdPayExceptionEvent = new CreatedPayExceptionEvent();
             createdPayExceptionEvent.setOutTradeNo(payE.getOutTradeNo());
-            createdPayExceptionEvent.setOrderPayNo(payE.getTradeNo());
+            createdPayExceptionEvent.setOrderPayNo(payE.getOrderPayNo());
             domainEventPublisher.publish(createdPayExceptionEvent);
 
             payE.setStatus(ERecordPayStatus.FAILED);

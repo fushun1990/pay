@@ -10,6 +10,7 @@ import com.fushun.pay.dto.clientobject.notify.PayNotifyWeixinGZHDTO;
 import com.fushun.pay.infrastructure.common.BizCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 @RestController
+@RequestMapping("/notify")
 public class NotifyController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class NotifyController {
     /**
      * 微信公众号 支付异步通知功能
      */
-    @PostMapping("/notify/weixin/gzh")
+    @PostMapping("/weixin/gzh")
     @NoApiResult
     public void payWeixinGZHNotify(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader( "Content-type", "text/html;charset=UTF-8" );
@@ -40,6 +42,7 @@ public class NotifyController {
 
         PayNotifyWeixinGZHDTO payNotifyWeixinGZHDTO=new PayNotifyWeixinGZHDTO();
         payNotifyWeixinGZHDTO.setNotifyContent(result);
+        payNotifyCmd.setPayNotifyWeixinGZHDTO(payNotifyWeixinGZHDTO);
         SingleResponse<String> singleResponse= payServiceI.payNotifyAlipayReust(payNotifyCmd);
         out.write(singleResponse.getData());
     }

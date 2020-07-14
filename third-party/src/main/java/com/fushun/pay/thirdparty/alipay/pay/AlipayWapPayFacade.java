@@ -85,7 +85,7 @@ public class AlipayWapPayFacade {
     private Map<String, String> getRequestData(CreatePayAlipayWapDTO payParamDTO) {
 
 
-        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
+        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getOrderPayNo();
 
         // 把请求参数打包成数组
         Map<String, String> sParaTemp = new HashMap<String, String>();

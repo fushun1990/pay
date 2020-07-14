@@ -12,7 +12,7 @@ public class CreatePayAliPayAppVO extends CreatedPayVO{
     /**
      * 支付单号，业务系统的
      */
-    private String orderPayNo;
+    private String outTradeNo;
 
     /**
      * 支付参数

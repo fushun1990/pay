@@ -17,3 +17,7 @@ app:
         password: 123456
         pool-size: 30
         driverClassName: com.mysql.cj.jdbc.Driver
+
+pay:
+  startWeb: true
+  notifyUrl: https://local.ihaoshenghuo.com/source/web_weixin_notice.php

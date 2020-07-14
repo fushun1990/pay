@@ -2,6 +2,7 @@ package com.fushun.pay.domain.pay.async;
 
 import cn.hutool.http.HttpUtil;
 import com.fushun.pay.client.config.PayConfig;
+import com.fushun.pay.client.dto.enumeration.ERecordPayNotityStatus;
 import com.fushun.pay.infrastructure.pay.tunnel.database.PayDBTunnel;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayDO;
 import com.fushun.pay.infrastructure.pay.tunnel.database.dataobject.RecordPayId;
@@ -39,14 +40,14 @@ public class PayAsyncService {
      * @return
      */
     @Async
-    public Future<String> asyncPayNotify(String outTradeNo,String tradeNo) {
+    public Future<String> asyncPayNotify(String outTradeNo,String orderPayNo) {
 
         try {
             RecordPayId recordPayId=new RecordPayId();
             recordPayId.setOutTradeNo(outTradeNo);
             Optional<RecordPayDO> recordPayDOOptional= payDBTunnel.findById(recordPayId);
             if(!recordPayDOOptional.isPresent()){
-                logger.error("没有支付信息，outTradeNo：[{}],tradeNo:[{}]",outTradeNo,tradeNo);
+                logger.error("没有支付信息，outTradeNo：[{}],orderPayNo:[{}]",outTradeNo,orderPayNo);
                 return new AsyncResult<String>("fail");
             }
             RecordPayDO recordPayDO=recordPayDOOptional.get();
@@ -56,9 +57,13 @@ public class PayAsyncService {
                 String url = recordPayDO.getNotifyUrl();
                 Map<String, Object> parameter = new HashMap<>();
                 parameter.put("outTradeNo", outTradeNo);
-                parameter.put("tradeNo-Id", tradeNo);
+                parameter.put("orderPayNo", orderPayNo);
                 String result = HttpUtil.post(url, parameter);
-
+                if("success".equals(result)){
+                    recordPayDO.setNotityStatus(ERecordPayNotityStatus.YES);
+                    payDBTunnel.save(recordPayDO);
+                }
+                logger.info("异步通知完成，返回：[{}]",result);
                 return new AsyncResult<String>("success");
             }else{
                 //TODO 内部集成

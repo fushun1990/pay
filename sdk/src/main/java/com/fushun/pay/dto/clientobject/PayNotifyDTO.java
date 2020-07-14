@@ -3,8 +3,6 @@ package com.fushun.pay.dto.clientobject;
 import com.alibaba.cola.dto.ClientObject;
 import lombok.Data;
 
-import java.util.Map;
-
 /**
  * @author wangfushun
  * @version 1.0
@@ -12,10 +10,5 @@ import java.util.Map;
  */
 @Data
 public class PayNotifyDTO extends ClientObject {
-
-    /**
-     * 异步通知数据
-     */
-    private Map<String, String> paramMap;
 
 }

@@ -21,6 +21,10 @@ public class BizCode {
      * 微信公众号
      */
     public final static String PAY_SCENARIO_WEIXIN_GZH ="weixin_gzh";
+    /**
+     * 微信公众号
+     */
+    public final static String PAY_SCENARIO_WEIXIN_XCX ="weixin_xcx";
 
     /**
      * 微信app

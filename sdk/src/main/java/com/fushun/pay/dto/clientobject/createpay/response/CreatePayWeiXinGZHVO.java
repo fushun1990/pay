@@ -30,7 +30,7 @@ public class CreatePayWeiXinGZHVO extends CreatedPayVO{
     /**
      * 时间戳
      */
-    private String timestamp;
+    private String timeStamp;
 
     /**
      *  签名
@@ -45,7 +45,6 @@ public class CreatePayWeiXinGZHVO extends CreatedPayVO{
     /**
      * 支付系统支付单号
      */
-    private String orderPayNo;
-
+    private String outTradeNo;
 
 }

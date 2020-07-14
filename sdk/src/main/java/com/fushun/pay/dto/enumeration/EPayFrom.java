@@ -9,7 +9,7 @@ public enum EPayFrom implements ECallBackFrom<String> {
     /**
      * 物业缴费
      */
-    PAY_PROPERTY("pay_property", "物业缴费", "PPT_");
+    PAY_PROPERTY("PAY_PROPERTY", "物业缴费", "PPT_");
 
     private String code;
 

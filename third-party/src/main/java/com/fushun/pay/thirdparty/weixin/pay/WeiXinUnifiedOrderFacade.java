@@ -41,7 +41,7 @@ public class WeiXinUnifiedOrderFacade {
     private WeiXinOAuth20Facade weiXinOAuth20Facade;
 
     private AppUnifiedOrderReqData getReq(AppUnifiedOrderReqData unifiedorderReqData, CreatePayWeiXinDTO payParamDTO) {
-        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
+        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getOrderPayNo();
         unifiedorderReqData.setBody(payParamDTO.getBody());
         unifiedorderReqData.setOut_trade_no(outTradeNo);
         unifiedorderReqData.setTotal_fee(payParamDTO.getTotalFee().multiply(bai).intValue());

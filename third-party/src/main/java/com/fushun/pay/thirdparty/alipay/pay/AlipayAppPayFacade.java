@@ -94,7 +94,7 @@ public class AlipayAppPayFacade {
         try {
             Map<String, String> map = this.getRequestData(payParamDTO);
             String payStr = createPayHtml(map);
-            createPayAliPayAppVO.setOrderPayNo(map.get("orderPayNo"));
+            createPayAliPayAppVO.setOutTradeNo(map.get("outTradeNo"));
             createPayAliPayAppVO.setPayStr(payStr);
         } catch (Exception e) {
             createPayAliPayAppVO.setStatus(ECreatePayStatus.FAIL);
@@ -104,7 +104,7 @@ public class AlipayAppPayFacade {
     }
 
     private Map<String, String> getRequestData(CreatePayAlipayAppDTO payParamDTO) {
-        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
+        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getOrderPayNo();
 
         // 把请求参数打包成数组
         Map<String, String> sParaTemp = new HashMap<String, String>();
@@ -128,7 +128,7 @@ public class AlipayAppPayFacade {
             map.put("body", payParamDTO.getBody());
         }
         sParaTemp.put("biz_content", JsonUtil.classToJson(map));
-        sParaTemp.put("orderPayNo", outTradeNo);
+        sParaTemp.put("outTradeNo", outTradeNo);
         return sParaTemp;
     }
 

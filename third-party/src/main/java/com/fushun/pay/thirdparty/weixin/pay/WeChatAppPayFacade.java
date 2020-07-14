@@ -93,8 +93,8 @@ public class WeChatAppPayFacade {
      * @creation 2017年1月4日
      * @records <p>  fushun 2017年1月4日</p>
      */
-    protected void getRequestData(CreatePayWeiXinAppDTO payParamDTO, CreatePayWeiXinAppVO createdPayThirdPartyCO) {
-        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getTradeNo();
+    protected void getRequestData(CreatePayWeiXinAppDTO payParamDTO, CreatePayWeiXinAppVO createPayWeiXinAppVO) {
+        String outTradeNo = payParamDTO.getPayFrom().getPreStr() + payParamDTO.getOrderPayNo();
         UnifiedorderResData unifiedorderResData = null;
         unifiedorderResData = weiXinUnifiedOrderFacade.unifiedOrderPay(payParamDTO);
 
@@ -105,14 +105,14 @@ public class WeChatAppPayFacade {
         jsPayReqData.setSign(Signature.getMD5Sign(Signature.getSignMap(AppPayReqData.class, jsPayReqData), jsPayReqData.getConfigure()));
 
         Map<String, String> map = new HashMap<String, String>();
-        createdPayThirdPartyCO.setAppId(jsPayReqData.getAppid());
-        createdPayThirdPartyCO.setPartnerid(jsPayReqData.getPartnerid());
-        createdPayThirdPartyCO.setPrepayid(jsPayReqData.getPrepayid());
-        createdPayThirdPartyCO.setPackage_(jsPayReqData.getPackage_());
-        createdPayThirdPartyCO.setNoncestr(jsPayReqData.getNoncestr());
-        createdPayThirdPartyCO.setTimestamp( jsPayReqData.getTimestamp());
-        createdPayThirdPartyCO.setSign(jsPayReqData.getSign());
-        createdPayThirdPartyCO.setOrderPayNo(outTradeNo);
+        createPayWeiXinAppVO.setAppId(jsPayReqData.getAppid());
+        createPayWeiXinAppVO.setPartnerid(jsPayReqData.getPartnerid());
+        createPayWeiXinAppVO.setPrepayid(jsPayReqData.getPrepayid());
+        createPayWeiXinAppVO.setPackage_(jsPayReqData.getPackage_());
+        createPayWeiXinAppVO.setNoncestr(jsPayReqData.getNoncestr());
+        createPayWeiXinAppVO.setTimestamp( jsPayReqData.getTimestamp());
+        createPayWeiXinAppVO.setSign(jsPayReqData.getSign());
+        createPayWeiXinAppVO.setOutTradeNo(outTradeNo);
 
     }
 

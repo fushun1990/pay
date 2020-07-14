@@ -71,6 +71,6 @@ public class PaySyncResponseCmdExe{
         if (!analysisSyncResponse || (BeanUtils.isNotNull(eRecordPayStatus) && eRecordPayStatus!=ERecordPayStatus.SUCCESS)) {
             return SingleResponse.buildFailure(StringUtils.isEmpty(errorCode)?ErrorCode.PAY_FAIL.getErrCode():errorCode, ErrorCode.PAY_FAIL.getErrCode());
         }
-        return SingleResponse.of(ErrorCode.PAY_SUCCESS.getErrDesc());
+        return SingleResponse.of(ErrorCode.PAY_SUCCESS.getErrCode());
     }
 }

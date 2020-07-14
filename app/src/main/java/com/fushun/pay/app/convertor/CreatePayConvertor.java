@@ -19,8 +19,8 @@ public class CreatePayConvertor implements CreatePayConvertorExtPt<PayDTO> {
     @Override
     public PayE clientToEntity(PayDTO payDTO, BizScenario bizScenario) {
         PayE payE = DomainFactory.create(PayE.class);
-        String outTradeNo = payDTO.getPayFrom().getPreStr() + payDTO.getTradeNo();
-        payE.setTradeNo(payDTO.getTradeNo());
+        String outTradeNo = payDTO.getPayFrom().getPreStr() + payDTO.getOrderPayNo();
+        payE.setOrderPayNo(payDTO.getOrderPayNo());
         payE.setOutTradeNo(outTradeNo);
         payE.setPayMoney(payDTO.getTotalFee());
         payE.setPayWay(payDTO.getPayWay());
@@ -36,9 +36,10 @@ public class CreatePayConvertor implements CreatePayConvertorExtPt<PayDTO> {
         payDTO.setPayFrom( dataObject.getPayFrom());
         payDTO.setPayWay( dataObject.getPayWay());
         payDTO.setTotalFee(dataObject.getPayMoney());
-        payDTO.setTradeNo(dataObject.getOutTradeNo());
+        //TODO
+//        payDTO.setTradeNo(dataObject.getOutTradeNo());
         payDTO.setOrderPayNo(dataObject.getOrderPayNo());
-        payDTO.setPayNo(dataObject.getPayNo());
+//        payDTO.setPayNo(dataObject.getPayNo());
         return payDTO;
     }
 }
