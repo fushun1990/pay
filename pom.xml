@@ -29,7 +29,7 @@
     <properties>
         <cola.framework.version>1.0.0-SNAPSHOT</cola.framework.version>
         <alipay-sdk-java.version>3.3.2</alipay-sdk-java.version>
-        <bcprov-jdk14.version>1.54</bcprov-jdk14.version>
+        <bcprov-jdk14.version>1.67</bcprov-jdk14.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <lombok.version>1.12.6</lombok.version>
     </properties>
